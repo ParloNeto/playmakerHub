@@ -1,0 +1,33 @@
+<app-header />
+<div class="container">
+  @if (getCareerDetails(); as career) {
+  <div class="career">
+    <div class="career__content">
+      <h2 class="title-content">{{ career.teamCareer }}</h2>
+    </div>
+    <div class="image-club-and-manager-pic">
+      <div class="image-club">
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/8/81/Hertha_BSC_Logo_2012.svg"
+          alt="Escudo do {{ career.teamCareer }}"
+        />
+      </div>
+      <div class="image-manager">
+        <div class="image-manager__background">
+          <img
+            [src]="career.urlImageCoach"
+            alt="Foto do Manager {{ career.coachsName }}"
+          />
+        </div>
+        <h3>{{ career.coachsName }}</h3>
+      </div>
+    </div>
+    <div class="career-bottom-buttons">
+      <button class="btn-primary-white">TESTE</button>
+      <button class="btn-primary-white">TESTE</button>
+    </div>
+
+  </div>
+  }
+
+</div>

@@ -1,0 +1,57 @@
+:host {
+  $width-background: 1200px;
+  $width-image: 192px;
+
+  .container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0px 0px 160px 0px;
+  }
+
+  .career {
+    width: $width-background;
+    height: 600px;
+    background-color: var(--primary-01);
+    border-radius: 15px;
+    display: flex;
+    position: relative;
+    &__content {
+      margin: 30px 30px 15px 45px;
+    }
+  }
+
+  .career-bottom-buttons {
+    width: 100%;
+    position: absolute;
+    bottom: -100px; /* Posiciona o topo da div filho no meio da div pai */
+    transform: translateY(-50%); /* Ajusta a posição vertical para o meio */
+    left: 70px; /* Ajusta para fora da div pai */
+  }
+
+  .image-club {
+    width: 192px;
+    height: 192px;
+    background-color: var(--white);
+    border-radius: 50%;
+    overflow: hidden;
+    background: none;
+    position: absolute;
+    top: 0%; /* Posiciona o topo da div filho no meio da div pai */
+    transform: translateY(-50%); /* Ajusta a posição vertical para o meio */
+    right: 70px; /* Ajusta para fora da div pai */
+    img {
+      width: $width-image;
+      height: $width-image;
+    }
+  }
+
+  .image-club-and-manager-pic {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    flex-direction: column;
+    margin-right: 18px;
+  }
+}
