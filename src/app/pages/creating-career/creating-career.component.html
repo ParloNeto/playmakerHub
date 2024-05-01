@@ -1,0 +1,46 @@
+<app-header />
+<div class="container">
+  <div class="creating-career">
+    <div class="creating-career__content">
+      <h2 class="title-content">Criar nova Carreira</h2>
+      <form class="creating-career__form" [formGroup]="formCreatingCareer" (ngSubmit)="submitForm()">
+        <div class="input-form">
+          <label for="fifaCareer">Fifa da Carreira:</label>
+          <select formControlName="fifaCareer">
+            @for (optionFifa of selectedFifaCareer; track optionFifa) {
+              <option [ngValue]="optionFifa">
+                {{optionFifa}}
+              </option>
+            }
+          </select>
+        </div>
+        <div class="input-form">
+          <label for="teamCareer">Time da Carreira:</label>
+          <input placeholder="Digite aqui..." type="text" formControlName="teamCareer"/>
+        </div>
+        <div class="input-form">
+          <label for="coachsName">Nome do Técnico:</label>
+          <input placeholder="Digite aqui..." type="text" formControlName="coachsName"/>
+        </div>
+        <div class="input-form">
+          <label for="nationality">Nacionalidade:</label>
+          <input placeholder="Digite aqui..." type="text" formControlName="nationality"/>
+        </div>
+        <div class="input-form">
+          <button type="submit" class="btn-primary" (click)="submitForm()" [disabled]="formCreatingCareer.invalid">CRIAR CARREIRA</button>
+        </div>
+        <div class="input-form">
+          <label for="urlImageCoach">Foto do Técnico (URL):</label>
+          <input placeholder="Digite aqui..." type="text" formControlName="urlImageCoach"/>
+        </div>
+      </form>
+
+    </div>
+    <div class="image-manager">
+      <div class="image-manager__background">
+        <img [src]="getUrl" alt="Foto do Manager {{getCoachsName}}">
+      </div>
+      <h3>{{getCoachsName}}</h3>
+    </div>
+  </div>
+</div>

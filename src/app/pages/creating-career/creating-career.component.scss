@@ -1,0 +1,72 @@
+:host {
+  $width-background: 1200px;
+
+  .container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0px 0px 160px 0px;
+  }
+
+  .creating-career {
+    width: $width-background;
+    height: 600px;
+    background-color: var(--primary-01);
+    border-radius: 15px;
+    display: flex;
+    justify-content: space-between;
+
+    &__content {
+      margin: 30px 30px 15px 45px;
+    }
+
+    &__form {
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: column;
+      height: 400px;
+      width: 450px;
+      .input-form {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 20px;
+        margin-right: 15px;
+      }
+    }
+  }
+
+  label {
+    font-family: Roboto;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 18.75px;
+    color: var(--white);
+    margin-bottom: 5px;
+  }
+
+  input {
+    width: 190px;
+    height: 30px;
+    border-radius: 10px;
+    border: none;
+    padding-left: 10px;
+  }
+
+  ::placeholder {
+    color: var(--primary);
+    font-family: Roboto;
+    font-size: 12px;
+    font-weight: 400;
+  }
+
+  select {
+    // appearance: none;
+    background-color: var(--white);
+    width: 202.5px;
+    height: 30px;
+    outline: none;
+    padding-left: 10px;
+    border-radius: 10px;
+    border: none;
+  }
+}

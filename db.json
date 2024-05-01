@@ -1,0 +1,36 @@
+{
+  "newCareer": [
+    {
+      "id": "1",
+      "fifaCareer": "FIFA 17",
+      "teamCareer": "Wolfsburg",
+      "coachsName": "Sérgio Busquets",
+      "nationality": "espanha",
+      "urlImageCoach": "https://fifastatic.fifaindex.com/FIFA23/players/189511.png"
+    },
+    {
+      "id": "2",
+      "fifaCareer": "FIFA 17",
+      "teamCareer": "Wolfsburg",
+      "coachsName": "Sérgio Busquets",
+      "nationality": "espanha",
+      "urlImageCoach": "https://fifastatic.fifaindex.com/FIFA23/players/189511.png"
+    },
+    {
+      "id": "3",
+      "fifaCareer": "FIFA 17",
+      "teamCareer": "Wolfsburg",
+      "coachsName": "Sérgio Busquets",
+      "nationality": "espanha",
+      "urlImageCoach": "https://fifastatic.fifaindex.com/FIFA23/players/189511.png"
+    },
+    {
+      "id": "4",
+      "fifaCareer": "FIFA 17",
+      "teamCareer": "Palmeiras",
+      "coachsName": "Sérgio Busquets",
+      "nationality": "espanha",
+      "urlImageCoach": "https://fifastatic.fifaindex.com/FIFA23/players/189511.png"
+    }
+  ]
+}
