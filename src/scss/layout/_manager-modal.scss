@@ -1,0 +1,32 @@
+.image-manager {
+  width: 200px;
+  height: 250px;
+  border-radius: 20px 20px 0px 0px;
+  background-color: var(--primary);
+  margin-right: 45px;
+  margin-top: 30px;
+
+  h3 {
+    text-align: center;
+
+    color: var(--white);
+    font-family: Roboto;
+    font-size: 16px;
+    font-style: italic;
+    font-weight: 200;
+    line-height: 18.75px;
+  }
+
+  &__background {
+    width: 200px;
+    height: 206px;
+    border-radius: 20px 21px 0px 0px;
+    background-color: var(--white);
+
+    img {
+      width: 200px;
+      height: 206px
+    }
+
+  }
+}
