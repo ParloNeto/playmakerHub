@@ -1,0 +1,74 @@
+.btn-create-career {
+  width: 130px;
+  height: 30px;
+  border-radius: 10px;
+  background-color: var(--secundary);
+  color: var(--white);
+  border: none;
+  font-family: Roboto;
+  font-size: 18px;
+  font-weight: 500;
+  text-align: center;
+  cursor: pointer;
+}
+
+.btn-primary {
+  width: 200px;
+  height: 40px;
+  border-radius: 10px;
+  background-color: var(--secundary);
+  color: var(--white);
+  font-family: Roboto;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 18.75px;
+  text-align: center;
+  cursor: pointer;
+
+  &:disabled {
+    background-color: var(--secundary-01);
+    cursor: not-allowed;
+  }
+}
+
+.btn-item-career {
+  width: 260px;
+  height: 45px;
+
+  border-radius: 5px;
+  background-color: var(--secundary);
+  color: var(--white);
+
+  font-family: Roboto;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 21.09px;
+  text-align: center;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 20px;
+  margin-bottom: 20px;
+  cursor: pointer;
+  img {
+    background-color: var(--secundary-010);
+    padding: 5px;
+    border-radius: 7.5px;
+  }
+}
+
+.btn-primary-white {
+  width: 250px;
+  height: 100px;
+  border-radius: 50px;
+  background-color: var(--white);
+  color: var(--secundary);
+  font-family: Roboto;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 18.75px;
+  text-align: center;
+  margin-right: 30px;
+  cursor: pointer;
+}
