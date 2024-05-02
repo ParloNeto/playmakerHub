@@ -19,7 +19,7 @@ export class HomeComponent implements OnInit{
   public getCareer = this.#careerService.getCareers;
 
   ngOnInit(): void {
-    this.#careerService.httpCareers$().subscribe();
+    // this.#careerService.httpCareers$().subscribe();
   }
 
   public careerExists(data: NewCareer[]): string {

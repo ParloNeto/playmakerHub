@@ -15,6 +15,7 @@ export class CareerComponent implements OnInit {
   activatedRoute = inject(ActivatedRoute);
 
   public getCareerDetails = this.#careerService.getCareerDetails;
+  getFifaCareer: any;
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe({

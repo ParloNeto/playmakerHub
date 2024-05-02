@@ -22,10 +22,19 @@
     @if (getCareer(); as data) {
 
     <div class="created-careers" [ngClass]="careerExists(data)">
-      <div class="created-careers__content" >
+      <div class="created-careers__content">
         @for (createdCareer of data; track createdCareer) {
         <div>
-          <button [routerLink]="['career', createdCareer.id]" class="btn-item-career">{{createdCareer.teamCareer}} <img src="../../../assets/icons/edit-club.svg" alt="edit club icon"></button>
+          <button
+            [routerLink]="['career', createdCareer.id]"
+            class="btn-item-career"
+          >
+            {{ createdCareer.teamCareer }}
+            <img
+              src="../../../assets/icons/edit-club.svg"
+              alt="edit club icon"
+            />
+          </button>
         </div>
         } @empty {
         <h3>Você não possui nenhuma carreira criada no momento...</h3>
@@ -33,10 +42,15 @@
           Crie Agora!
         </button>
         }
-
       </div>
     </div>
     } @else {
+    <div class="created-careers">
+      <div class="created-careers__content">
+        <h3>Não foi possível carregar suas carreiras...</h3>
+        <h4>Tente novamente mais tarde.</h4>
+      </div>
+    </div>
 
     }
   </div>

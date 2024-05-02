@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject, signal } from '@angular/core';
 import { NewCareer } from '../../models/career/new-career';
-import { Observable, shareReplay, tap } from 'rxjs';
+import { Observable, of, shareReplay, tap } from 'rxjs';
+import { fifaVersionMock } from './mocks/fifaVersion-mocks';
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +10,9 @@ import { Observable, shareReplay, tap } from 'rxjs';
 export class CareerService {
 
   constructor() {}
+
+  $fifaVersion = of(fifaVersionMock)
+
 
   #http = inject(HttpClient);
   #apiUrl = "http://localhost:3000/newCareer";
@@ -35,5 +39,19 @@ export class CareerService {
       shareReplay(),
       tap((res) => this.#setCareerDetails.set(res))
     );
+  }
+
+  #selectedFifaCareer = signal<string[]>([
+    'FIFA 16',
+    'FIFA 17',
+    'FIFA 18',
+    'FIFA 19',
+    'FIFA 20',
+    'FIFA 21',
+    'FIFA 22',
+    'FIFA 23',
+  ]);
+  get getFifaCareer() {
+    return this.#selectedFifaCareer.asReadonly();
   }
 }
