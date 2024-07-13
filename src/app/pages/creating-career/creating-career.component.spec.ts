@@ -1,6 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
 import { CreatingCareerComponent } from './creating-career.component';
+import { RouterModule } from '@angular/router';
+import { HomeComponent } from '../home/home.component';
 
 describe('CreatingCareerComponent', () => {
   let component: CreatingCareerComponent;
@@ -8,10 +13,13 @@ describe('CreatingCareerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CreatingCareerComponent]
+      imports: [CreatingCareerComponent, HttpClientTestingModule, RouterModule.forRoot([
+        { path: '', component: HomeComponent },
+        { path: 'new-career', component: CreatingCareerComponent },
+      ]),]
     })
     .compileComponents();
-    
+
     fixture = TestBed.createComponent(CreatingCareerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

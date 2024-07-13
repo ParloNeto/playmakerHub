@@ -4,33 +4,153 @@
       "id": "1",
       "fifaCareer": "FIFA 17",
       "teamCareer": "Wolfsburg",
-      "coachsName": "Sérgio Busquets",
+      "leagueCareer": "bundesliga",
+      "coachsName": "Xabi Alonso",
       "nationality": "espanha",
-      "urlImageCoach": "https://fifastatic.fifaindex.com/FIFA23/players/189511.png"
+      "urlImageCoach": "https://cdn.soccerwiki.org/images/player/998.png",
+      "players": [
+        {
+          "id": 1,
+          "firstName": "Endrick",
+          "lastName": "Felipe",
+          "nationality": "Brazil",
+          "position": "ATA",
+          "kitNumber": 9,
+          "joined": 2017,
+          "urlImagePlayer": "https://s3p.sofifa.net/37a65d83e0b413e26f62a36d2e5152ddca8c6684.png",
+          "statistics": {
+            "season": "",
+            "matchs": 64,
+            "goals": 11,
+            "assists": 2,
+            "yellowCards": 8,
+            "redCards": 1,
+            "contractedAtualSeason": false
+          }
+        },
+        {
+          "id": 2,
+          "firstName": "Raphael",
+          "lastName": "Veiga",
+          "nationality": "Brazil",
+          "position": "MEI",
+          "kitNumber": 10,
+          "joined": 2017,
+          "urlImagePlayer": "https://s3p.sofifa.net/37a65d83e0b413e26f62a36d2e5152ddca8c6684.png",
+          "statistics": {
+            "season": "",
+            "matchs": 64,
+            "goals": 41,
+            "assists": 11,
+            "yellowCards": 8,
+            "redCards": 1,
+            "contractedAtualSeason": false
+          }
+        },
+        {
+          "id": 3,
+          "firstName": "Zé Rafael",
+          "lastName": "Martins",
+          "nationality": "Brazil",
+          "position": "VOL",
+          "kitNumber": 10,
+          "joined": 2017,
+          "urlImagePlayer": "https://s3p.sofifa.net/37a65d83e0b413e26f62a36d2e5152ddca8c6684.png",
+          "statistics": {
+            "season": "",
+            "matchs": 64,
+            "goals": 55,
+            "assists": 21,
+            "yellowCards": 8,
+            "redCards": 1,
+            "contractedAtualSeason": false
+          }
+        },
+        {
+          "id": 4,
+          "firstName": "Joao",
+          "lastName": "Martins",
+          "nationality": "Brazil",
+          "position": "ATA",
+          "kitNumber": 19,
+          "joined": 2014,
+          "urlImagePlayer": "https://s3p.sofifa.net/37a65d83e0b413e26f62a36d2e5152ddca8c6684.png",
+          "statistics": {
+            "season": "",
+            "matchs": 64,
+            "goals": 15,
+            "assists": 31,
+            "yellowCards": 8,
+            "redCards": 1,
+            "contractedAtualSeason": false
+          }
+        },
+      {
+        "id": 5,
+        "firstName": "Paulo",
+        "lastName": "Dybala",
+        "nationality": "Argentina",
+        "position": "MEI",
+        "kitNumber": 10,
+        "joined": 2017,
+        "urlImagePlayer": "https://s3p.sofifa.net/37a65d83e0b413e26f62a36d2e5152ddca8c6684.png",
+        "statistics": {
+          "season": "",
+          "matchs": 64,
+          "goals": 45,
+          "assists": 21,
+          "yellowCards": 8,
+          "redCards": 1,
+          "contractedAtualSeason": false
+        }
+      },
+      {
+        "id": 6,
+        "firstName": "Fernando",
+        "lastName": "Prass",
+        "nationality": "Brazil",
+        "position": "GOL",
+        "kitNumber": 10,
+        "joined": 2017,
+        "urlImagePlayer": "https://s3p.sofifa.net/37a65d83e0b413e26f62a36d2e5152ddca8c6684.png",
+        "statistics": {
+          "season": "",
+          "matchs": 234,
+          "goals": 0,
+          "assists": 4,
+          "yellowCards": 8,
+          "redCards": 1,
+          "contractedAtualSeason": false
+        }
+      }
+      ]
     },
     {
       "id": "2",
-      "fifaCareer": "FIFA 17",
+      "fifaCareer": "FIFA 18",
       "teamCareer": "Wolfsburg",
-      "coachsName": "Sérgio Busquets",
+      "leagueCareer": "bundesliga",
+      "coachsName": "Xabi Alonso",
       "nationality": "espanha",
-      "urlImageCoach": "https://fifastatic.fifaindex.com/FIFA23/players/189511.png"
+      "urlImageCoach": "https://cdn.soccerwiki.org/images/player/998.png"
     },
     {
       "id": "3",
-      "fifaCareer": "FIFA 17",
+      "fifaCareer": "FIFA 19",
       "teamCareer": "Wolfsburg",
-      "coachsName": "Sérgio Busquets",
+      "leagueCareer": "bundesliga",
+      "coachsName": "Xabi Alonso",
       "nationality": "espanha",
-      "urlImageCoach": "https://fifastatic.fifaindex.com/FIFA23/players/189511.png"
+      "urlImageCoach": "https://cdn.soccerwiki.org/images/player/998.png"
     },
     {
       "id": "4",
-      "fifaCareer": "FIFA 17",
+      "fifaCareer": "FIFA 23",
       "teamCareer": "Palmeiras",
-      "coachsName": "Sérgio Busquets",
+      "leagueCareer": "brasileirao",
+      "coachsName": "Xabi Alonso",
       "nationality": "espanha",
-      "urlImageCoach": "https://fifastatic.fifaindex.com/FIFA23/players/189511.png"
+      "urlImageCoach": "https://cdn.soccerwiki.org/images/player/998.png"
     }
   ]
 }

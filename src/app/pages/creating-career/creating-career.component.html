@@ -3,92 +3,126 @@
   <div class="creating-career">
     <div class="creating-career__content">
       <h2 class="title-content">Criar nova Carreira</h2>
-      <form
-        class="creating-career__form"
-        [formGroup]="formCreatingCareer"
-        (ngSubmit)="submitForm()"
-      >
-        <div class="input-form">
-          <label for="fifaCareer">Fifa da Carreira:</label>
-          <input
-            type="text"
-            #searchFifaVersion
-            placeholder="Ex: 16, 17..."
-            formControlName="fifaCareer"
-            [matAutocomplete]="autoFV"
-            (input)="onSearchUpdatedFifaVersion(searchFifaVersion.value)"
-          />
-          <mat-autocomplete #autoFV="matAutocomplete">
-            @for (optionFifa of fifaVersion(); track optionFifa) {
-            <mat-option [value]="optionFifa">{{ optionFifa }}</mat-option>
-            }
-          </mat-autocomplete>
-        </div>
-        <div class="input-form">
-          <label for="urlImageCoach">Liga da Carreira:</label>
-          <input
-            placeholder="Digite aqui..."
-            type="text"
-            formControlName="urlImageCoach"
-          />
-        </div>
-        <div class="input-form">
-          <label for="teamCareer">Time da Carreira:</label>
-          <input
-            placeholder="Digite aqui..."
-            type="text"
-            formControlName="teamCareer"
-          />
-        </div>
-        <div class="input-form">
-          <label for="coachsName">Nome do Técnico:</label>
-          <input
-            placeholder="Digite aqui..."
-            type="text"
-            formControlName="coachsName"
-          />
-        </div>
-        <div class="input-form">
-          <button
-            type="submit"
-            class="btn-primary"
-            (click)="submitForm()"
-            [disabled]="formCreatingCareer.invalid"
-          >
-            CRIAR CARREIRA
-          </button>
-        </div>
-        <div class="input-form">
-          <label for="nationality">Nacionalidade:</label>
-          <input
-            type="text"
-            #searchNation
-            placeholder="Digite aqui a nacionalidade..."
-            formControlName="nationality"
-            [matAutocomplete]="autoNation"
-            (input)="onSearchUpdatedNation(searchNation.value)"
-          />
-          <mat-autocomplete #autoNation="matAutocomplete">
-            @for (name of nations(); track name.nation) {
-            <mat-option [value]="name.nation">{{ name.nation }}</mat-option>
-            }
-          </mat-autocomplete>
-        </div>
-        <div class="input-form">
-          <label for="urlImageCoach">Foto do Técnico (URL):</label>
-          <input
-            placeholder="Digite aqui..."
-            type="text"
-            formControlName="urlImageCoach"
-          />
-        </div>
-      </form>
+      <div class="creating-career__form">
+        <form [formGroup]="formCreatingCareer" (ngSubmit)="submitForm()">
+          <div class="input-form">
+            <label for="fifaCareer">Fifa da Carreira:</label>
+            <input
+              type="text"
+              #searchFifaVersion
+              placeholder="Ex: 16, 17..."
+              formControlName="fifaCareer"
+              [matAutocomplete]="autoFV"
+              (input)="onSearchUpdatedFifaVersion(searchFifaVersion.value)"
+            />
+            <mat-autocomplete #autoFV="matAutocomplete">
+              @for (optionFifa of fifaVersion(); track optionFifa) {
+              <mat-option [value]="optionFifa">{{ optionFifa }}</mat-option>
+              }
+            </mat-autocomplete>
+          </div>
+          <div class="input-form">
+            <label for="leagueCareer">Liga da Carreira:</label>
+            <input
+              type="text"
+              #searchLeagueCareer
+              placeholder="Ex: Bundesliga..."
+              formControlName="leagueCareer"
+              [matAutocomplete]="autoLC"
+              (input)="onSearchUpdatedLeagueCareer(searchLeagueCareer.value)"
+              (focus)="onSearchUpdatedLeagueCareer(searchLeagueCareer.value)"
+              appUpperCase
+            />
+            <mat-autocomplete #autoLC="matAutocomplete">
+              @for (league of leagues(); track league.name) {
+              <mat-option [value]="league.name">{{ league.name }}</mat-option>
+              }
+            </mat-autocomplete>
+          </div>
+          <div class="input-form">
+            <label for="teamCareer">Time da Carreira:</label>
+            <input
+              type="text"
+              #searchTeamCareer
+              placeholder="Selecione aqui o clube..."
+              formControlName="teamCareer"
+              [matAutocomplete]="autoTC"
+              (input)="selectedTeamsFilteredByLeague()"
+              (focus)="selectedTeamsFilteredByLeague()"
+              appUpperCase
+            />
+            <mat-autocomplete #autoTC="matAutocomplete">
+              @for (team of filteredOptions; track team) {
+              <mat-option [value]="team">{{ team }}</mat-option>
+              }
+            </mat-autocomplete>
+          </div>
+
+          <div class="input-form">
+            <button
+              type="submit"
+              class="btn-primary"
+              [disabled]="!this.formCreatingCareer.valid || !this.formCreatingCoach.valid"
+            >
+              CRIAR CARREIRA
+            </button>
+          </div>
+        </form>
+        <form
+          [formGroup]="formCreatingCoach"
+        >
+          <div class="input-form">
+            <label for="coachesName">Nome do Técnico:</label>
+            <input
+              placeholder="Digite aqui..."
+              type="text"
+              formControlName="coachesName"
+              maxlength="20"
+            />
+          </div>
+          <div class="input-form">
+            <label for="nationality">Nacionalidade:</label>
+            <input
+              type="text"
+              #searchNation
+              placeholder="Digite aqui a nacionalidade..."
+              formControlName="nationality"
+              [matAutocomplete]="autoNation"
+              (input)="onSearchUpdatedNation(searchNation.value)"
+              appUpperCase
+            />
+            <mat-autocomplete #autoNation="matAutocomplete">
+              @for (name of nations(); track name.nation) {
+              <mat-option [value]="name.nation">{{ name.nation }}</mat-option>
+              }
+            </mat-autocomplete>
+          </div>
+          <div class="input-form">
+            <label for="urlImageCoach">Foto do Técnico (URL):</label>
+            <input
+              placeholder="Digite aqui..."
+              type="text"
+              formControlName="urlImageCoach"
+            />
+          </div>
+        </form>
+        <phub-modal [title]="titleModal">
+        </phub-modal>
+      </div>
     </div>
+    @if (showError()) {
+    <div class="show-error-modal">
+      <h4 class="text-warn">{{ messageError() }}</h4>
+    </div>
+    }
+    <button [routerLink]="['/']" class="btn-arrow-return">
+      <img src="../../../assets/icons/voltar.svg" alt="Voltar para a Home" />
+    </button>
     <div class="image-manager">
       <div class="image-manager__background">
-        <img [src]="getUrl" alt="Foto do Manager {{ getCoachsName }}" />
+        <img [src]="getUrl" alt="Foto do Manager {{ getCoachesName }}" />
       </div>
-      <h3>{{ getCoachsName }}</h3>
+      <h3>{{ getCoachesName }}</h3>
     </div>
   </div>
 </div>

@@ -1,0 +1,86 @@
+<app-header />
+<div class="container">
+  @if (getCareerDetails(); as career) {
+  <div class="career">
+    <div class="career__content">
+      @if (season === "geral") {
+      <h2 class="title-content">{{ season }}</h2>
+      <h4 class="subtitle-league left">
+        {{ career.leagueCareer }} - {{ career.fifaCareer }}
+      </h4>
+      } @else {
+      <h2 class="title-content">{{ showSeason(career.fifaCareer) }}</h2>
+      <h4 class="subtitle-league">
+        {{ career.leagueCareer }} - {{ career.fifaCareer }}
+      </h4>
+      }
+
+      <h2 class="semi-bold">Elenco</h2>
+
+      <h2 class="position-title">Goleiro</h2>
+      <div class="list-players">
+        @if (getPlayersFromCareer(); as players) { @for (player of players;
+        track player) {
+        <icon-player [getPlayer]="player" />
+        } } @else {
+        <h3 class="purple-warn">
+          Você não possui nenhum jogador cadastrado no momento...
+        </h3>
+        <button
+          routerLink="/career/{{ career.id }}/{{ season }}/new-player"
+          class="btn-primary"
+        >
+          Cadastrar Jogador
+        </button>
+        }
+        <button
+          routerLink="/career/{{ career.id }}/{{ season }}/new-player"
+          class="btn-primary"
+        >
+          Cadastrar Jogador
+        </button>
+      </div>
+    </div>
+
+    <app-details-manager-club-icon
+      [clubName]="career.teamCareer"
+      [showTop3PlayersScreen]="true"
+    />
+
+    <button [routerLink]="['/career', career.id]" class="btn-arrow-return">
+      <img src="../../../assets/icons/voltar.svg" alt="Voltar para a Home" />
+    </button>
+
+    <div class="career-bottom-buttons">
+      @if (season === "geral") {
+      <button
+        [routerLink]="['/career', career.id, initialSeason()]"
+        routerLinkActive="active"
+        class="btn-primary-white"
+      >
+        {{ initialSeason() }}
+      </button>
+      <button
+        [routerLink]="['/career', career.id, season, 'new-season']"
+        routerLinkActive="active"
+        class="btn-primary-white"
+      >
+        Adicionar Temporada
+      </button>
+      } @else {
+      <button
+        [routerLink]="['/career', career.id, 'geral']"
+        routerLinkActive="active"
+        class="btn-primary-white"
+      >
+        Geral
+      </button>
+      }
+
+      <button [routerLink]="['/career', career.id]" class="btn-primary-white">
+        {{ career.teamCareer }}
+      </button>
+    </div>
+  </div>
+  }
+</div>

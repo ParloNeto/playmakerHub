@@ -1,4 +1,4 @@
-.btn-create-career {
+@mixin btn-create-career {
   width: 130px;
   height: 30px;
   border-radius: 10px;
@@ -12,7 +12,7 @@
   cursor: pointer;
 }
 
-.btn-primary {
+@mixin btn-primary {
   width: 200px;
   height: 40px;
   border-radius: 10px;
@@ -31,7 +31,7 @@
   }
 }
 
-.btn-item-career {
+@mixin btn-item-career {
   width: 260px;
   height: 45px;
 
@@ -58,8 +58,8 @@
   }
 }
 
-.btn-primary-white {
-  width: 250px;
+@mixin btn-primary-white {
+  width: 13vw;
   height: 100px;
   border-radius: 50px;
   background-color: var(--white);
@@ -71,4 +71,102 @@
   text-align: center;
   margin-right: 30px;
   cursor: pointer;
+}
+
+@mixin btn-arrow-return {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: var(--white);
+  color: var(--primary-01);
+  cursor: pointer;
+  position: absolute;
+  top: 0%;
+  transform: translateY(-50%);
+  left: 45px;
+  img {
+    width: 35px;
+    height: 35px;
+  }
+
+  &:hover {
+    transition: ease-in-out 0.25s;
+    background-color: var(--white-01);
+  }
+}
+
+@mixin circle-edit-player {
+  width: 24px;
+  height: 24px;
+  padding: 3px;
+  border-radius: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--secundary-15-opacity);
+  cursor: pointer;
+  img {
+    width: 18px;
+    height: 18px;
+    top: 3px;
+
+    color: var(--white);
+
+    &:hover {
+      width: 24px;
+      height: 24px;
+      padding: 3px;
+      border-radius: 15px;
+      background-color: var(--secundary);
+      transition: background-color 0.7s ease-in-out 3ms;
+    }
+  }
+}
+
+.btn-create-career {
+  @include btn-create-career();
+}
+
+.btn-primary {
+  @include btn-primary();
+}
+
+.btn-item-career {
+  @include btn-item-career();
+}
+
+.btn-primary-white {
+  @include btn-primary-white();
+}
+
+.btn-primary-white-modal {
+  @include btn-primary-white();
+  width: 15vw;
+  height: 5vh;
+  margin: 0;
+  background-color: var(--white-01);
+  color: var(--secundary);
+}
+
+.btn-primary-red {
+  @include btn-primary-white();
+  background-color: var(--red);
+  color: var(--white);
+}
+
+.btn-primary-red-modal {
+  @include btn-primary-white();
+  width: 15vw;
+  height: 5vh;
+  margin: 0;
+  background-color: var(--red);
+  color: var(--white);
+}
+
+button.btn-arrow-return {
+  @include btn-arrow-return();
+}
+
+button.circle-edit-player {
+  @include circle-edit-player();
 }

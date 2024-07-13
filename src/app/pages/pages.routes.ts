@@ -1,21 +1,49 @@
-import { CareerComponent } from './career/career.component';
-import { CreatingCareerComponent } from './creating-career/creating-career.component';
-import { Routes } from '@angular/router';
 
+import { Routes } from '@angular/router';
 
 export const PAGES_ROUTES: Routes = [
   {
     path: '',
-    loadComponent: () => import('./home/home.component').then((p) => p.HomeComponent),
+    redirectTo: 'home',
+    pathMatch: 'full',
   },
   {
-    path: 'career/:id',
+    path: 'home',
+    loadComponent: () =>
+      import('./home/home.component').then((p) => p.HomeComponent),
+  },
+  {
+    path: 'career',
     title: 'Ver detalhes da Carreira - Playmaker Hub',
-    loadComponent: () => import('./career/career.component').then((p) => p.CareerComponent),
+    children: [
+      {
+        path: ':id',
+        loadComponent: () =>
+          import('./career/career.component').then((p) => p.CareerComponent),
+      },
+      {
+        path: ':id/:season',
+        loadComponent: () =>
+          import('./career/details/details.component').then((p) => p.DetailsComponent),
+      },
+      {
+        path: ':id/:season/new-player',
+        loadComponent: () =>
+          import('./new-player/new-player.component').then((p) => p.NewPlayerComponent),
+      },
+      {
+        path: ':id/:season/new-season',
+        loadComponent: () =>
+          import('./new-season/new-season.component').then((p) => p.NewSeasonComponent),
+      },
+    ],
   },
   {
     path: 'new-career',
     title: 'Criar Carreira - Playmaker Hub',
-    loadComponent: () => import('./creating-career/creating-career.component').then((p) => p.CreatingCareerComponent),
+    loadComponent: () =>
+      import('./creating-career/creating-career.component').then(
+        (p) => p.CreatingCareerComponent
+      ),
   },
 ];

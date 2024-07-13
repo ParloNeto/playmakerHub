@@ -2,23 +2,23 @@
 
 <div class="container">
   <div class="container-new-career">
-    <h2>Bem vindo!</h2>
+    <h2 class="semi-bold">Bem vindo!</h2>
     <div [routerLink]="['/new-career']" class="new-career">
       <img
         src="../../../assets/icons/carreira.svg"
         alt="icon de nova carreira"
       />
-      <h2>Criar uma nova Carreira</h2>
+      <h2 class="new-career">Criar uma nova Carreira</h2>
     </div>
   </div>
   <div class="caroussel-home">
-    <h2>
+    <h2 class="caroussel-home__text">
       O Playmaker Hub foi criado com a intenção de facilitar o gerenciamento
       entre temporadas do Modo Carreira de Manager no FIFA.
     </h2>
   </div>
   <div class="container-created-careers">
-    <h2>Suas carreiras!</h2>
+    <h2 class="semi-bold">Suas carreiras!</h2>
     @if (getCareer(); as data) {
 
     <div class="created-careers" [ngClass]="careerExists(data)">
@@ -26,7 +26,7 @@
         @for (createdCareer of data; track createdCareer) {
         <div>
           <button
-            [routerLink]="['career', createdCareer.id]"
+            [routerLink]="['/career', createdCareer.id]"
             class="btn-item-career"
           >
             {{ createdCareer.teamCareer }}
@@ -37,7 +37,9 @@
           </button>
         </div>
         } @empty {
-        <h3>Você não possui nenhuma carreira criada no momento...</h3>
+        <h3 class="purple-warn">
+          Você não possui nenhuma carreira criada no momento...
+        </h3>
         <button class="btn-create-career" [routerLink]="['/new-career']">
           Crie Agora!
         </button>
@@ -47,7 +49,7 @@
     } @else {
     <div class="created-careers">
       <div class="created-careers__content">
-        <h3>Não foi possível carregar suas carreiras...</h3>
+        <h3 class="purple-warn">Não foi possível carregar suas carreiras...</h3>
         <h4>Tente novamente mais tarde.</h4>
       </div>
     </div>

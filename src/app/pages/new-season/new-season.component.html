@@ -1,0 +1,113 @@
+<app-header />
+<div class="container">
+  <div class="creating-career">
+    <div class="creating-career__content">
+      <h2 class="title-content">
+        Cadastrar Temporada - {{ getCareerDetails()?.teamCareer }}
+      </h2>
+      <div class="creating-career__form">
+        <form [formGroup]="formSeason">
+          <div class="input-form">
+            <label for="seasonName">Nome da Temporada:</label>
+            <input
+              type="text"
+              #searchSeason
+              placeholder="Digite aqui..."
+              formControlName="seasonName"
+              [matAutocomplete]="autoSeason"
+              (input)="onSearchUpdatedSeasonName(searchSeason.value)"
+              appUpperCase
+            />
+            <mat-autocomplete #autoSeason="matAutocomplete">
+              @for (season of getSeasons(); track season) {
+              <mat-option [value]="season">{{
+                transformSeasonString(season)
+              }}</mat-option>
+              }
+            </mat-autocomplete>
+          </div>
+          <div class="input-form">
+            <label for="games">Jogos:</label>
+            <input
+              placeholder="Digite aqui..."
+              type="number"
+              formControlName="games"
+              maxlength="3"
+            />
+          </div>
+          <div class="input-form">
+            <label for="wins">Vitórias:</label>
+            <input
+              placeholder="Digite aqui..."
+              type="number"
+              formControlName="wins"
+              maxlength="3"
+            />
+          </div>
+          <div class="input-form">
+            <label for="draws">Empates:</label>
+            <input
+              placeholder="Digite aqui..."
+              type="number"
+              formControlName="draws"
+              maxlength="3"
+            />
+          </div>
+          <div class="input-form">
+            <label for="losses">Derrotas:</label>
+            <input
+              placeholder="Digite aqui..."
+              type="number"
+              formControlName="losses"
+              maxlength="3"
+            />
+          </div>
+          <div class="input-form">
+            <label for="goalsConceded">Gols sofridos:</label>
+            <input
+              placeholder="Digite aqui..."
+              type="number"
+              formControlName="goalsConceded"
+              maxlength="3"
+            />
+          </div>
+          <div class="input-form">
+            <label for="goalsScored">Gols marcados:</label>
+            <input
+              placeholder="Digite aqui..."
+              type="number"
+              formControlName="goalsScored"
+              maxlength="3"
+            />
+          </div>
+          <div class="input-form">
+            <label for="titles">Titulos:</label>
+            <input
+              placeholder="Digite aqui..."
+              type="number"
+              formControlName="titles"
+              maxlength="3"
+            />
+          </div>
+          <button
+            type="submit"
+            class="btn-primary"
+            [disabled]="formSeason.invalid"
+            (click)="submitForm()"
+          >
+            Cadastrar Temporada
+          </button>
+        </form>
+        <phub-modal [title]="titleModal()"></phub-modal>
+      </div>
+
+      @if (getCareerDetails(); as careerDetails) {
+      <app-details-manager-club-icon [clubName]="careerDetails.teamCareer" />
+      }
+
+      <button [routerLink]="['/']" class="btn-arrow-return">
+        <img src="../../../assets/icons/voltar.svg" alt="Voltar para a Home" />
+      </button>
+    </div>
+  </div>
+</div>

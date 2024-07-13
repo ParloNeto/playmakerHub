@@ -1,13 +1,6 @@
 :host {
   $width-background: 1200px;
 
-  .container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0px 0px 160px 0px;
-  }
-
   .creating-career {
     width: $width-background;
     height: 600px;
@@ -15,6 +8,7 @@
     border-radius: 15px;
     display: flex;
     justify-content: space-between;
+    position: relative;
 
     &__content {
       margin: 30px 30px 15px 45px;
@@ -33,6 +27,13 @@
         margin-right: 15px;
       }
     }
+  }
+
+  .show-error-modal {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    transition: all 1s;
   }
 
   label {
@@ -69,4 +70,6 @@
     border-radius: 10px;
     border: none;
   }
+
+
 }

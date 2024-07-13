@@ -1,0 +1,15 @@
+$width-background: 1200px;
+
+.career {
+  width: $width-background;
+  height: 600px;
+  background-color: var(--primary-01);
+  border-radius: 15px;
+  display: flex;
+  position: relative;
+  &__content {
+    margin: 30px 30px 15px 45px;
+    position: relative;
+    width: 100%;
+  }
+}

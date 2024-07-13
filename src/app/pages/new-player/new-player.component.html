@@ -1,0 +1,229 @@
+<app-header />
+<div class="container">
+  <div class="creating-career">
+    <div class="creating-career__content">
+      <h2 class="title-content">Cadastrar Jogador - {{ season() }}</h2>
+      <div class="creating-career__form">
+
+        <form
+          [formGroup]="formNewPlayer"
+          (ngSubmit)="submitForm()"
+        >
+          <div class="input-form">
+            <label for="firstName">Nome:</label>
+            <input
+              placeholder="Digite aqui..."
+              type="text"
+              formControlName="firstName"
+              maxlength="20"
+            />
+          </div>
+          <div class="input-form">
+            <label for="lastName">Sobrenome:</label>
+            <input
+              placeholder="Digite aqui..."
+              type="text"
+              formControlName="lastName"
+              maxlength="20"
+            />
+          </div>
+          <div class="input-form">
+            <label for="kitNumber">Número do Jogador:</label>
+            <input
+              placeholder="Digite aqui..."
+              type="number"
+              formControlName="kitNumber"
+              maxlength="20"
+            />
+          </div>
+
+          <div class="input-form">
+            <label for="position">Posição:</label>
+            <input
+              placeholder="Digite aqui..."
+              type="text"
+              formControlName="position"
+            />
+          </div>
+          <div class="input-form">
+            <label for="joined">Data de Chegada:</label>
+            <input
+              placeholder="Digite aqui..."
+              type="number"
+              formControlName="joined"
+            />
+          </div>
+
+            <div class="input-form">
+              <label for="nationality">Nacionalidade:</label>
+              <input
+                type="text"
+                #searchNation
+                placeholder="Digite aqui a nacionalidade..."
+                formControlName="nationality"
+                [matAutocomplete]="autoNation"
+                (input)="onSearchUpdatedNation(searchNation.value)"
+                appUpperCase
+              />
+              <mat-autocomplete #autoNation="matAutocomplete">
+                @for (name of nations(); track name.nation) {
+                <mat-option [value]="name.nation">{{ name.nation }}</mat-option>
+                }
+              </mat-autocomplete>
+            </div>
+            <div class="input-form">
+              <label for="urlImagePlayer">Foto do Jogador (URL):</label>
+              <input
+                placeholder="Digite aqui..."
+                type="text"
+                formControlName="urlImagePlayer"
+              />
+            </div>
+
+        </form>
+        <form action="post" [formGroup]="formStatisticsNewPlayer">
+          <div class="input-form">
+            <label for="matches">Partidas:</label>
+            <input
+              placeholder="Digite aqui..."
+              type="number"
+              formControlName="matches"
+              maxlength="20"
+            />
+          </div>
+          <div class="input-form">
+            <label for="goals">Gols:</label>
+            <input
+              placeholder="Digite aqui..."
+              type="number"
+              formControlName="goals"
+            />
+          </div>
+          <div class="input-form">
+            <label for="assists">Assistências:</label>
+            <input
+              placeholder="Digite aqui..."
+              type="number"
+              formControlName="assists"
+            />
+          </div>
+          @if (this.season() === 'geral') {
+            <div class="input-form">
+              <label for="teamCareer">Time da Carreira:</label>
+              <input
+                type="text"
+                #searchTeamCareer
+                placeholder="Selecione aqui uma temporada..."
+                formControlName="contractedAtualSeason"
+                appUpperCase
+              />
+            </div>
+            } @else {
+            <div class="checkbox-form">
+              <legend>Contratado nessa Temporada?</legend>
+              <div class="checkbox-form__body">
+                <div class="checkbox-form__body__checkbox">
+                  <input
+                    type="radio"
+                    [value]="true"
+                    name="contractedAtualSeason"
+                    formControlName="contractedAtualSeason"
+                  />
+                  <label for="contractedAtualSeason">Sim</label>
+                </div>
+                <div class="checkbox-form__body__checkbox">
+                  <input
+                    type="radio"
+                    [value]="false"
+                    name="contractedAtualSeason"
+                    formControlName="contractedAtualSeason"
+                  />
+                  <label for="contractedAtualSeason">Não</label>
+                </div>
+              </div>
+            </div>
+            }
+
+            <div class="input-form">
+              <label for="yellowCards">Cartões Amarelos:</label>
+              <input
+                placeholder="Digite aqui..."
+                type="number"
+                formControlName="yellowCards"
+              />
+            </div>
+            <div class="input-form">
+              <label for="redCards">Cartões Vermelhos:</label>
+              <input
+                placeholder="Digite aqui..."
+                type="number"
+                formControlName="redCards"
+              />
+            </div>
+        </form>
+
+
+
+
+
+          <!-- <div class="input-form">
+          <label for="fifaCareer">Fifa da Carreira:</label>
+          <input
+            type="text"
+            #searchFifaVersion
+            placeholder="Ex: 16, 17..."
+            formControlName="fifaCareer"
+            [matAutocomplete]="autoFV"
+          />
+          <mat-autocomplete #autoFV="matAutocomplete">
+            @for (optionFifa of fifaVersion(); track optionFifa) {
+            <mat-option [value]="optionFifa">{{ optionFifa }}</mat-option>
+            }
+          </mat-autocomplete>
+        </div> -->
+          <!-- <div class="input-form">
+          <label for="leagueCareer">Liga da Carreira:</label>
+          <input
+          type="text"
+          #searchLeagueCareer
+          placeholder="Ex: Bundesliga..."
+          formControlName="leagueCareer"
+          [matAutocomplete]="autoLC"
+          (input)="onSearchUpdatedLeagueCareer(searchLeagueCareer.value)"
+          (focus)="onSearchUpdatedLeagueCareer(searchLeagueCareer.value)"
+          appUpperCase
+        />
+        <mat-autocomplete #autoLC="matAutocomplete">
+          @for (league of leagues(); track league.name) {
+          <mat-option [value]="league.name">{{ league.name }}</mat-option>
+          }
+        </mat-autocomplete>
+        </div> -->
+
+
+
+          <button
+            type="submit"
+            class="btn-primary"
+            [disabled]="formNewPlayer.invalid || formStatisticsNewPlayer.invalid"
+            (click)="submitForm()"
+          >
+            Cadastrar Jogador
+          </button>
+
+      </div>
+      <!-- @if (showError()) {
+      <div class="show-error-modal">
+        <h4 class="text-warn">{{messageError()}}</h4>
+      </div>
+    } -->
+      @if (getCareerDetails(); as careerDetails) {
+      <app-details-manager-club-icon [clubName]="careerDetails.teamCareer" />
+      }
+
+      <button [routerLink]="['/']" class="btn-arrow-return">
+        <img src="../../../assets/icons/voltar.svg" alt="Voltar para a Home" />
+      </button>
+    </div>
+  </div>
+</div>
