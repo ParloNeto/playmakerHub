@@ -15,15 +15,15 @@
 @import './scss/theme/custom-theme';
 @import "scss/index";
 
-$hub-typography: mat.define-typography-config(
-    $font-family: 'Roboto',
-  );
+$hub-typography: mat.m2-define-typography-config($font-family: 'Roboto');
+
+  @include mat.typography-hierarchy($hub-typography);
 
 // Define a dark theme
-$dark-theme: mat.define-dark-theme((
+$dark-theme: mat.m2-define-dark-theme((
  color: (
-   primary: mat.define-palette($secundary-palette),
-   accent: mat.define-palette($white-palette),
+   primary: mat.m2-define-palette($secundary-palette),
+   accent: mat.m2-define-palette($white-palette),
  ),
   // Only include `typography` and `density` in the default dark theme.
   typography: $hub-typography,
