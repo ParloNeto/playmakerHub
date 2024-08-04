@@ -9,7 +9,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "serve:ssr:playmakerHub": "node dist/playmaker-hub/server/server.mjs",
+    "serve:ssr:playmakerHub": "node dist/playmaker-hub/server/server.mjs"
   },
   "private": true,
   "dependencies": {
