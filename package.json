@@ -9,7 +9,9 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "serve:ssr:playmakerHub": "node dist/playmaker-hub/server/server.mjs"
+    "serve:ssr:playmakerHub": "node dist/playmaker-hub/server/server.mjs",
+    "openapi-ts": "openapi-ts",
+    "my-awesome-script-name": "openapi-generator-cli generate -i http://localhost:8080/v3/api-docs -g typescript-angular -o generated-sources/openapi --additional-properties=ngVersion=17.3.8,npmName=restClient,supportsES6=true,npmVersion=10.8.1,withInterfaces=true"
   },
   "private": true,
   "dependencies": {
@@ -27,6 +29,7 @@
     "@angular/ssr": "^17.1.2",
     "express": "^4.18.2",
     "json-server": "^1.0.0-alpha.23",
+    "ngx-spinner": "^17.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"

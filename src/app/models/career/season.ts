@@ -3,6 +3,7 @@ import { Title } from "./title";
 
 export interface Season {
   id?: string;
+  seasonName?: string;
   games?: number;
   wins?: number;
   draws?: number;

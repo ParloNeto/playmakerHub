@@ -1,6 +1,7 @@
 <app-header />
 
 <div class="container">
+  <phub-loader></phub-loader>
   <div class="container-new-career">
     <h2 class="semi-bold">Bem vindo!</h2>
     <div [routerLink]="['/new-career']" class="new-career">
@@ -19,7 +20,7 @@
   </div>
   <div class="container-created-careers">
     <h2 class="semi-bold">Suas carreiras!</h2>
-    @if (getCareer(); as data) {
+    @if (getCareers(); as data) {
 
     <div class="created-careers" [ngClass]="careerExists(data)">
       <div class="created-careers__content">

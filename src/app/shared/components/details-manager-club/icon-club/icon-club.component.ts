@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { NewCareer } from '../../../../models/career/new-career';
 
 @Component({
@@ -13,6 +13,7 @@ import { NewCareer } from '../../../../models/career/new-career';
       />
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class IconClubComponent {
   @Input() teamCareer!: string;

@@ -7,6 +7,21 @@
       <h4 class="subtitle-league">
         {{ career.leagueCareer }} - {{ career.fifaCareer }}
       </h4>
+      <h2 class="semi-bold">Temporadas</h2>
+      <div class="career__seasons">
+        @if (seasons()) { @for (season of seasons(); track season.id) {
+        <button
+          class="btn-primary"
+          [routerLink]="[season.seasonName]"
+        >
+          {{ showSeason(season.seasonName!) }}
+        </button>
+        } } @else {
+        <h3 class="purple-warn">
+          Você não possui nenhuma temporada cadastrada no momento...
+        </h3>
+        }
+      </div>
     </div>
 
     <app-details-manager-club-icon
@@ -25,7 +40,9 @@
         [routerLink]="[this.formatSeason(career.fifaCareer)]"
         class="btn-primary-white"
       >
-        {{ initialSeason() }}
+        @if (this.initialSeason()) {
+        {{ showSeason(initialSeason()!) }}
+        }
       </button>
       <button
         [routerLink]="['/career', career.id, 'geral', 'new-season']"

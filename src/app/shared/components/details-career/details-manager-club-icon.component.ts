@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { IconManagerComponent } from '../details-manager-club/icon-manager/icon-manager.component';
 import { NewCareer } from '../../../models/career/new-career';
 import { IconClubComponent } from '../details-manager-club/icon-club/icon-club.component';
@@ -13,9 +13,7 @@ import { IconClubComponent } from '../details-manager-club/icon-club/icon-club.c
       <app-icon-manager [manager]="careerInput"></app-icon-manager>
     </div>
   `,
-  styles: `
-
-  `,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DetailsManagerClubIconComponent {
   @Input() careerInput!: NewCareer;

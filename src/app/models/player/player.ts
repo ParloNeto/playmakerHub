@@ -1,6 +1,7 @@
 import { Statistics } from "./statistics";
 
 export interface Player {
+  id: string;
   firstName: string;
   lastName: string;
   nationality: string;
@@ -8,5 +9,6 @@ export interface Player {
   kitNumber: number;
   joined: number;
   urlImagePlayer: string;
-  getStatisticsBySeasons: Statistics
+  getStatisticsBySeasons: Statistics;
+  idCareer: string;
 }

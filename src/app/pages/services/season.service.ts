@@ -8,7 +8,7 @@ import { Observable, shareReplay, tap } from 'rxjs';
 })
 export class SeasonService {
   #http = inject(HttpClient);
-  #apiUrl = environment.GET_SEASONS_URL;
+  #apiUrl = environment.GET_ALL_SEASONS_URL;
 
   constructor() {}
 

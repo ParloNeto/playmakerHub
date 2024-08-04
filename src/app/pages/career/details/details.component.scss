@@ -3,18 +3,11 @@
   background-color: red;
 }
 
-  .list-players {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    align-content: center;
-    overflow-x: auto;
 
-    // width: 625px;
-    /* flex-wrap: wrap; */
-    margin: 0px 0px;
+  .new-player {
+    position: absolute;
   }
+
 
   .career {
     width: 1200px;
@@ -26,15 +19,6 @@
   }
   h3.purple-warn {
     width: 220px;
-  }
-
-  h2.position-title {
-    font-family: Roboto;
-    font-size: 18px;
-    font-style: italic;
-    font-weight: 200;
-    color: var(--secundary);
-
   }
 
   .left {

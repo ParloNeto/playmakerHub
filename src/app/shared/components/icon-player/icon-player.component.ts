@@ -1,13 +1,14 @@
 import { NgIf } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Player } from '../../../models/player/player';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'icon-player',
   standalone: true,
-  imports: [NgIf],
+  imports: [NgIf, RouterLink],
   template: `
-  @if (player) {
+    @if (player) {
     <div class="box-player">
       <p class="number-player">{{ player.kitNumber }}</p>
       <img
@@ -18,8 +19,8 @@ import { Player } from '../../../models/player/player';
       <div class="box-player__info">
         <p class="name-player">{{ player.firstName }}</p>
         <div class="box-player__info__statistics">
-          @if (player.getStatisticsBySeasons) {
-            @if (player.getStatisticsBySeasons.goals === 1) {
+          @if (player.getStatisticsBySeasons) { @if
+          (player.getStatisticsBySeasons.goals === 1) {
           <p class="goals-player">
             {{ player.getStatisticsBySeasons.goals }} Gol
           </p>
@@ -29,12 +30,9 @@ import { Player } from '../../../models/player/player';
           <p class="goals-player">
             {{ player.getStatisticsBySeasons.assists }} Assistências
           </p>
-          }
-          }
-
-
+          } }
         </div>
-        <button class="circle-edit-player">
+        <button class="circle-edit-player" [routerLink]="[player.id, 'edit-player']">
           <img
             src="../../../../assets/icons/edit-player.svg"
             alt="Edit player"
@@ -43,9 +41,10 @@ import { Player } from '../../../models/player/player';
       </div>
       <p class="position-player">{{ player.position }}</p>
     </div>
-  }
+    }
   `,
   styleUrl: './icon-player.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class IconPlayerComponent {
   @Input({ required: true, alias: 'getPlayer' }) player!: Player;

@@ -1,4 +1,12 @@
-import { Component, OnDestroy, OnInit, computed, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnDestroy,
+  OnInit,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
 import { HeaderComponent } from '../../shared/header/header.component';
 import {
   FormBuilder,
@@ -21,7 +29,6 @@ import { NewCareer } from '../../models/career/new-career';
 import { ModalService } from '../services/modal.service';
 import { CoachService } from '../services/coach.service';
 import { Subscription } from 'rxjs';
-import { PlayerService } from '../services/player.service';
 
 @Component({
   selector: 'app-creating-career',
@@ -42,9 +49,9 @@ import { PlayerService } from '../services/player.service';
   ],
   templateUrl: './creating-career.component.html',
   styleUrl: './creating-career.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CreatingCareerComponent implements OnInit, OnDestroy {
-
   #fb = inject(FormBuilder);
   #nationService = inject(NationService);
   #careerService = inject(CareerService);
@@ -56,9 +63,15 @@ export class CreatingCareerComponent implements OnInit, OnDestroy {
   public formCreatingCareer!: FormGroup;
   public formCreatingCoach!: FormGroup;
 
-  private getAllNations: Subscription = this.#nationService.getAllNationsMock().subscribe();
-  private getAllFootballLeagues: Subscription = this.#careerService.httpFootballLeagues$().subscribe();
-  private getAllVersionFifa: Subscription = this.#careerService.httpVersionFifa$().subscribe();
+  private getAllNations: Subscription = this.#nationService
+    .getAllNationsMock()
+    .subscribe();
+  private getAllFootballLeagues: Subscription = this.#careerService
+    .httpFootballLeagues$()
+    .subscribe();
+  private getAllVersionFifa: Subscription = this.#careerService
+    .httpVersionFifa$()
+    .subscribe();
 
   public showError = signal<boolean>(false);
   public messageError = signal<string>('');
@@ -143,9 +156,13 @@ export class CreatingCareerComponent implements OnInit, OnDestroy {
 
   public nations = computed(() => {
     const sq = this.searchQueryNation();
-    return this.#nationService
-      .getNations()!
-      .filter((x) => x.nation.includes(sq));
+    const nations = this.#nationService.getNations();
+
+    if (nations) {
+      return nations!.filter((x) => x.nation.includes(sq));
+    }
+
+     return null;
   });
 
   /**
@@ -155,9 +172,11 @@ export class CreatingCareerComponent implements OnInit, OnDestroy {
    */
   public fifaVersion = computed(() => {
     const sq = this.searchQueryFifaVersion();
-    return this.#careerService
-      .getFifaCareer()!
-      .filter((fifaVersion) => fifaVersion.includes(sq));
+    const fifaCareer = this.#careerService.getFifaCareer();
+    if (fifaCareer) {
+      return fifaCareer!.filter((fifaVersion) => fifaVersion.includes(sq));
+    }
+    return null;
   });
 
   /**
@@ -229,7 +248,7 @@ export class CreatingCareerComponent implements OnInit, OnDestroy {
       this.setTimeRemoveMessageError(false, 5000);
     }
 
-    if (existNation.length != 0) {
+    if (existNation?.length != 0) {
       console.log(existNation);
       console.log('existe nartion');
     } else {

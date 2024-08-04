@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { HeaderComponent } from '../../shared/header/header.component';
 import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
 import { CareerService } from '../services/career.service';
@@ -9,6 +9,8 @@ import { ModalService } from '../services/modal.service';
 import { Subscription } from 'rxjs';
 import { ModalComponent } from '../../shared/components/modal/modal.component';
 import { NewCareer } from '../../models/career/new-career';
+import { transformSeasonString } from '../../shared/utils/utils';
+import { IconPlayerComponent } from '../../shared/components/icon-player/icon-player.component';
 @Component({
   selector: 'app-career',
   standalone: true,
@@ -20,6 +22,7 @@ import { NewCareer } from '../../models/career/new-career';
   ],
   templateUrl: './career.component.html',
   styleUrl: './career.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CareerComponent implements OnInit, OnDestroy {
   #careerService = inject(CareerService);
@@ -31,6 +34,9 @@ export class CareerComponent implements OnInit, OnDestroy {
   private id!: string;
   public getCareerDetails = this.#careerService.getCareerDetails;
   public initialSeason = this.#careerService.getSeasonByInitialSeason;
+  public seasons = this.#careerService.getAllSeasonsByCareer;
+  public showSeason = transformSeasonString
+
 
   private confirmSubscription!: Subscription;
 
@@ -38,6 +44,7 @@ export class CareerComponent implements OnInit, OnDestroy {
     this.#activatedRoute.params.subscribe({
       next: (params: Params) => {
         this.id = params['id'];
+        this.#careerService.httpSeasonsByCareer$(this.id).subscribe();
         this.#careerService.httpCareersById$(this.id).subscribe({
           next: (career: NewCareer) => {
             this.#careerService.httpSeasonByInitialSeason$(career.fifaCareer).subscribe();
@@ -45,6 +52,7 @@ export class CareerComponent implements OnInit, OnDestroy {
         });
       },
     });
+
   }
 
   ngOnDestroy() {
@@ -77,10 +85,6 @@ export class CareerComponent implements OnInit, OnDestroy {
       .replace('/', '-');
     const formattedSeason = 'temporada-' + strippedSeason;
     return formattedSeason;
-  }
-
-  public showSeason(fifaCareer: string): string {
-    return getInitialSeasonByFIFAVersion(fifaCareer);
   }
 
   public deleteCareer(): void {

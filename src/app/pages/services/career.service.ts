@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject, signal } from '@angular/core';
 import { NewCareer } from '../../models/career/new-career';
-import { Observable, of, shareReplay, tap } from 'rxjs';
+import { firstValueFrom, Observable, of, shareReplay, tap } from 'rxjs';
 import { fifaVersionMock } from './mocks/fifaVersion-mocks';
 import { footballLeagues } from './mocks/football-leagues';
 import { FootballLeague } from '../../models/footballLeagues/footballLeagues';
@@ -20,17 +20,24 @@ export class CareerService {
 
   #http = inject(HttpClient);
   #apiUrl = environment.CREATE_CAREER_URL;
+  #seasonApiUrl = environment.SEASONS_URL;
 
   #setCareers = signal<NewCareer[] | null>(null);
   get getCareers() {
     return this.#setCareers.asReadonly();
   }
 
-  httpCareers$(): Observable<NewCareer[]> {
-    return this.#http.get<NewCareer[]>(`${this.#apiUrl}`).pipe(
-      shareReplay(),
-      tap((res) => this.#setCareers.set(res))
-    );
+  // httpCareers$(): Observable<NewCareer[]> {
+  //   return this.#http.get<NewCareer[]>(`${this.#apiUrl}`).pipe(
+  //     shareReplay(1),
+  //     tap((res) => this.#setCareers.set(res))
+  //   );
+  // }
+
+  async httpCareers(): Promise<NewCareer[]> {
+    const careers$ = this.#http.get<NewCareer[]>(`${this.#apiUrl}`);
+    const response = await firstValueFrom(careers$);
+    return response;
   }
 
   #setCareerDetails = signal<NewCareer | null>(null);
@@ -40,31 +47,57 @@ export class CareerService {
 
   httpCareersById$(id: string): Observable<NewCareer> {
     return this.#http.get<NewCareer>(`${this.#apiUrl}/${id}`).pipe(
-      shareReplay(),
+      shareReplay(1),
       tap((res) => {
         this.#setCareerDetails.set(res);
       })
     );
   }
 
-  #setPlayersOfCareersGeral = signal<Player[] | null>(null);
-  get getPlayersOfCareersGeral() {
-    return this.#setPlayersOfCareersGeral.asReadonly();
+  #setSeasons = signal<Season[] | null>(null);
+  get getAllSeasonsByCareer() {
+    return this.#setSeasons.asReadonly();
+  }
+
+  httpSeasonsByCareer$(idCareer: string): Observable<Season[]> {
+    return this.#http
+      .get<Season[]>(`${this.#seasonApiUrl}/career/${idCareer}`)
+      .pipe(
+        shareReplay(1),
+        tap((res: Season[]) => {
+          this.#setSeasons.set(res);
+        })
+      );
+  }
+
+  #setPlayersFromCareer = signal<Player[] | null>(null);
+  get getPlayersFromCareer() {
+    return this.#setPlayersFromCareer.asReadonly();
   }
 
   httpPlayersOfCareersGeralById$(careerId: string): Observable<Player[]> {
     return this.#http.get<Player[]>(`${this.#apiUrl}/${careerId}/players`).pipe(
       shareReplay(),
       tap((res: Player[]) => {
-        this.#setPlayersOfCareersGeral.set(res);
-        console.log(res)
+        this.#setPlayersFromCareer.set(res);
+        console.log(res);
       })
     );
   }
 
-  #setPlayerCareerDetails = signal<Player[] | null>(null);
-  get getPlayerCareerDetails() {
-    return this.#setCareerDetails.asReadonly();
+  httpPlayersFilteredBySeason$(
+    careerId: string,
+    typeSeason: string
+  ): Observable<Player[]> {
+    return this.#http
+      .get<Player[]>(`${this.#apiUrl}/${careerId}/${typeSeason}`)
+      .pipe(
+        shareReplay(),
+        tap((res: Player[]) => {
+          this.#setPlayersFromCareer.set(res);
+          console.log(res);
+        })
+      );
   }
 
   httpPostCareer$(career: NewCareer): Observable<NewCareer> {
@@ -74,11 +107,16 @@ export class CareerService {
     );
   }
 
-  httpPostSeasonByCareerId$(season: Season, careerId: string): Observable<Season> {
-    return this.#http.post<Season>(`${this.#apiUrl}/${careerId}/seasons`, season).pipe(
-      shareReplay(),
-      tap((res) => {})
-    );
+  httpPostSeasonByCareerId$(
+    season: Season,
+    careerId: string
+  ): Observable<Season> {
+    return this.#http
+      .post<Season>(`${this.#apiUrl}/${careerId}/seasons`, season)
+      .pipe(
+        shareReplay(),
+        tap((res) => {})
+      );
   }
 
   httpDeleteCareer$(careerId: string): Observable<NewCareer> {
@@ -112,7 +150,7 @@ export class CareerService {
     );
   }
 
-  #setSeasonByInitialSeason = signal<string | null>(null);
+  #setSeasonByInitialSeason = signal<string>('');
   get getSeasonByInitialSeason() {
     return this.#setSeasonByInitialSeason.asReadonly();
   }

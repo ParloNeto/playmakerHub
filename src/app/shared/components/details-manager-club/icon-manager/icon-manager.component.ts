@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Coach } from '../../../../models/career/Coach';
 import { NgIf } from '@angular/common';
 
@@ -17,6 +17,7 @@ import { NgIf } from '@angular/common';
       <h3>{{ manager.coachesName }}</h3>
     </div>
     }`,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class IconManagerComponent {
   @Input({ alias: 'manager-details' }) manager!: Coach;

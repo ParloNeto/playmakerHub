@@ -1,3 +1,4 @@
+import { EditPlayerComponent } from './edit-player/edit-player.component';
 
 import { Routes } from '@angular/router';
 
@@ -35,6 +36,11 @@ export const PAGES_ROUTES: Routes = [
         path: ':id/:season/new-season',
         loadComponent: () =>
           import('./new-season/new-season.component').then((p) => p.NewSeasonComponent),
+      },
+      {
+        path: ':id/:season/:id/edit-player',
+        loadComponent: () =>
+          import('./edit-player/edit-player.component').then((p) => p.EditPlayerComponent),
       },
     ],
   },

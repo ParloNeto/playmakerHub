@@ -21,7 +21,7 @@
             <mat-autocomplete #autoSeason="matAutocomplete">
               @for (season of getSeasons(); track season) {
               <mat-option [value]="season">{{
-                transformSeasonString(season)
+                showSeason(season)
               }}</mat-option>
               }
             </mat-autocomplete>

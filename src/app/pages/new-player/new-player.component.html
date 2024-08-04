@@ -210,13 +210,9 @@
           >
             Cadastrar Jogador
           </button>
-
+        <phub-modal [title]="titleModal()"></phub-modal>
       </div>
-      <!-- @if (showError()) {
-      <div class="show-error-modal">
-        <h4 class="text-warn">{{messageError()}}</h4>
-      </div>
-    } -->
+  
       @if (getCareerDetails(); as careerDetails) {
       <app-details-manager-club-icon [clubName]="careerDetails.teamCareer" />
       }

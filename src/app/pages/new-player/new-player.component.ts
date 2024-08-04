@@ -1,6 +1,6 @@
 import { Player } from './../../models/player/player';
 import { NgFor, AsyncPipe, CommonModule } from '@angular/common';
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
 import {
   ReactiveFormsModule,
   FormsModule,
@@ -11,13 +11,16 @@ import {
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { ActivatedRoute, Params, RouterLink } from '@angular/router';
+import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
 import { UpperCaseDirective } from '../../shared/directives/upper-case.directive';
 import { HeaderComponent } from '../../shared/header/header.component';
 import { NationService } from '../services/nation.service';
 import { CareerService } from '../services/career.service';
 import { DetailsManagerClubIconComponent } from '../../shared/components/details-manager-club/details-manager-club-icon.component';
 import { PlayerService } from '../services/player.service';
+import { ModalService } from '../services/modal.service';
+import { ModalComponent } from '../../shared/components/modal/modal.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-new-player',
@@ -35,15 +38,21 @@ import { PlayerService } from '../services/player.service';
     UpperCaseDirective,
     RouterLink,
     DetailsManagerClubIconComponent,
+    ModalComponent
   ],
   templateUrl: './new-player.component.html',
   styleUrl: './new-player.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NewPlayerComponent implements OnInit {
   #fb = inject(FormBuilder);
   #careerService = inject(CareerService);
   #nationService = inject(NationService);
   #playerService = inject(PlayerService);
+  #modalService = inject(ModalService);
+  #snackBar = inject(MatSnackBar);
+  #router = inject(Router);
+
 
   #activatedRoute = inject(ActivatedRoute);
 
@@ -53,8 +62,9 @@ export class NewPlayerComponent implements OnInit {
   public formStatisticsNewPlayer!: FormGroup;
   public searchQueryNation = signal<string>('');
   public season = signal<string>('');
-  public id = signal<string>('');
-  // public id!: string;
+  public idCareer = signal<string>('');
+  public titleModal = this.#playerService.titleModal;
+  // public idCareer!: string;
 
   /**
    * Filtra a nacionalidade com base no input do campo 'nationality'.
@@ -73,7 +83,7 @@ export class NewPlayerComponent implements OnInit {
     this.#activatedRoute.params.subscribe({
       next: (params: Params) => {
         this.season.set(params['season']);
-        this.id.set(params['id']);
+        this.idCareer.set(params['id']);
 
         // this.#careerService.httpCareersById$(id).subscribe();
       },
@@ -94,6 +104,7 @@ export class NewPlayerComponent implements OnInit {
       ],
       kitNumber: [0, [Validators.required]],
       urlImagePlayer: ['', [Validators.required]],
+      idCareer: [this.idCareer(), [Validators.required]],
     });
 
     this.formStatisticsNewPlayer = this.#fb.group({
@@ -110,7 +121,7 @@ export class NewPlayerComponent implements OnInit {
         [Validators.required, Validators.minLength(2), Validators.maxLength(2)],
       ],
       contractedAtualSeason: [, [Validators.required]],
-    })
+    });
 
     this.verifySeason(this.season());
   }
@@ -125,18 +136,13 @@ export class NewPlayerComponent implements OnInit {
     //   this.formNewPlayer.get('season')?.setValue(this.season());
     // }
 
-    if (this.formNewPlayer.valid && this.formStatisticsNewPlayer.valid)
-       {
+    if (this.formNewPlayer.valid && this.formStatisticsNewPlayer.valid) {
       const player = Object.assign({}, this.formNewPlayer.value, {
         statisticsBySeasons: [this.formStatisticsNewPlayer.value],
       }) as Player;
 
       this.#playerService
-        .httpCreatePlayerByCareer$(
-          this.id(),
-          player,
-          this.season()
-        )
+        .httpCreatePlayerByCareer$(this.idCareer(), player, this.season())
         .subscribe();
     }
     console.log(this.formNewPlayer.valid);

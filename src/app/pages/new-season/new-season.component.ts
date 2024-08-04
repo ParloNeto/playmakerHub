@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { HeaderComponent } from '../../shared/header/header.component';
 import { NgFor, AsyncPipe, CommonModule } from '@angular/common';
 import {
@@ -14,7 +14,6 @@ import { MatInputModule } from '@angular/material/input';
 import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
 import { DetailsManagerClubIconComponent } from '../../shared/components/details-manager-club/details-manager-club-icon.component';
 import { UpperCaseDirective } from '../../shared/directives/upper-case.directive';
-import { CareerComponent } from '../career/career.component';
 import { CareerService } from '../services/career.service';
 import { SeasonService } from '../services/season.service';
 import { Season } from '../../models/career/season';
@@ -22,6 +21,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ModalService } from '../services/modal.service';
 import { ModalComponent } from '../../shared/components/modal/modal.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { transformSeasonString } from '../../shared/utils/utils';
 
 
 @Component({
@@ -44,6 +44,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   ],
   templateUrl: './new-season.component.html',
   styleUrl: './new-season.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NewSeasonComponent implements OnInit {
   #activatedRoute = inject(ActivatedRoute);
@@ -60,6 +61,8 @@ export class NewSeasonComponent implements OnInit {
   public formSeason!: FormGroup;
   public getCareerDetails = this.#careerService.getCareerDetails;
   public getSeasons = this.#seasonService.getSeasons;
+  public showSeason = transformSeasonString
+
 
   ngOnInit(): void {
     this.#activatedRoute.params.subscribe({
@@ -107,17 +110,4 @@ export class NewSeasonComponent implements OnInit {
     this.searchQuerySeasonName.set(nationName);
   }
 
-  public transformSeasonString(input: string): string {
-    const parts = input.split('-');
-
-    if (parts.length !== 3 || parts[0].toLowerCase() !== 'temporada') {
-      throw new Error('Formato inválido');
-    }
-
-    const season = parts[0].charAt(0).toUpperCase() + parts[0].slice(1);
-    const year1 = parts[1];
-    const year2 = parts[2];
-
-    return `${season} ${year1}/${year2}`;
-  }
 }
