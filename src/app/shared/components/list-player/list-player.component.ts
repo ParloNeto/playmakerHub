@@ -1,5 +1,5 @@
 import { NgIf } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, Input, Signal, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, Signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Player } from '../../../models/player/player';
 import { IconPlayerComponent } from '../icon-player/icon-player.component';
@@ -47,10 +47,9 @@ import { ShowPlayersComponent } from './show-players/show-players.component';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ListPlayerComponent {
-  @Input({ required: true, alias: 'setPlayers' })
-  public players!: Signal<Player[] | null>;
-  // public players: input.required<Player[]>();
-  // migrate implementation in Angular 18 version
+  public players = input.required<Player[] | null>({
+    alias: "setPlayer"
+  });
 
   goalkeepers = computed(
     () => this.players()!.filter((player) => player.position === 'GOL') ?? []

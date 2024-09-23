@@ -1,3 +1,4 @@
+import { StringUtils, transformSeasonString } from './../../shared/utils/utils';
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { HeaderComponent } from '../../shared/header/header.component';
 import { NgFor, AsyncPipe, CommonModule } from '@angular/common';
@@ -21,7 +22,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ModalService } from '../services/modal.service';
 import { ModalComponent } from '../../shared/components/modal/modal.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { transformSeasonString } from '../../shared/utils/utils';
+import { LoaderModule } from '../../shared/components/loader/loader.module';
 
 
 @Component({
@@ -40,7 +41,8 @@ import { transformSeasonString } from '../../shared/utils/utils';
     UpperCaseDirective,
     RouterLink,
     DetailsManagerClubIconComponent,
-    ModalComponent
+    ModalComponent,
+    LoaderModule
   ],
   templateUrl: './new-season.component.html',
   styleUrl: './new-season.component.scss',
@@ -82,7 +84,6 @@ export class NewSeasonComponent implements OnInit {
       losses: [0, [Validators.maxLength(3)]],
       goalsConceded: [0, [Validators.maxLength(3)]],
       goalsScored: [0, [Validators.maxLength(3)]],
-      titles: [[{titleName: "Titulo"}], [Validators.required]],
     });
   }
 

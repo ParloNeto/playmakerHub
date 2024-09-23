@@ -1,7 +1,16 @@
+export class StringUtils {
+
+}
+
 export function transformSeasonString(input: string): string {
   const parts = input.split('-');
 
-  if (parts.length !== 3 || parts[0].toLowerCase() !== 'temporada') {
+  if (
+    parts.length !== 3 ||
+    parts[0].toLowerCase() !== 'temporada' ||
+    isNaN(Number(parts[1])) ||
+    isNaN(Number(parts[2]))
+  ) {
     throw new Error('Formato inválido');
   }
 

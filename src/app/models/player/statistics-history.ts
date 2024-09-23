@@ -1,9 +1,7 @@
-export interface Statistics {
-  season: string;
+export interface StatisticsHistory {
   matches: number;
   goals: number;
   assists: number;
   yellowCards: number;
   redCards: number;
-  contractedAtualSeason: boolean;
 };

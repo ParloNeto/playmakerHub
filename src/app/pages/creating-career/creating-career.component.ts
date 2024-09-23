@@ -28,7 +28,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { NewCareer } from '../../models/career/new-career';
 import { ModalService } from '../services/modal.service';
 import { CoachService } from '../services/coach.service';
-import { Subscription } from 'rxjs';
+import { Coach } from '../../models/career/Coach';
+import { FootballLeague } from '../../models/footballLeagues/footballLeagues';
+import { LoaderModule } from '../../shared/components/loader/loader.module';
+import { FileUploadModule } from '../../shared/components/file-upload/file-upload.module';
+import { DetailsManagerClubIconComponent } from '../../shared/components/details-manager-club/details-manager-club-icon.component';
+import { Team } from '../../models/footballLeagues/team';
 
 @Component({
   selector: 'app-creating-career',
@@ -46,12 +51,15 @@ import { Subscription } from 'rxjs';
     UpperCaseDirective,
     RouterLink,
     ModalComponent,
+    LoaderModule,
+    FileUploadModule,
+    DetailsManagerClubIconComponent
   ],
   templateUrl: './creating-career.component.html',
   styleUrl: './creating-career.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CreatingCareerComponent implements OnInit, OnDestroy {
+export class CreatingCareerComponent implements OnInit {
   #fb = inject(FormBuilder);
   #nationService = inject(NationService);
   #careerService = inject(CareerService);
@@ -63,16 +71,6 @@ export class CreatingCareerComponent implements OnInit, OnDestroy {
   public formCreatingCareer!: FormGroup;
   public formCreatingCoach!: FormGroup;
 
-  private getAllNations: Subscription = this.#nationService
-    .getAllNationsMock()
-    .subscribe();
-  private getAllFootballLeagues: Subscription = this.#careerService
-    .httpFootballLeagues$()
-    .subscribe();
-  private getAllVersionFifa: Subscription = this.#careerService
-    .httpVersionFifa$()
-    .subscribe();
-
   public showError = signal<boolean>(false);
   public messageError = signal<string>('');
   titleModal!: 'Aviso!' | 'Sucesso!' | 'Erro!';
@@ -80,14 +78,29 @@ export class CreatingCareerComponent implements OnInit, OnDestroy {
   public searchQueryNation = signal<string>('');
   public searchQueryFifaVersion = signal<string>('');
   public searchQueryLeagueCareer = signal<string>('');
-  public searchQueryTeamCareer = signal<string>('');
 
-  public filteredOptions: string[] = [];
+  public filteredOptions: Team[] = [];
+
+  #setFootballLeague = signal<FootballLeague[] | null>(null);
+  get getFootballLeague() {
+    return this.#setFootballLeague.asReadonly();
+  }
+
+  #setNations = signal<{ nation: string }[] | null>(null);
+  get getNations() {
+    return this.#setNations.asReadonly();
+  }
+
+  #setFifaCareer = signal<string[] | null>(null);
+  get getFifaCareer() {
+    return this.#setFifaCareer.asReadonly();
+  }
 
   ngOnInit(): void {
-    this.getAllNations;
-    this.getAllFootballLeagues;
-    this.getAllVersionFifa;
+
+    this.getVersionsFifa().then();
+    this.getNationsMock().then();
+    this.getFootballLeagues().then();
 
     this.formCreatingCareer = this.#fb.group({
       fifaCareer: [
@@ -107,7 +120,7 @@ export class CreatingCareerComponent implements OnInit, OnDestroy {
 
     this.formCreatingCoach = this.#fb.group({
       coachesName: [
-        null,
+        '',
         [
           Validators.required,
           Validators.maxLength(20),
@@ -127,11 +140,6 @@ export class CreatingCareerComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy(): void {
-    this.getAllNations.unsubscribe();
-    this.getAllFootballLeagues.unsubscribe();
-  }
-
   get getUrl() {
     return this.formCreatingCoach.get('urlImageCoach')!.value;
   }
@@ -148,6 +156,10 @@ export class CreatingCareerComponent implements OnInit, OnDestroy {
     return this.formCreatingCareer.get('leagueCareer')!.value;
   }
 
+  get getTeamCareer() {
+    return this.formCreatingCareer.get('teamCareer')!.value;
+  }
+
   /**
    * Filtra a nacionalidade com base no input do campo 'nationality'.
    *
@@ -156,13 +168,13 @@ export class CreatingCareerComponent implements OnInit, OnDestroy {
 
   public nations = computed(() => {
     const sq = this.searchQueryNation();
-    const nations = this.#nationService.getNations();
+    const nations = this.getNations();
 
     if (nations) {
       return nations!.filter((x) => x.nation.includes(sq));
     }
 
-     return null;
+    return null;
   });
 
   /**
@@ -172,7 +184,7 @@ export class CreatingCareerComponent implements OnInit, OnDestroy {
    */
   public fifaVersion = computed(() => {
     const sq = this.searchQueryFifaVersion();
-    const fifaCareer = this.#careerService.getFifaCareer();
+    const fifaCareer = this.getFifaCareer();
     if (fifaCareer) {
       return fifaCareer!.filter((fifaVersion) => fifaVersion.includes(sq));
     }
@@ -186,9 +198,11 @@ export class CreatingCareerComponent implements OnInit, OnDestroy {
    */
   public leagues = computed(() => {
     const sq = this.searchQueryLeagueCareer();
-    return this.#careerService
-      .getFootballLeagues()!
-      .filter((league) => league.name.includes(sq));
+    const footballLeagues = this.getFootballLeague();
+    if (footballLeagues) {
+      return footballLeagues.filter((league) => league.name.includes(sq));
+    }
+    return null;
   });
 
   /**
@@ -198,65 +212,79 @@ export class CreatingCareerComponent implements OnInit, OnDestroy {
    */
   public selectedTeamsFilteredByLeague = computed(() => {
     const sq = this.searchQueryLeagueCareer();
-    return this.leagues()
-      .filter((league) => league.name == sq)
-      .map((res) => (this.filteredOptions = res.teams.slice()));
+    const leagues = this.leagues();
+    if (leagues) {
+      leagues
+        .filter((league) => league.name == sq)
+        .map((res) => (this.filteredOptions = res.teams.slice()));
+    }
+    return null;
   });
 
-  public submitForm(): void {
-    this.checkFieldValues();
-
+  public async submitForm(): Promise<void> {
     if (this.formCreatingCareer.valid && this.formCreatingCoach.valid) {
       const careerForm = this.formCreatingCareer.value;
       const coachForm = this.formCreatingCoach.value;
 
-      this.#coachService.createCoach(coachForm).subscribe({
-        next: (createdCoach) => {
-          const finalForm: NewCareer = {
-            coach: createdCoach,
-            fifaCareer: careerForm.fifaCareer,
-            leagueCareer: careerForm.leagueCareer,
-            teamCareer: careerForm.teamCareer,
-          };
-          this.#careerService.httpPostCareer$(finalForm).subscribe({
-            next: () => {
-              this.#router.navigateByUrl(`/home`);
-              this.#snackBar.open('Carreira criada com sucesso!', 'Fechar', {
-                duration: 3500,
-              });
-            },
-          });
-        },
-        error: (err: Error) => {
-          this.titleModal = 'Erro!';
-          this.#modalService.showError(err.message);
-        },
+      const finalForm: NewCareer = {
+        coach: coachForm,
+        fifaCareer: careerForm.fifaCareer,
+        leagueCareer: careerForm.leagueCareer,
+        teamCareer: careerForm.teamCareer,
+      };
+
+      await this.createCareer(finalForm).then(() => {
+        this.#router.navigateByUrl(`/home`);
+        this.#snackBar.open('Carreira criada com sucesso!', 'Fechar', {
+          duration: 3500,
+        });
       });
     }
   }
 
-  public checkFieldValues(): void {
-    const existLeague = this.leagues();
-    const existNation = this.nations();
-    if (existLeague.length != 0) {
-      console.log(existLeague);
-      console.log('existe array');
-    } else {
-      this.formCreatingCareer.get('leagueCareer')!.reset();
-      this.messageError.set('O nome no campo da Liga não existe.');
-      this.showError.set(true);
-      this.setTimeRemoveMessageError(false, 5000);
+  async createCoach(coach: Partial<Coach>) {
+    try {
+      const response = await this.#coachService.httpCreateCoach(coach);
+      return response;
+    } catch (err: any) {
+      console.error(err);
+      this.#modalService.showError(err.error.message);
     }
+    return undefined;
+  }
 
-    if (existNation?.length != 0) {
-      console.log(existNation);
-      console.log('existe nartion');
-    } else {
-      this.formCreatingCareer.get('nationality')!.reset();
-      console.log('O nome no campo de Nação não existe.');
-      this.messageError.set('O nome no campo de Nação não existe.');
-      this.showError.set(true);
-      this.setTimeRemoveMessageError(false, 5000);
+  async createCareer(career: Partial<NewCareer>) {
+    try {
+      await this.#careerService.httpPostCareer(career);
+    } catch (err: any) {
+      this.#modalService.showError(err.error.message);
+    }
+  }
+
+  async getFootballLeagues(): Promise<void> {
+    try {
+      const footballLeagues = await this.#careerService.httpFootballLeagues();
+      this.#setFootballLeague.set(footballLeagues);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  async getNationsMock(): Promise<void> {
+    try {
+      const nations = await this.#nationService.getAllNationsMock();
+      this.#setNations.set(nations);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  async getVersionsFifa(): Promise<void> {
+    try {
+      const versionsFifa = await this.#careerService.httpVersionFifa();
+      this.#setFifaCareer.set(versionsFifa);
+    } catch (err) {
+      console.error(err);
     }
   }
 
@@ -277,16 +305,5 @@ export class CreatingCareerComponent implements OnInit, OnDestroy {
 
     const dashedName = formattedName.replace(/\s+/g, '-');
     return dashedName;
-  }
-
-  private changeValueForm(league: string, nation: string) {
-    this.formCreatingCoach.get('nationality')!.setValue(nation);
-    this.formCreatingCareer.get('leagueCareer')!.setValue(league);
-  }
-
-  private setTimeRemoveMessageError(showError: boolean, time: number): void {
-    setTimeout(() => {
-      this.showError.set(showError);
-    }, time);
   }
 }

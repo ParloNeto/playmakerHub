@@ -1,0 +1,16 @@
+:host {
+  .subtitle-league {
+    left: 0;
+  }
+
+  p.number-player {
+    position: absolute;
+    font-size: 228px;
+    font-style: italic;
+    font-weight: 700;
+    color: var(--white);
+    right: 20%;
+    bottom: -190px;
+    opacity: 15%;
+  }
+}

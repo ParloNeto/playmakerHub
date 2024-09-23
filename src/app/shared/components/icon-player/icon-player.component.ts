@@ -18,7 +18,7 @@ import { RouterLink } from '@angular/router';
       />
       <div class="box-player__info">
         <p class="name-player">{{ player.firstName }}</p>
-        <div class="box-player__info__statistics">
+        <!-- <div class="box-player__info__statistics">
           @if (player.getStatisticsBySeasons) { @if
           (player.getStatisticsBySeasons.goals === 1) {
           <p class="goals-player">
@@ -31,7 +31,7 @@ import { RouterLink } from '@angular/router';
             {{ player.getStatisticsBySeasons.assists }} Assistências
           </p>
           } }
-        </div>
+        </div> -->
         <button class="circle-edit-player" [routerLink]="[player.id, 'edit-player']">
           <img
             src="../../../../assets/icons/edit-player.svg"

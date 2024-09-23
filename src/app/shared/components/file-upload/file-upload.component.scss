@@ -1,0 +1,17 @@
+.file-input {
+  display: none;
+}
+
+.file-upload {
+  display: flex;
+  flex-direction: column;
+}
+
+.upload-btn {
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.progress-bar {
+  margin-bottom: 10px;
+}

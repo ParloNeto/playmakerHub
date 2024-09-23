@@ -16,28 +16,20 @@ export class CareerService {
   constructor() {}
 
   $fifaVersion = of(fifaVersionMock);
-  $footballLeagues = of(footballLeagues);
 
   #http = inject(HttpClient);
   #apiUrl = environment.CREATE_CAREER_URL;
   #seasonApiUrl = environment.SEASONS_URL;
 
-  #setCareers = signal<NewCareer[] | null>(null);
-  get getCareers() {
-    return this.#setCareers.asReadonly();
-  }
-
-  // httpCareers$(): Observable<NewCareer[]> {
-  //   return this.#http.get<NewCareer[]>(`${this.#apiUrl}`).pipe(
-  //     shareReplay(1),
-  //     tap((res) => this.#setCareers.set(res))
-  //   );
-  // }
-
   async httpCareers(): Promise<NewCareer[]> {
     const careers$ = this.#http.get<NewCareer[]>(`${this.#apiUrl}`);
     const response = await firstValueFrom(careers$);
     return response;
+  }
+
+  async httpPostCareer(career: Partial<NewCareer>):  Promise<NewCareer[]> {
+    const career$ = this.#http.post<NewCareer[]>(`${this.#apiUrl}`, career);
+    return await firstValueFrom(career$);
   }
 
   #setCareerDetails = signal<NewCareer | null>(null);
@@ -61,7 +53,7 @@ export class CareerService {
 
   httpSeasonsByCareer$(idCareer: string): Observable<Season[]> {
     return this.#http
-      .get<Season[]>(`${this.#seasonApiUrl}/career/${idCareer}`)
+      .get<Season[]>(`${this.#apiUrl}/${idCareer}/seasons`)
       .pipe(
         shareReplay(1),
         tap((res: Season[]) => {
@@ -100,12 +92,12 @@ export class CareerService {
       );
   }
 
-  httpPostCareer$(career: NewCareer): Observable<NewCareer> {
-    return this.#http.post<NewCareer>(`${this.#apiUrl}`, career).pipe(
-      shareReplay(),
-      tap((res) => {})
-    );
-  }
+  // httpPostCareer$(career: NewCareer): Observable<NewCareer> {
+  //   return this.#http.post<NewCareer>(`${this.#apiUrl}`, career).pipe(
+  //     shareReplay(),
+  //     tap((res) => {})
+  //   );
+  // }
 
   httpPostSeasonByCareerId$(
     season: Season,
@@ -128,27 +120,6 @@ export class CareerService {
     );
   }
 
-  // httpPlayersCareersById$(id: string): Observable<NewCareer> {
-  //   return this.#http.get<NewCareer>(`${this.#apiUrl}/${id}`).pipe(
-  //     shareReplay(),
-  //     tap((res) => {
-  //       this.#setPlayerCareerDetails.set(res.players)
-  //       console.log(res.players)
-  //     })
-  //   );
-  // }
-
-  #setFifaCareer = signal<string[] | null>(null);
-  get getFifaCareer() {
-    return this.#setFifaCareer.asReadonly();
-  }
-
-  httpVersionFifa$(): Observable<string[]> {
-    return this.#http.get<string[]>(environment.CREATE_FIFAVERSION_URL).pipe(
-      shareReplay(),
-      tap((res) => this.#setFifaCareer.set(res))
-    );
-  }
 
   #setSeasonByInitialSeason = signal<string>('');
   get getSeasonByInitialSeason() {
@@ -171,15 +142,13 @@ export class CareerService {
       );
   }
 
-  #setFootballLeagues = signal<FootballLeague[] | null>(null);
-  get getFootballLeagues() {
-    return this.#setFootballLeagues.asReadonly();
+  async httpFootballLeagues(): Promise<FootballLeague[]> {
+    const footballLeagues$ = this.#http.get<FootballLeague[]>(environment.LEAGUES_API_URL);
+    return await firstValueFrom(footballLeagues$);
+  }
+  async httpVersionFifa(): Promise<string[]> {
+    const versionsFifa$ = this.#http.get<string[]>(environment.CREATE_FIFAVERSION_URL);
+    return await firstValueFrom(versionsFifa$);
   }
 
-  httpFootballLeagues$(): Observable<FootballLeague[]> {
-    return this.$footballLeagues.pipe(
-      shareReplay(),
-      tap((res) => this.#setFootballLeagues.set(res))
-    );
-  }
 }

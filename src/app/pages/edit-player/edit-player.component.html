@@ -1,54 +1,63 @@
 <app-header />
+<phub-loader></phub-loader>
+
 <div class="container">
   <div class="career">
     <div class="career__content">
- @if (getPlayerById(); as player) {
-     <h2 class="title-content">{{ player.firstName }} {{ player.lastName }} - Editar Jogador</h2>
-      <!--
-      <h4 class="subtitle-league left">
-        {{ career.leagueCareer }} - {{ career.fifaCareer }}
+      @defer { @if (getPlayerById(); as player) {
+      <h2 class="title-content">
+        {{ player.firstName }} {{ player.lastName }}
+      </h2>
+      @if (getCareerDetails(); as career) {
+      <h4 class="subtitle-league">
+        <p class="number-player">{{ player.kitNumber }}</p>
+
+        {{ career.leagueCareer }} - {{ showSeason(this.season()!) }}
       </h4>
 
-      <h2 class="title-content">{{ showSeason(season()) }}</h2>
-      <h4 class="subtitle-league">
-        {{ career.leagueCareer }} - {{ career.fifaCareer }}
-      </h4> -->
+      <!-- <h2 class="title-content"></h2>
+             <h4 class="subtitle-league">
+               {{ career.teamCareer }} - {{ career.fifaCareer }}
+             </h4> -->
+      }
 
 
       <h2 class="semi-bold">Elenco</h2>
 
       <h2 class="position-title">Goleiro</h2>
       <div class="list-players">
-
-
-       <icon-player [getPlayer]="player" />
-
-        <h3 class="purple-warn">
-          Você não possui nenhum jogador cadastrado no momento...
-        </h3>
+        <icon-player [getPlayer]="player" />
         <!-- <button
-          routerLink="/career/{{ career.id }}/{{ season() }}/new-player"
-          class="btn-primary"
-        >
-          Cadastrar Jogador
-        </button>
+               routerLink="/career/{{ career.id }}/{{ season() }}/new-player"
+               class="btn-primary"
+             >
+               Cadastrar Jogador
+             </button>
 
-        <button
-          routerLink="/career/{{ career.id }}/{{ season() }}/new-player"
-          class="btn-primary"
-        >
-          Cadastrar Jogador
-        </button> -->
+             <button
+               routerLink="/career/{{ career.id }}/{{ season() }}/new-player"
+               class="btn-primary"
+             >
+               Cadastrar Jogador
+             </button> -->
+              <phub-statistics [statisticsHistory]="player.statisticsHistory"/>
       </div>
-    }
+      } } @error {
+      <p>erro</p>
+      }
+
+
     </div>
 
-     <!-- <app-details-manager-club-icon
+    <!-- <app-details-manager-club-icon
       [clubName]="career.teamCareer"
       [showTop3PlayersScreen]="false"
     /> -->
 
-    <button [routerLink]="['/career']" class="btn-arrow-return">
+    <button
+      [routerLink]="['/career', this.idCareerOfPlayer(), this.season()]"
+      class="btn-arrow-return"
+    >
       <img src="../../../assets/icons/voltar.svg" alt="Voltar para a Home" />
     </button>
 
@@ -83,5 +92,4 @@
       </button>
     </div> -->
   </div>
-
 </div>

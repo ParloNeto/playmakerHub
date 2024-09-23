@@ -1,6 +1,13 @@
 import { Player } from './../../models/player/player';
 import { NgFor, AsyncPipe, CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
 import {
   ReactiveFormsModule,
   FormsModule,
@@ -11,7 +18,7 @@ import {
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Params, RouterLink } from '@angular/router';
 import { UpperCaseDirective } from '../../shared/directives/upper-case.directive';
 import { HeaderComponent } from '../../shared/header/header.component';
 import { NationService } from '../services/nation.service';
@@ -20,7 +27,8 @@ import { DetailsManagerClubIconComponent } from '../../shared/components/details
 import { PlayerService } from '../services/player.service';
 import { ModalService } from '../services/modal.service';
 import { ModalComponent } from '../../shared/components/modal/modal.component';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { FileUploadModule } from '../../shared/components/file-upload/file-upload.module';
+import { LoaderModule } from '../../shared/components/loader/loader.module';
 
 @Component({
   selector: 'app-new-player',
@@ -38,11 +46,13 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     UpperCaseDirective,
     RouterLink,
     DetailsManagerClubIconComponent,
-    ModalComponent
+    ModalComponent,
+    FileUploadModule,
+    LoaderModule
   ],
   templateUrl: './new-player.component.html',
   styleUrl: './new-player.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NewPlayerComponent implements OnInit {
   #fb = inject(FormBuilder);
@@ -50,9 +60,6 @@ export class NewPlayerComponent implements OnInit {
   #nationService = inject(NationService);
   #playerService = inject(PlayerService);
   #modalService = inject(ModalService);
-  #snackBar = inject(MatSnackBar);
-  #router = inject(Router);
-
 
   #activatedRoute = inject(ActivatedRoute);
 
@@ -64,20 +71,13 @@ export class NewPlayerComponent implements OnInit {
   public season = signal<string>('');
   public idCareer = signal<string>('');
   public titleModal = this.#playerService.titleModal;
-  // public idCareer!: string;
 
-  /**
-   * Filtra a nacionalidade com base no input do campo 'nationality'.
-   *
-   * @returns {string} Retorna um array filtrado com o nome passado no input.
-   */
 
-  public nations = computed(() => {
-    const sq = this.searchQueryNation();
-    return this.#nationService
-      .getNations()!
-      .filter((x) => x.nation.includes(sq));
-  });
+
+  #setNations = signal<{ nation: string }[] | null>(null);
+  get getNations() {
+    return this.#setNations.asReadonly();
+  }
 
   ngOnInit(): void {
     this.#activatedRoute.params.subscribe({
@@ -88,27 +88,24 @@ export class NewPlayerComponent implements OnInit {
         // this.#careerService.httpCareersById$(id).subscribe();
       },
     });
-    this.#nationService.getAllNationsMock().subscribe();
 
     this.formNewPlayer = this.#fb.group({
       firstName: ['', [Validators.minLength(3), Validators.required]],
       lastName: ['', [Validators.minLength(3), Validators.required]],
-      nationality: ['', [Validators.minLength(3), Validators.required]],
+      nationality: ['', [Validators.required]],
       position: [
-        '',
-        [Validators.required, Validators.minLength(1), Validators.maxLength(3)],
+        null,
+        [Validators.required],
       ],
       joined: [
-        0,
-        [Validators.required, Validators.minLength(4), Validators.maxLength(4)],
+        2017,
+        [Validators.required],
       ],
-      kitNumber: [0, [Validators.required]],
+      kitNumber: [10, [Validators.required]],
       urlImagePlayer: ['', [Validators.required]],
-      idCareer: [this.idCareer(), [Validators.required]],
     });
 
     this.formStatisticsNewPlayer = this.#fb.group({
-      season: [this.season()],
       matches: [0, [Validators.required]],
       goals: [0, [Validators.required]],
       assists: [0, [Validators.required]],
@@ -119,15 +116,40 @@ export class NewPlayerComponent implements OnInit {
       redCards: [
         0,
         [Validators.required, Validators.minLength(2), Validators.maxLength(2)],
-      ],
-      contractedAtualSeason: [, [Validators.required]],
+      ]
     });
 
     this.verifySeason(this.season());
+    this.getNationsMock().then()
   }
+
+   /**
+   * Filtra a nacionalidade com base no input do campo 'nationality'.
+   *
+   * @returns {string} Retorna um array filtrado com o nome passado no input.
+   */
+
+   public nations = computed(() => {
+    const sq = this.searchQueryNation();
+    const nations = this.getNations();
+    if (nations) {
+      return nations.filter((x) => x.nation.includes(sq));
+    }
+    return null;
+  });
+
   public verifySeason(typeSeason: string) {
     if (typeSeason === 'geral') {
       // this.formNewPlayer.get('contractedAtualSeason')?.setValue()
+    }
+  }
+
+  async getNationsMock(): Promise<void> {
+    try {
+      const nations = await this.#nationService.getAllNationsMock();
+      this.#setNations.set(nations);
+    } catch (err) {
+      console.error(err);
     }
   }
 
@@ -146,6 +168,7 @@ export class NewPlayerComponent implements OnInit {
         .subscribe();
     }
     console.log(this.formNewPlayer.valid);
+    console.log(this.formNewPlayer.value);
   }
 
   public onSearchUpdatedNation(nationName: string) {

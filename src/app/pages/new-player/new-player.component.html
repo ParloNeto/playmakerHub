@@ -1,4 +1,6 @@
 <app-header />
+<phub-loader></phub-loader>
+
 <div class="container">
   <div class="creating-career">
     <div class="creating-career__content">
@@ -7,7 +9,6 @@
 
         <form
           [formGroup]="formNewPlayer"
-          (ngSubmit)="submitForm()"
         >
           <div class="input-form">
             <label for="firstName">Nome:</label>
@@ -42,6 +43,7 @@
             <input
               placeholder="Digite aqui..."
               type="text"
+              maxlength="3"
               formControlName="position"
             />
           </div>
@@ -73,11 +75,13 @@
             </div>
             <div class="input-form">
               <label for="urlImagePlayer">Foto do Jogador (URL):</label>
-              <input
+              <!-- <input
                 placeholder="Digite aqui..."
                 type="text"
                 formControlName="urlImagePlayer"
-              />
+              /> -->
+              <file-upload formControlName="urlImagePlayer"
+              ></file-upload>
             </div>
 
         </form>
@@ -107,42 +111,7 @@
               formControlName="assists"
             />
           </div>
-          @if (this.season() === 'geral') {
-            <div class="input-form">
-              <label for="teamCareer">Time da Carreira:</label>
-              <input
-                type="text"
-                #searchTeamCareer
-                placeholder="Selecione aqui uma temporada..."
-                formControlName="contractedAtualSeason"
-                appUpperCase
-              />
-            </div>
-            } @else {
-            <div class="checkbox-form">
-              <legend>Contratado nessa Temporada?</legend>
-              <div class="checkbox-form__body">
-                <div class="checkbox-form__body__checkbox">
-                  <input
-                    type="radio"
-                    [value]="true"
-                    name="contractedAtualSeason"
-                    formControlName="contractedAtualSeason"
-                  />
-                  <label for="contractedAtualSeason">Sim</label>
-                </div>
-                <div class="checkbox-form__body__checkbox">
-                  <input
-                    type="radio"
-                    [value]="false"
-                    name="contractedAtualSeason"
-                    formControlName="contractedAtualSeason"
-                  />
-                  <label for="contractedAtualSeason">Não</label>
-                </div>
-              </div>
-            </div>
-            }
+
 
             <div class="input-form">
               <label for="yellowCards">Cartões Amarelos:</label>
@@ -205,19 +174,19 @@
           <button
             type="submit"
             class="btn-primary"
-            [disabled]="formNewPlayer.invalid || formStatisticsNewPlayer.invalid"
+            [disabled]="formStatisticsNewPlayer.invalid || this.formNewPlayer.invalid"
             (click)="submitForm()"
           >
             Cadastrar Jogador
           </button>
         <phub-modal [title]="titleModal()"></phub-modal>
       </div>
-  
+
       @if (getCareerDetails(); as careerDetails) {
       <app-details-manager-club-icon [clubName]="careerDetails.teamCareer" />
       }
 
-      <button [routerLink]="['/']" class="btn-arrow-return">
+      <button [routerLink]="['/career', this.idCareer(), this.season()]" class="btn-arrow-return">
         <img src="../../../assets/icons/voltar.svg" alt="Voltar para a Home" />
       </button>
     </div>

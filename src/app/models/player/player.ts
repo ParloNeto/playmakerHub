@@ -1,4 +1,5 @@
 import { Statistics } from "./statistics";
+import { StatisticsHistory } from "./statistics-history";
 
 export interface Player {
   id: string;
@@ -9,6 +10,7 @@ export interface Player {
   kitNumber: number;
   joined: number;
   urlImagePlayer: string;
-  getStatisticsBySeasons: Statistics;
+  statisticsBySeasons: Statistics[];
+  statisticsHistory: StatisticsHistory;
   idCareer: string;
 }

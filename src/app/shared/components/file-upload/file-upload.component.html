@@ -1,0 +1,12 @@
+
+<input type="file" class="file-input"
+       (change)="onFileSelected($event)" #fileUpload>
+
+<div class="file-upload">
+        <input [disabled]="true" [value]="fileName">
+    <button class="upload-btn"
+      (click)="onClick(fileUpload)" [disabled]="disabled">
+        <img src="../../../../assets/icons/upload-file.svg" alt="Carregar imagem">
+    </button>
+
+</div>

@@ -1,4 +1,6 @@
 <app-header />
+<phub-loader></phub-loader>
+
 <div class="container">
   <div class="creating-career">
     <div class="creating-career__content">
@@ -47,13 +49,12 @@
               placeholder="Selecione aqui o clube..."
               formControlName="teamCareer"
               [matAutocomplete]="autoTC"
-              (input)="selectedTeamsFilteredByLeague()"
               (focus)="selectedTeamsFilteredByLeague()"
               appUpperCase
             />
             <mat-autocomplete #autoTC="matAutocomplete">
               @for (team of filteredOptions; track team) {
-              <mat-option [value]="team">{{ team }}</mat-option>
+              <mat-option [value]="team.name">{{ team.name }}</mat-option>
               }
             </mat-autocomplete>
           </div>
@@ -62,15 +63,15 @@
             <button
               type="submit"
               class="btn-primary"
-              [disabled]="!this.formCreatingCareer.valid || !this.formCreatingCoach.valid"
+              [disabled]="
+                !this.formCreatingCareer.valid || !this.formCreatingCoach.valid
+              "
             >
               CRIAR CARREIRA
             </button>
           </div>
         </form>
-        <form
-          [formGroup]="formCreatingCoach"
-        >
+        <form [formGroup]="formCreatingCoach">
           <div class="input-form">
             <label for="coachesName">Nome do Técnico:</label>
             <input
@@ -99,15 +100,17 @@
           </div>
           <div class="input-form">
             <label for="urlImageCoach">Foto do Técnico (URL):</label>
-            <input
+            <!-- <input
               placeholder="Digite aqui..."
               type="text"
               formControlName="urlImageCoach"
-            />
+            /> -->
+            <file-upload
+              formControlName="urlImageCoach"
+            ></file-upload>
           </div>
         </form>
-        <phub-modal [title]="titleModal">
-        </phub-modal>
+        <phub-modal [title]="titleModal"> </phub-modal>
       </div>
     </div>
     @if (showError()) {
@@ -118,11 +121,19 @@
     <button [routerLink]="['/']" class="btn-arrow-return">
       <img src="../../../assets/icons/voltar.svg" alt="Voltar para a Home" />
     </button>
-    <div class="image-manager">
+    <!-- <div class="image-manager">
       <div class="image-manager__background">
         <img [src]="getUrl" alt="Foto do Manager {{ getCoachesName }}" />
       </div>
       <h3>{{ getCoachesName }}</h3>
-    </div>
+    </div> -->
+
+    <app-details-manager-club-icon
+      [clubName]="getTeamCareer"
+      [personName]="getCoachesName"
+      [url]="getUrl"
+    />
+
+
   </div>
 </div>

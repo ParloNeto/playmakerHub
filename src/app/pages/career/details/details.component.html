@@ -1,4 +1,6 @@
 <app-header />
+<phub-loader></phub-loader>
+
 <div class="container">
   @if (getCareerDetails(); as career) {
   <div class="career">
@@ -18,7 +20,7 @@
       <h2 class="semi-bold">Elenco</h2>
 
         @if (getPlayersFromCareer(); as players) {
-        <phub-list-player [setPlayers]="getPlayersFromCareer" />
+        <phub-list-player [setPlayer]="getPlayersFromCareer()" />
         } @else {
         <h3 class="purple-warn">
           Você não possui nenhum jogador cadastrado no momento...

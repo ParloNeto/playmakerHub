@@ -1,3 +1,4 @@
+import { StringUtils, transformSeasonString } from './../../shared/utils/utils';
 import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { HeaderComponent } from '../../shared/header/header.component';
 import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
@@ -9,8 +10,7 @@ import { ModalService } from '../services/modal.service';
 import { Subscription } from 'rxjs';
 import { ModalComponent } from '../../shared/components/modal/modal.component';
 import { NewCareer } from '../../models/career/new-career';
-import { transformSeasonString } from '../../shared/utils/utils';
-import { IconPlayerComponent } from '../../shared/components/icon-player/icon-player.component';
+import { LoaderModule } from '../../shared/components/loader/loader.module';
 @Component({
   selector: 'app-career',
   standalone: true,
@@ -19,6 +19,7 @@ import { IconPlayerComponent } from '../../shared/components/icon-player/icon-pl
     RouterLink,
     DetailsManagerClubIconComponent,
     ModalComponent,
+    LoaderModule
   ],
   templateUrl: './career.component.html',
   styleUrl: './career.component.scss',

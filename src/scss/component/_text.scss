@@ -50,3 +50,21 @@ h4.subtitle-league {
   left: 7.5%;
   transform: translateY(-50%);
 }
+
+h4.column-stats-field {
+  font-family: Roboto;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 20px;
+  color: var(--white);
+  margin: 0 auto;
+
+  &__number {
+    font-family: Roboto;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 20px;
+  color: var(--white);
+  margin: 0 auto;
+  }
+}

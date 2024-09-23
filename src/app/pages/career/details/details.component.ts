@@ -1,3 +1,4 @@
+import { transformSeasonString } from './../../../shared/utils/utils';
 import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
 import { HeaderComponent } from '../../../shared/header/header.component';
 import { ActivatedRoute, Params, RouterLink } from '@angular/router';
@@ -5,11 +6,8 @@ import { CareerService } from '../../services/career.service';
 import { DetailsManagerClubIconComponent } from '../../../shared/components/details-manager-club/details-manager-club-icon.component';
 import { IconPlayerComponent } from '../../../shared/components/icon-player/icon-player.component';
 import { NewCareer } from '../../../models/career/new-career';
-import { transformSeasonString } from '../../../shared/utils/utils';
 import { ListPlayerComponent } from '../../../shared/components/list-player/list-player.component';
 import { LoaderModule } from '../../../shared/components/loader/loader.module';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-details',
@@ -29,7 +27,6 @@ import { finalize } from 'rxjs';
 export class DetailsComponent implements OnInit {
   #careerService = inject(CareerService);
   #activatedRoute = inject(ActivatedRoute);
-  private loading = inject(NgxSpinnerService)
 
 
   public getCareerDetails = this.#careerService.getCareerDetails;
@@ -53,11 +50,9 @@ export class DetailsComponent implements OnInit {
           this.#careerService.httpPlayersOfCareersGeralById$(id).subscribe();
         }
 
-        const loaderTicket = this.loading;
-        loaderTicket.show();
+
 
         this.#careerService.httpCareersById$(id)
-        .pipe(finalize(() => loaderTicket.hide()))
         .subscribe({
           next: (career: NewCareer) => {
             this.#careerService
