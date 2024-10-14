@@ -179,11 +179,10 @@
           >
             Cadastrar Jogador
           </button>
-        <phub-modal [title]="titleModal()"></phub-modal>
       </div>
 
       @if (getCareerDetails(); as careerDetails) {
-      <app-details-manager-club-icon [clubName]="careerDetails.teamCareer" />
+      <phub-details-photo [clubName]="careerDetails.teamCareer" />
       }
 
       <button [routerLink]="['/career', this.idCareer(), this.season()]" class="btn-arrow-return">

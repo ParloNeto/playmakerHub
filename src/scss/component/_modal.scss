@@ -21,7 +21,10 @@
   padding: 20px;
   border: 1px solid #888;
   width: 60vw;
-  text-align: center; /* Centraliza o conteúdo do modal */
+  text-align: center;
+
+  &__error {
+  }
 }
 
 .modal-header {
@@ -34,6 +37,10 @@
 .modal-title {
   flex-grow: 1;
   text-align: center; /* Centraliza o título */
+
+  &__error {
+    color: var(--red);
+  }
 }
 
 .close {

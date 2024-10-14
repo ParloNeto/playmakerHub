@@ -1,14 +1,14 @@
 import { ChangeDetectionStrategy, Component, Input, Signal } from '@angular/core';
 import { Player } from '../../../../models/player/player';
-import { IconPlayerComponent } from '../../icon-player/icon-player.component';
+import { IconPlayerSeasonComponent } from '../../icon-player-season/icon-player-season.component';
 
 @Component({
   selector: 'phub-show-players',
   standalone: true,
-  imports: [IconPlayerComponent],
+  imports: [IconPlayerSeasonComponent],
   template: `
 @for (player of typePlayer(); track player.id) {
-        <icon-player [getPlayer]="player" />
+        <phub-icon-player-season [getPlayer]="player" />
       }
   `,
   styleUrl: './show-players.component.scss',

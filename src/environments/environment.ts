@@ -1,5 +1,5 @@
 export const environment = {
-  CREATE_CAREER_URL: "http://localhost:8080/careers",
+  CAREER_URL: "http://localhost:8080/careers",
   CREATE_COACH_URL: "http://localhost:8080/coaches",
   SEASONS_URL: "http://localhost:8080/seasons",
   CREATE_FIFAVERSION_URL: "http://localhost:8080/fifaVersion",

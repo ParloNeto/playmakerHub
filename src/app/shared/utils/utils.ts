@@ -1,8 +1,10 @@
-export class StringUtils {
-
-}
+export class StringUtils {}
 
 export function transformSeasonString(input: string): string {
+  if (input.toLowerCase() === 'geral') {
+    return `${input}`;
+  }
+
   const parts = input.split('-');
 
   if (

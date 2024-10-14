@@ -1,5 +1,11 @@
 import { StatisticsHistory } from './../../../models/player/statistics-history';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { Statistics } from '../../../models/player/statistics';
 import { NgIf } from '@angular/common';
 
@@ -9,26 +15,28 @@ import { NgIf } from '@angular/common';
   imports: [NgIf],
   template: `
     <div class="statistics">
-      @if (statisticsHistory) {
-        <div class="column-stats">
+      @if (this.stats()) {
+      <div class="column-stats">
         <h4 class="column-stats-field">Jogos</h4>
-        <h4 class="column-stats-field__number">{{statisticsHistory.matches}}</h4>
+        <h4 class="column-stats-field__number">{{ this.stats()!.matches }}</h4>
       </div>
       <div class="column-stats">
         <h4 class="column-stats-field">Gols</h4>
-        <h4 class="column-stats-field__number">{{statisticsHistory.goals}}</h4>
+        <h4 class="column-stats-field__number">{{ this.stats()!.goals }}</h4>
       </div>
       <div class="column-stats">
         <h4 class="column-stats-field">Assistências</h4>
-        <h4 class="column-stats-field__number">{{statisticsHistory.assists}}</h4>
+        <h4 class="column-stats-field__number">{{ this.stats()!.assists }}</h4>
       </div>
       <div class="column-stats">
         <h4 class="column-stats-field">Cartões Amar.</h4>
-        <h4 class="column-stats-field__number">{{statisticsHistory.yellowCards}}</h4>
+        <h4 class="column-stats-field__number">
+          {{ this.stats()!.yellowCards }}
+        </h4>
       </div>
       <div class="column-stats">
         <h4 class="column-stats-field">Cartões Verm.</h4>
-        <h4 class="column-stats-field__number">{{statisticsHistory.redCards}}</h4>
+        <h4 class="column-stats-field__number">{{ this.stats()!.redCards }}</h4>
       </div>
       }
     </div>
@@ -36,7 +44,19 @@ import { NgIf } from '@angular/common';
   styleUrl: './statistics.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class StatisticsComponent {
+export class StatisticsComponent implements OnInit {
+
   @Input() statisticsHistory!: StatisticsHistory;
-  @Input() statistics!: Statistics;
+  @Input() statisticsSeason!: Statistics;
+
+  public stats = signal<StatisticsHistory | Statistics | null>(null);
+
+  ngOnInit(): void {
+    if (this.statisticsHistory) {
+      this.stats.set(this.statisticsHistory);
+    } else {
+      this.stats.set(this.statisticsSeason);
+    }
+  }
+
 }

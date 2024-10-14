@@ -110,7 +110,6 @@
             ></file-upload>
           </div>
         </form>
-        <phub-modal [title]="titleModal"> </phub-modal>
       </div>
     </div>
     @if (showError()) {
@@ -128,7 +127,7 @@
       <h3>{{ getCoachesName }}</h3>
     </div> -->
 
-    <app-details-manager-club-icon
+    <phub-details-photo
       [clubName]="getTeamCareer"
       [personName]="getCoachesName"
       [url]="getUrl"

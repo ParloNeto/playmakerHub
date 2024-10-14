@@ -13,15 +13,12 @@ import { Router } from '@angular/router';
 })
 export class PlayerService {
   #http = inject(HttpClient);
-  #apiUrl = environment.CREATE_CAREER_URL;
+  #apiUrl = environment.CAREER_URL;
   #apiPlayerUrl = environment.PLAYERS_API_URL;
 
   #modalService = inject(ModalService);
   #snackBar = inject(MatSnackBar);
   #router = inject(Router);
-
-  public titleModal = signal<string>('');
-
 
   constructor() {}
 
@@ -46,7 +43,6 @@ export class PlayerService {
               duration: 3500,
             });
           }, error: (bodyErr: HttpErrorResponse) => {
-            this.titleModal.set("Erro!")
             this.#modalService.showError(bodyErr.error.message);
           }
         })
@@ -66,4 +62,13 @@ export class PlayerService {
       })
     );
   }
+
+  // httpDeletePlayer$(playerId: string): Observable<Player> {
+  //   return this.#http.delete<Player>(`${this.#apiUrl}/${careerId}`).pipe(
+  //     shareReplay(),
+  //     tap((res) => {
+  //       console.log(`Deletado!`);
+  //     })
+  //   );
+  // }
 }

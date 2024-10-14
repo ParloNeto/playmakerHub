@@ -70,7 +70,6 @@ export class NewPlayerComponent implements OnInit {
   public searchQueryNation = signal<string>('');
   public season = signal<string>('');
   public idCareer = signal<string>('');
-  public titleModal = this.#playerService.titleModal;
 
 
 

@@ -4,7 +4,7 @@ import { Player } from '../../../models/player/player';
 import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'icon-player',
+  selector: 'phub-icon-player-season',
   standalone: true,
   imports: [NgIf, RouterLink],
   template: `
@@ -43,9 +43,9 @@ import { RouterLink } from '@angular/router';
     </div>
     }
   `,
-  styleUrl: './icon-player.component.scss',
+  styleUrl: './icon-player-season.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class IconPlayerComponent {
+export class IconPlayerSeasonComponent {
   @Input({ required: true, alias: 'getPlayer' }) player!: Player;
 }

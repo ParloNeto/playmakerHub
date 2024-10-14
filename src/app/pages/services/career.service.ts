@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject, signal } from '@angular/core';
 import { NewCareer } from '../../models/career/new-career';
 import { firstValueFrom, Observable, of, shareReplay, tap } from 'rxjs';
@@ -8,6 +8,9 @@ import { FootballLeague } from '../../models/footballLeagues/footballLeagues';
 import { Player } from '../../models/player/player';
 import { environment } from '../../../environments/environment';
 import { Season } from '../../models/career/season';
+import { PlayerStats } from '../../models/player/player-stats';
+import { Pageable } from '../../models/player/pageable';
+import { Page } from '../../models/player/page';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +21,7 @@ export class CareerService {
   $fifaVersion = of(fifaVersionMock);
 
   #http = inject(HttpClient);
-  #apiUrl = environment.CREATE_CAREER_URL;
+  #apiUrl = environment.CAREER_URL;
   #seasonApiUrl = environment.SEASONS_URL;
 
   async httpCareers(): Promise<NewCareer[]> {
@@ -140,6 +143,30 @@ export class CareerService {
         shareReplay(),
         tap((res) => this.#setSeasonByInitialSeason.set(res.season))
       );
+  }
+
+  async httpGetPlayersTopByGoals(idCareer: string, pageable: Pageable): Promise<Page<PlayerStats>> {
+
+    let params = new HttpParams()
+    .set('page', pageable.page.toString())
+    .set('size', pageable.size.toString());
+
+    const playersTopByGoals$ = this.#http.get<Page<PlayerStats>>(`${environment.CAREER_URL}/${idCareer}/statistics/goals`, {
+      params
+    });
+    return await firstValueFrom(playersTopByGoals$);
+  }
+
+  async httpGetPlayersTopByAssists(idCareer: string, pageable: Pageable): Promise<Page<PlayerStats>> {
+
+    let params = new HttpParams()
+    .set('page', pageable.page.toString())
+    .set('size', pageable.size.toString());
+
+    const playersTopByAssists$ = this.#http.get<Page<PlayerStats>>(`${environment.CAREER_URL}/${idCareer}/statistics/assists`, {
+      params
+    });
+    return await firstValueFrom(playersTopByAssists$);
   }
 
   async httpFootballLeagues(): Promise<FootballLeague[]> {

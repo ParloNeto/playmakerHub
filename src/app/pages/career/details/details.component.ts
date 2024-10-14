@@ -4,7 +4,7 @@ import { HeaderComponent } from '../../../shared/header/header.component';
 import { ActivatedRoute, Params, RouterLink } from '@angular/router';
 import { CareerService } from '../../services/career.service';
 import { DetailsManagerClubIconComponent } from '../../../shared/components/details-manager-club/details-manager-club-icon.component';
-import { IconPlayerComponent } from '../../../shared/components/icon-player/icon-player.component';
+import { IconPlayerSeasonComponent } from '../../../shared/components/icon-player-season/icon-player-season.component';
 import { NewCareer } from '../../../models/career/new-career';
 import { ListPlayerComponent } from '../../../shared/components/list-player/list-player.component';
 import { LoaderModule } from '../../../shared/components/loader/loader.module';
@@ -16,7 +16,7 @@ import { LoaderModule } from '../../../shared/components/loader/loader.module';
     HeaderComponent,
     RouterLink,
     DetailsManagerClubIconComponent,
-    IconPlayerComponent,
+    IconPlayerSeasonComponent,
     ListPlayerComponent,
     LoaderModule
   ],

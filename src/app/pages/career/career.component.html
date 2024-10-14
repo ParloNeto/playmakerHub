@@ -1,5 +1,6 @@
 <app-header />
-<phub-loader></phub-loader>
+<phub-loader>
+</phub-loader>
 
 <div class="container">
   @if (getCareerDetails(); as career) {
@@ -26,11 +27,14 @@
       </div>
     </div>
 
-    <app-details-manager-club-icon
+
+      <phub-details-photo
       [manager]="career.coach"
-      [showTop3PlayersScreen]="false"
       [clubName]="career.teamCareer"
     />
+
+
+
 
     <button [routerLink]="['/home']" class="btn-arrow-return">
       <img src="../../../assets/icons/voltar.svg" alt="Voltar para a Home" />
@@ -62,6 +66,11 @@
       </button>
     </div>
   </div>
-  <phub-modal title="Aviso!"> </phub-modal>
+  <div class="top-3-stats-side">
+    <app-top-3-stats-players-career [idCareer]="career.id">
+
+    </app-top-3-stats-players-career>
+  </div>
+
   }
 </div>

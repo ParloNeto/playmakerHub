@@ -1,10 +1,13 @@
 <app-header />
 <phub-loader></phub-loader>
+<phub-modal>
+  <h1>oi</h1>
 
+</phub-modal>
 <div class="container">
   <div class="career">
+    @defer { @if (getPlayerById(); as player) {
     <div class="career__content">
-      @defer { @if (getPlayerById(); as player) {
       <h2 class="title-content">
         {{ player.firstName }} {{ player.lastName }}
       </h2>
@@ -15,44 +18,52 @@
         {{ career.leagueCareer }} - {{ showSeason(this.season()!) }}
       </h4>
 
-      <!-- <h2 class="title-content"></h2>
-             <h4 class="subtitle-league">
-               {{ career.teamCareer }} - {{ career.fifaCareer }}
-             </h4> -->
       }
 
-
-      <h2 class="semi-bold">Elenco</h2>
-
-      <h2 class="position-title">Goleiro</h2>
-      <div class="list-players">
-        <icon-player [getPlayer]="player" />
-        <!-- <button
-               routerLink="/career/{{ career.id }}/{{ season() }}/new-player"
-               class="btn-primary"
-             >
-               Cadastrar Jogador
-             </button>
-
-             <button
-               routerLink="/career/{{ career.id }}/{{ season() }}/new-player"
-               class="btn-primary"
-             >
-               Cadastrar Jogador
-             </button> -->
-              <phub-statistics [statisticsHistory]="player.statisticsHistory"/>
+      <div class="career__content__statistics">
+        @if (this.season() === 'geral') {
+          <phub-statistics [statisticsHistory]="player.statisticsHistory" />
+        } @else {
+          <phub-statistics [statisticsSeason]="this.actualSeason()!" />
+        }
       </div>
-      } } @error {
-      <p>erro</p>
-      }
-
-
     </div>
 
-    <!-- <app-details-manager-club-icon
-      [clubName]="career.teamCareer"
-      [showTop3PlayersScreen]="false"
-    /> -->
+    <div class="career__player-icon-and-review">
+      <phub-details-photo [player]="player" [clubName]="'Palmeiras'" />
+
+      <app-top-3-stats-players-career [idCareer]="player.idCareer">
+      </app-top-3-stats-players-career>
+    </div>
+
+    } } @error {
+    <p>erro</p>
+    }
+
+    <div class="career-bottom-buttons">
+      <button
+        [routerLink]="['/career', this.idCareerOfPlayer(), this.season()]"
+        routerLinkActive="active"
+        class="btn-primary-white"
+      >
+        Elenco
+      </button>
+      <button
+        [routerLink]="['/career', this.idCareerOfPlayer(), this.season()]"
+        routerLinkActive="active"
+        class="btn-primary-white"
+      >
+        Geral do Jogador
+      </button>
+      <button
+
+        class="btn-primary-red align-final"
+        aria-label="Deletar Carreira"
+        (click)="deletePlayer()"
+      >
+        Deletar Jogador
+      </button>
+    </div>
 
     <button
       [routerLink]="['/career', this.idCareerOfPlayer(), this.season()]"
@@ -60,36 +71,5 @@
     >
       <img src="../../../assets/icons/voltar.svg" alt="Voltar para a Home" />
     </button>
-
-    <!-- <div class="career-bottom-buttons">
-      @if (season() === "geral") {
-      <button
-        [routerLink]="['/career', career.id, initialSeason()]"
-        routerLinkActive="active"
-        class="btn-primary-white"
-      >
-        {{ showSeason(initialSeason()) }}
-      </button>
-      <button
-        [routerLink]="['/career', career.id, season(), 'new-season']"
-        routerLinkActive="active"
-        class="btn-primary-white"
-      >
-        Adicionar Temporada
-      </button>
-      } @else {
-      <button
-        [routerLink]="['/career', career.id, 'geral']"
-        routerLinkActive="active"
-        class="btn-primary-white"
-      >
-        Geral
-      </button>
-      }
-
-      <button [routerLink]="['/career', career.id]" class="btn-primary-white">
-        {{ career.teamCareer }}
-      </button>
-    </div> -->
   </div>
 </div>

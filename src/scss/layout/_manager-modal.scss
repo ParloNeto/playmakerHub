@@ -21,12 +21,23 @@
     height: 206px;
     border-radius: 20px 20px 0px 0px;
     background-color: var(--white);
-    
+
     img {
       width: 200px;
       height: 206px;
       border-radius: 20px 20px 0px 0px;
     }
 
+  }
+
+  #player-nation-img {
+    width: 20px;
+    margin-left: 5px;
+  }
+
+  .name-player-and-nation {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
