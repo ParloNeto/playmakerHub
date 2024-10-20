@@ -10,34 +10,79 @@
       <h4 class="subtitle-league left">
         {{ career.leagueCareer }} - {{ career.fifaCareer }}
       </h4>
-      } @else {
+      } @else if (isValidTypeSeasonKey(season())) {
       <h2 class="title-content">{{ showSeason(season()) }}</h2>
       <h4 class="subtitle-league">
         {{ career.leagueCareer }} - {{ career.fifaCareer }}
       </h4>
+      } @else {
+        <h2 class="title-content">Carreira não encontrada</h2>
+
       }
 
-      <h2 class="semi-bold">Elenco</h2>
 
-        @if (getPlayersFromCareer(); as players) {
-        <phub-list-player [setPlayer]="getPlayersFromCareer()" />
+      @if (season() === "geral") {
+        <h2 class="semi-bold">Elenco</h2>
+        @if (getPlayersFromCareer(); as playersGeral) {
+          <phub-list-player [setPlayer]="playersGeral" />
+          } @else {
+          <h3 class="purple-warn">
+            Você não possui nenhum jogador cadastrado no momento...
+          </h3>
+          }
+          <button
+            routerLink="/career/{{ career.id }}/{{ season() }}/new-player"
+            class="btn-primary cadastrar-jogador-top"
+          >
+            Cadastrar Jogador
+          </button>
+      } @else if (isValidTypeSeasonKey(season())) {
+        <h2 class="semi-bold">Elenco</h2>
+        @if (getPlayersFromCareerFilteredBySeason(); as playersFilteredBySeason) {
+          <phub-list-player [setPlayer]="playersFilteredBySeason" />
         } @else {
-        <h3 class="purple-warn">
-          Você não possui nenhum jogador cadastrado no momento...
-        </h3>
-        <button
-          routerLink="/career/{{ career.id }}/{{ season() }}/new-player"
-          class="btn-primary"
-        >
-          Cadastrar Jogador
-        </button>
+          <h3 class="purple-warn">
+            Você não possui nenhum jogador cadastrado nessa temporada no momento...
+          </h3>
+          <button
+            routerLink="/career/{{ career.id }}/{{ season() }}/new-player"
+            class="btn-primary"
+          >
+            Cadastrar Jogador
+          </button>
+          <button
+          (click)="modalAddPlayerToActualSeason()"
+            class="btn-primary add-player-in-season"
+          >
+            Adicionar jogador existente na carreira
+          </button>
         }
         <button
-          routerLink="/career/{{ career.id }}/{{ season() }}/new-player"
+        routerLink="/career/{{ career.id }}/{{ season() }}/new-player"
+        class="btn-primary cadastrar-jogador-top"
+      >
+        Cadastrar Jogador
+      </button>
+        <button
+          (click)="modalAddPlayerToActualSeason()"
+            class="btn-primary "
+          >
+            Adicionar jogador existente na carreira
+          </button>
+
+
+
+      } @else {
+        <h2 class="semi-bold">Não foi possível encontrar dados associados a essa carreira.</h2>
+
+
+        <button
+          routerLink="/career/{{ career.id }}"
           class="btn-primary new-player"
         >
-          Cadastrar Jogador
+          Retornar ao menu da carreira
         </button>
+      }
 
     </div>
 

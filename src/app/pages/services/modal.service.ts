@@ -9,6 +9,7 @@ import {
 import { Observable, Subject, take } from 'rxjs';
 import { ModalComponent } from '../../shared/components/modal/modal.component';
 import { ModalState } from '../../models/enums/modal-state';
+import { Player } from '../../models/player/player';
 
 @Injectable({
   providedIn: 'root',
@@ -16,9 +17,11 @@ import { ModalState } from '../../models/enums/modal-state';
 export class ModalService {
   private modalSubject = new Subject<any>();
   private confirmSubject = new Subject<boolean>();
+  private playerSubject = new Subject<Player>();
 
   modalState$ = this.modalSubject.asObservable();
   confirmState$ = this.confirmSubject.asObservable();
+  confirmTransferPlayerState$ = this.playerSubject.asObservable();
   private modalRef!: ComponentRef<ModalComponent> | null;
 
   constructor(
@@ -55,7 +58,8 @@ export class ModalService {
   showConfirmation(
     message: string,
     confirmText: string = 'Prosseguir',
-    cancelText: string = 'Cancelar'
+    cancelText: string = 'Cancelar',
+    data?: any
   ) {
     this.createModalComponent();
 
@@ -65,6 +69,26 @@ export class ModalService {
         message,
         confirmText,
         cancelText,
+        data
+      });
+    }, 0);
+  }
+
+  showTransferPlayer(
+    message: string,
+    data?: any,
+    confirmText: string = 'Adicionar',
+    cancelText: string = 'Cancelar',
+  ) {
+    this.createModalComponent();
+
+    setTimeout(() => {
+      this.modalSubject.next({
+        type: ModalState.PlayerTransfer,
+        message,
+        confirmText,
+        cancelText,
+        data
       });
     }, 0);
   }
@@ -79,6 +103,11 @@ export class ModalService {
     this.closeModal();
   }
 
+  confirmActionTransferPlayer(playerTransfer: Player) {
+    this.playerSubject.next(playerTransfer);
+    this.closeModal();
+  }
+
   private destroyModalComponent() {
     if (this.modalRef) {
       this.appRef.detachView(this.modalRef.hostView);
@@ -89,5 +118,9 @@ export class ModalService {
 
   public confirmState(): Observable<boolean> {
     return this.confirmState$.pipe(take(1));
+  }
+
+  public confirmTransferPlayerState(): Observable<Player> {
+    return this.confirmTransferPlayerState$.pipe(take(1));
   }
 }

@@ -80,6 +80,11 @@ export class CareerService {
     );
   }
 
+  #setPlayersFromCareerFilteredBySeason = signal<Player[] | null>(null);
+  get getPlayersFromCareerFilteredBySeason() {
+    return this.#setPlayersFromCareerFilteredBySeason.asReadonly();
+  }
+
   httpPlayersFilteredBySeason$(
     careerId: string,
     typeSeason: string
@@ -89,7 +94,39 @@ export class CareerService {
       .pipe(
         shareReplay(),
         tap((res: Player[]) => {
-          this.#setPlayersFromCareer.set(res);
+          this.#setPlayersFromCareerFilteredBySeason.set(res);
+          console.log(res);
+        })
+      );
+  }
+
+  httpUpdatePlayerToSeason$(
+    careerId: string,
+    playerId: string,
+    season: Season
+  ): Observable<Player[]> {
+    return this.#http
+      .put<Player[]>(`${this.#apiUrl}/${careerId}/${playerId}`, season)
+      .pipe(
+        shareReplay()
+      );
+  }
+
+  #setAvailablePlayersForSeason = signal<Player[] | null>(null);
+  get getAvailablePlayersForSeason() {
+    return this.#setAvailablePlayersForSeason.asReadonly();
+  }
+
+  httpGetAvailablePlayersForSeason$(
+    careerId: string,
+    seasonName: string
+  ): Observable<Player[]> {
+    return this.#http
+      .get<Player[]>(`${this.#apiUrl}/${careerId}/${seasonName}/available`)
+      .pipe(
+        shareReplay(),
+        tap((res: Player[]) => {
+          this.#setAvailablePlayersForSeason.set(res);
           console.log(res);
         })
       );
