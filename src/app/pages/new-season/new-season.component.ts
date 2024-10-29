@@ -1,5 +1,11 @@
 import { StringUtils, transformSeasonString } from './../../shared/utils/utils';
-import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { HeaderComponent } from '../../shared/header/header.component';
 import { NgFor, AsyncPipe, CommonModule } from '@angular/common';
 import {
@@ -8,6 +14,7 @@ import {
   FormBuilder,
   FormGroup,
   Validators,
+  FormControl,
 } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -23,7 +30,6 @@ import { ModalService } from '../services/modal.service';
 import { ModalComponent } from '../../shared/components/modal/modal.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { LoaderModule } from '../../shared/components/loader/loader.module';
-
 
 @Component({
   selector: 'phub-new-season',
@@ -42,11 +48,11 @@ import { LoaderModule } from '../../shared/components/loader/loader.module';
     RouterLink,
     DetailsManagerClubIconComponent,
     ModalComponent,
-    LoaderModule
+    LoaderModule,
   ],
   templateUrl: './new-season.component.html',
   styleUrl: './new-season.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NewSeasonComponent implements OnInit {
   #activatedRoute = inject(ActivatedRoute);
@@ -55,7 +61,6 @@ export class NewSeasonComponent implements OnInit {
   #snackBar = inject(MatSnackBar);
   #seasonService = inject(SeasonService);
   #router = inject(Router);
-  #fb = inject(FormBuilder);
 
   public searchQuerySeasonName = signal<string>('');
   public titleModal = signal<string>('');
@@ -63,8 +68,40 @@ export class NewSeasonComponent implements OnInit {
   public formSeason!: FormGroup;
   public getCareerDetails = this.#careerService.getCareerDetails;
   public getSeasons = this.#seasonService.getSeasons;
-  public showSeason = transformSeasonString
+  public showSeason = transformSeasonString;
 
+  constructor() {
+    this.formSeason = new FormGroup({
+      seasonName: new FormControl('', [
+        Validators.required,
+        Validators.maxLength(15),
+      ]),
+      games: new FormControl(0, [
+        Validators.pattern('^[0-9]*$'),
+        Validators.maxLength(3),
+      ]),
+      wins: new FormControl(0, [
+        Validators.pattern('^[0-9]*$'),
+        Validators.maxLength(3),
+      ]),
+      draws: new FormControl(0, [
+        Validators.pattern('^[0-9]*$'),
+        Validators.maxLength(3),
+      ]),
+      losses: new FormControl(0, [
+        Validators.pattern('^[0-9]*$'),
+        Validators.maxLength(3),
+      ]),
+      goalsConceded: new FormControl(0, [
+        Validators.pattern('^[0-9]*$'),
+        Validators.maxLength(3),
+      ]),
+      goalsScored: new FormControl(0, [
+        Validators.pattern('^[0-9]*$'),
+        Validators.maxLength(3),
+      ]),
+    });
+  }
 
   ngOnInit(): void {
     this.#activatedRoute.params.subscribe({
@@ -75,16 +112,6 @@ export class NewSeasonComponent implements OnInit {
 
     this.#careerService.httpCareersById$(this.id()).subscribe();
     this.#seasonService.httpGetAllSeasons().subscribe();
-
-    this.formSeason = this.#fb.group({
-      seasonName: ['', [Validators.required, Validators.maxLength(15)]],
-      games: [0, [Validators.maxLength(3)]],
-      wins: [0, [Validators.maxLength(3)]],
-      draws: [0, [Validators.maxLength(3)]],
-      losses: [0, [Validators.maxLength(3)]],
-      goalsConceded: [0, [Validators.maxLength(3)]],
-      goalsScored: [0, [Validators.maxLength(3)]],
-    });
   }
 
   public submitForm(): void {
@@ -99,7 +126,7 @@ export class NewSeasonComponent implements OnInit {
             });
           },
           error: (bodyErr: HttpErrorResponse) => {
-            this.titleModal.set("Erro!")
+            this.titleModal.set('Erro!');
             this.#modalService.showError(bodyErr.error.message);
             console.log(bodyErr.error.message);
           },
@@ -111,4 +138,9 @@ export class NewSeasonComponent implements OnInit {
     this.searchQuerySeasonName.set(nationName);
   }
 
+  clearIfZero(formControlName: string) {
+    if (this.formSeason.get(formControlName)?.value === 0) {
+      this.formSeason.get(formControlName)?.setValue('');
+    }
+  }
 }

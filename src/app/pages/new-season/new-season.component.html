@@ -2,17 +2,18 @@
 <phub-loader></phub-loader>
 
 <div class="container">
-  <div class="creating-career">
-    <div class="creating-career__content">
+  <div class="creating-form-background">
+    <div class="creating-form-background__content">
       <h2 class="title-content">
         Cadastrar Temporada - {{ getCareerDetails()?.teamCareer }}
       </h2>
-      <div class="creating-career__form">
+      <div class="creating-form-background__form">
         <form [formGroup]="formSeason">
           <div class="input-form">
             <label for="seasonName">Nome da Temporada:</label>
             <input
               type="text"
+
               #searchSeason
               placeholder="Digite aqui..."
               formControlName="seasonName"
@@ -31,55 +32,63 @@
           <div class="input-form">
             <label for="games">Jogos:</label>
             <input
-              placeholder="Digite aqui..."
-              type="number"
               formControlName="games"
+              placeholder="Digite aqui..."
+              type="text"
               maxlength="3"
+              (focus)="clearIfZero('games')"
             />
           </div>
           <div class="input-form">
             <label for="wins">Vitórias:</label>
             <input
-              placeholder="Digite aqui..."
-              type="number"
               formControlName="wins"
+              placeholder="Digite aqui..."
+              type="text"
               maxlength="3"
+              (focus)="clearIfZero('wins')"
             />
           </div>
           <div class="input-form">
             <label for="draws">Empates:</label>
             <input
-              placeholder="Digite aqui..."
-              type="number"
               formControlName="draws"
+              placeholder="Digite aqui..."
+              type="text"
               maxlength="3"
+              (focus)="clearIfZero('draws')"
+
             />
           </div>
           <div class="input-form">
             <label for="losses">Derrotas:</label>
             <input
-              placeholder="Digite aqui..."
-              type="number"
               formControlName="losses"
+              placeholder="Digite aqui..."
+              type="text"
               maxlength="3"
+              (focus)="clearIfZero('losses')"
+
             />
           </div>
           <div class="input-form">
             <label for="goalsConceded">Gols sofridos:</label>
             <input
-              placeholder="Digite aqui..."
-              type="number"
               formControlName="goalsConceded"
+              placeholder="Digite aqui..."
+              type="text"
               maxlength="3"
+              (focus)="clearIfZero('goalsConceded')"
             />
           </div>
           <div class="input-form">
             <label for="goalsScored">Gols marcados:</label>
             <input
-              placeholder="Digite aqui..."
-              type="number"
               formControlName="goalsScored"
+              placeholder="Digite aqui..."
+              type="text"
               maxlength="3"
+              (focus)="clearIfZero('goalsScored')"
             />
           </div>
           <button
