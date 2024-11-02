@@ -1,6 +1,7 @@
 import { Season } from './season';
 import { Coach } from "./Coach";
 import { Player } from '../player/player';
+import { CareerHistory } from './career-history';
 
 export interface NewCareer {
   id?: string;
@@ -10,4 +11,5 @@ export interface NewCareer {
   teamCareer: string;
   seasons?: Array<Season>;
   players?: Array<Player>;
+  careerHistory?: CareerHistory;
 }

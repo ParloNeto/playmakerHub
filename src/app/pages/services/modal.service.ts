@@ -19,9 +19,9 @@ export class ModalService {
   private confirmSubject = new Subject<boolean>();
   private playerSubject = new Subject<Player>();
 
-  modalState$ = this.modalSubject.asObservable();
-  confirmState$ = this.confirmSubject.asObservable();
-  confirmTransferPlayerState$ = this.playerSubject.asObservable();
+  public modalState$ = this.modalSubject.asObservable();
+  private confirmState$ = this.confirmSubject.asObservable();
+  private confirmTransferPlayerState$ = this.playerSubject.asObservable();
   private modalRef!: ComponentRef<ModalComponent> | null;
 
   constructor(
@@ -55,7 +55,16 @@ export class ModalService {
     }, 0);
   }
 
+  showSuccess(message?: string) {
+    this.createModalComponent();
+
+    setTimeout(() => {
+      this.modalSubject.next({ type: ModalState.Success, message: message });
+    }, 0);
+  }
+
   showConfirmation(
+    title: string,
     message: string,
     confirmText: string = 'Prosseguir',
     cancelText: string = 'Cancelar',
@@ -65,6 +74,7 @@ export class ModalService {
 
     setTimeout(() => {
       this.modalSubject.next({
+        title,
         type: ModalState.Confirmation,
         message,
         confirmText,
@@ -93,7 +103,7 @@ export class ModalService {
     }, 0);
   }
 
-  closeModal() {
+  private closeModal() {
     this.modalSubject.next({ type: 'close' });
     this.destroyModalComponent();
   }

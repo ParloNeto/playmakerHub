@@ -1,7 +1,19 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpParams,
+} from '@angular/common/http';
 import { Injectable, inject, signal } from '@angular/core';
 import { NewCareer } from '../../models/career/new-career';
-import { firstValueFrom, Observable, of, shareReplay, tap } from 'rxjs';
+import {
+  catchError,
+  firstValueFrom,
+  Observable,
+  of,
+  shareReplay,
+  tap,
+  throwError,
+} from 'rxjs';
 import { fifaVersionMock } from './mocks/fifaVersion-mocks';
 import { footballLeagues } from './mocks/football-leagues';
 import { FootballLeague } from '../../models/footballLeagues/footballLeagues';
@@ -30,7 +42,7 @@ export class CareerService {
     return response;
   }
 
-  async httpPostCareer(career: Partial<NewCareer>):  Promise<NewCareer[]> {
+  async httpPostCareer(career: Partial<NewCareer>): Promise<NewCareer[]> {
     const career$ = this.#http.post<NewCareer[]>(`${this.#apiUrl}`, career);
     return await firstValueFrom(career$);
   }
@@ -55,14 +67,27 @@ export class CareerService {
   }
 
   httpSeasonsByCareer$(idCareer: string): Observable<Season[]> {
-    return this.#http
-      .get<Season[]>(`${this.#apiUrl}/${idCareer}/seasons`)
-      .pipe(
-        shareReplay(1),
-        tap((res: Season[]) => {
-          this.#setSeasons.set(res);
-        })
-      );
+    return this.#http.get<Season[]>(`${this.#apiUrl}/${idCareer}/seasons`).pipe(
+      shareReplay(1),
+      tap((res: Season[]) => {
+        this.#setSeasons.set(res);
+      })
+    );
+  }
+
+  #setSeason = signal<Season | null>(null);
+  get getSeason() {
+    return this.#setSeason.asReadonly();
+  }
+
+  httpSeasonByCareer$(idCareer: string, typeSeason: string): Observable<Season> {
+    return this.#http.get<Season>(`${this.#apiUrl}/${idCareer}/seasons/${typeSeason}`)
+    .pipe(
+      shareReplay(1),
+      tap((res: Season) => {
+        this.#setSeason.set(res);
+      })
+    );
   }
 
   #setPlayersFromCareer = signal<Player[] | null>(null);
@@ -76,6 +101,13 @@ export class CareerService {
       tap((res: Player[]) => {
         this.#setPlayersFromCareer.set(res);
         console.log(res);
+      }),
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 404) {
+          this.#setPlayersFromCareer.set(null);
+        }
+        console.error(error);
+        return throwError(() => error);
       })
     );
   }
@@ -96,6 +128,12 @@ export class CareerService {
         tap((res: Player[]) => {
           this.#setPlayersFromCareerFilteredBySeason.set(res);
           console.log(res);
+        }),
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 404) {
+            this.#setPlayersFromCareerFilteredBySeason.set(null);
+          }
+          return throwError(() => error);
         })
       );
   }
@@ -107,9 +145,7 @@ export class CareerService {
   ): Observable<Player[]> {
     return this.#http
       .put<Player[]>(`${this.#apiUrl}/${careerId}/${playerId}`, season)
-      .pipe(
-        shareReplay()
-      );
+      .pipe(shareReplay());
   }
 
   #setAvailablePlayersForSeason = signal<Player[] | null>(null);
@@ -160,7 +196,6 @@ export class CareerService {
     );
   }
 
-
   #setSeasonByInitialSeason = signal<string>('');
   get getSeasonByInitialSeason() {
     return this.#setSeasonByInitialSeason.asReadonly();
@@ -182,37 +217,50 @@ export class CareerService {
       );
   }
 
-  async httpGetPlayersTopByGoals(idCareer: string, pageable: Pageable): Promise<Page<PlayerStats>> {
-
+  async httpGetPlayersTopByGoals(
+    idCareer: string,
+    pageable: Pageable
+  ): Promise<Page<PlayerStats>> {
     let params = new HttpParams()
-    .set('page', pageable.page.toString())
-    .set('size', pageable.size.toString());
+      .set('page', pageable.page.toString())
+      .set('size', pageable.size.toString());
 
-    const playersTopByGoals$ = this.#http.get<Page<PlayerStats>>(`${environment.CAREER_URL}/${idCareer}/statistics/goals`, {
-      params
-    });
+    const playersTopByGoals$ = this.#http.get<Page<PlayerStats>>(
+      `${environment.CAREER_URL}/${idCareer}/statistics/goals`,
+      {
+        params,
+      }
+    );
     return await firstValueFrom(playersTopByGoals$);
   }
 
-  async httpGetPlayersTopByAssists(idCareer: string, pageable: Pageable): Promise<Page<PlayerStats>> {
-
+  async httpGetPlayersTopByAssists(
+    idCareer: string,
+    pageable: Pageable
+  ): Promise<Page<PlayerStats>> {
     let params = new HttpParams()
-    .set('page', pageable.page.toString())
-    .set('size', pageable.size.toString());
+      .set('page', pageable.page.toString())
+      .set('size', pageable.size.toString());
 
-    const playersTopByAssists$ = this.#http.get<Page<PlayerStats>>(`${environment.CAREER_URL}/${idCareer}/statistics/assists`, {
-      params
-    });
+    const playersTopByAssists$ = this.#http.get<Page<PlayerStats>>(
+      `${environment.CAREER_URL}/${idCareer}/statistics/assists`,
+      {
+        params,
+      }
+    );
     return await firstValueFrom(playersTopByAssists$);
   }
 
   async httpFootballLeagues(): Promise<FootballLeague[]> {
-    const footballLeagues$ = this.#http.get<FootballLeague[]>(environment.LEAGUES_API_URL);
+    const footballLeagues$ = this.#http.get<FootballLeague[]>(
+      environment.LEAGUES_API_URL
+    );
     return await firstValueFrom(footballLeagues$);
   }
   async httpVersionFifa(): Promise<string[]> {
-    const versionsFifa$ = this.#http.get<string[]>(environment.CREATE_FIFAVERSION_URL);
+    const versionsFifa$ = this.#http.get<string[]>(
+      environment.CREATE_FIFAVERSION_URL
+    );
     return await firstValueFrom(versionsFifa$);
   }
-
 }

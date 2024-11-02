@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, signal } from '@angular/core';
 
 @Component({
   selector: 'app-icon-club',
@@ -9,8 +9,10 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
     <div class="image-club">
     @if (teamCareer) {
       <img
-        src="https://upload.wikimedia.org/wikipedia/commons/8/81/Hertha_BSC_Logo_2012.svg"
+        [src]="getSvgPath()"
+        src="../../../../../"
         alt="Escudo do {{ teamCareer }}"
+        id="badge-{{  formatTeamName(teamCareer)  }}"
       />
     }
     </div>
@@ -20,4 +22,14 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 })
 export class IconClubComponent {
   @Input() teamCareer!: string;
+
+
+  public formatTeamName(teamName: string): string {
+    return teamName.trim().toLowerCase().replace(/\s+/g, '-');
+  }
+
+  public getSvgPath(): string {
+    return `../../../../../assets/images/clubs/${this.formatTeamName(this.teamCareer)}.svg`;
+  }
+
 }

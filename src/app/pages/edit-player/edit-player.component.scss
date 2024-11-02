@@ -10,10 +10,10 @@
     &__content {
       &__statistics {
         display: flex;
-        align-items: center;
-        flex-direction: row;
-        justify-content: end;
-        height: 600px;
+        align-items: end;
+        flex-direction: column;
+        justify-content: space-evenly;
+        height: 24%;
       }
     }
 

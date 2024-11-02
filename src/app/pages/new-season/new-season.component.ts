@@ -30,6 +30,7 @@ import { ModalService } from '../services/modal.service';
 import { ModalComponent } from '../../shared/components/modal/modal.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { LoaderModule } from '../../shared/components/loader/loader.module';
+import { ClearOnFocusDirective } from '../../shared/directives/clear-on-focus.directive';
 
 @Component({
   selector: 'phub-new-season',
@@ -49,6 +50,7 @@ import { LoaderModule } from '../../shared/components/loader/loader.module';
     DetailsManagerClubIconComponent,
     ModalComponent,
     LoaderModule,
+    ClearOnFocusDirective
   ],
   templateUrl: './new-season.component.html',
   styleUrl: './new-season.component.scss',
@@ -138,9 +140,4 @@ export class NewSeasonComponent implements OnInit {
     this.searchQuerySeasonName.set(nationName);
   }
 
-  clearIfZero(formControlName: string) {
-    if (this.formSeason.get(formControlName)?.value === 0) {
-      this.formSeason.get(formControlName)?.setValue('');
-    }
-  }
 }

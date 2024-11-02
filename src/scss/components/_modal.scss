@@ -16,7 +16,7 @@
 }
 
 .modal-content {
-  background-color: #fefefe;
+  background-color: var(--white-modal);
   margin: 15% auto;
   padding: 20px;
   border: 1px solid #888;
@@ -44,14 +44,30 @@
   justify-content: center;
   align-items: center;
   position: relative;
+
+  img {
+    position: absolute;
+    opacity: 15%;
+    margin-top: 20px;
+  }
 }
 
 .modal-title {
   flex-grow: 1;
   text-align: center; /* Centraliza o título */
+  font-size: 34px;
+  font-weight: 400;
 
   &__error {
     color: var(--red);
+  }
+
+  &__confirmation {
+    color: var(--primary);
+  }
+
+  &__success {
+    color: var(--green);
   }
 }
 
@@ -66,6 +82,20 @@
   cursor: pointer;
 }
 
+.btn-modal{
+  &__error {
+    background-color: var(--red);
+  }
+
+  &__warning {
+    background-color: var(--white);
+  }
+
+  &__success {
+    background-color: var(--green);
+  }
+}
+
 .close:hover,
 .close:focus {
   color: black;
@@ -78,6 +108,10 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  font-weight: 500;
+
+  &__message {
+  }
 }
 
 .modal-footer {
@@ -90,7 +124,7 @@
   height: 45px;
 
   border-radius: 5px;
-  background-color: var(--red);
+
   color: var(--white);
 
   font-size: 18px;

@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { Observable, shareReplay, tap } from 'rxjs';
+import { firstValueFrom, Observable, shareReplay, tap } from 'rxjs';
+import { Season } from '../../models/career/season';
 
 @Injectable({
   providedIn: 'root',
@@ -24,5 +25,10 @@ export class SeasonService {
         this.#setSeasons.set(res);
       })
     );
+  }
+
+  async httpUpdateSeason(seasonId: string, seasonData: Partial<Season>): Promise<Season> {
+    const season$ = this.#http.put<Season>(`${environment.SEASONS_URL}/${seasonId}`, seasonData);
+    return await firstValueFrom(season$);
   }
 }

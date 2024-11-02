@@ -118,7 +118,7 @@
       padding: 3px;
       border-radius: 15px;
       background-color: var(--secundary);
-      transition: background-color 0.7s ease-in-out 3ms;
+      transition: background-color 0.25s ease-in-out;
     }
   }
 }
@@ -129,6 +129,11 @@
 
 .btn-primary {
   @include btn-primary();
+}
+
+.btn-primary-bigger {
+  @include btn-primary();
+  width: 300px;
 }
 
 .btn-item-career {
@@ -144,8 +149,8 @@
   width: 15vw;
   height: 5vh;
   margin: 0;
-  background-color: var(--white-01);
-  color: var(--secundary);
+  background-color: var(--secundary);
+  color: var(--white);
 }
 
 .btn-primary-red {

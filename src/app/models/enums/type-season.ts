@@ -1,4 +1,5 @@
 export enum TypeSeason {
+  TEMPORADA_2014 = "temporada-14-15",
   TEMPORADA_2015 = "temporada-15-16",
   TEMPORADA_2016 = "temporada-16-17",
   TEMPORADA_2017 = "temporada-17-18",

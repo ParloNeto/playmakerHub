@@ -1,12 +1,13 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { Observable, shareReplay, tap } from 'rxjs';
+import { catchError, Observable, shareReplay, tap, throwError } from 'rxjs';
 import { NewCareer } from '../../models/career/new-career';
 import { Player } from '../../models/player/player';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ModalService } from './modal.service';
 import { Router } from '@angular/router';
+import { Statistics } from '../../models/player/statistics';
 
 @Injectable({
   providedIn: 'root',
@@ -59,8 +60,41 @@ export class PlayerService {
       shareReplay(1),
       tap((res: Player) => {
         this.#setPlayerById.set(res);
-      })
+        console.log(res)
+      }),
+
     );
+  }
+
+  #setPlayerStatisticsSeason = signal<Statistics | null>(null);
+  get getPlayerStatisticsSeason() {
+    return this.#setPlayerStatisticsSeason.asReadonly();
+  }
+
+  httpFindPlayerStatisticsBySeason$(id: string, season: string): Observable<Statistics> {
+    return this.#http.get<Statistics>(`${this.#apiPlayerUrl}/${id}/${season}`).pipe(
+      shareReplay(1),
+      tap((res: Statistics) => {
+        this.#setPlayerStatisticsSeason.set(res);
+      }),
+      catchError((error) => {
+        this.#setPlayerStatisticsSeason.set(null);
+        console.error('Erro na requisição', error);
+        return throwError(() => error);
+    })
+    );
+  }
+
+  httpCreateStatisticsSeasonPlayer$(playerId: string, statistics: Statistics): Observable<Statistics> {
+    return this.#http.post<Statistics>(`${this.#apiPlayerUrl}/${playerId}/statistics`, statistics).pipe(
+      shareReplay(1),
+    )
+  }
+
+  httpUpdateStatisticsSeasonPlayer$(playerId: string, statistics: Statistics): Observable<Statistics> {
+    return this.#http.put<Statistics>(`${this.#apiPlayerUrl}/${playerId}/statistics`, statistics).pipe(
+      shareReplay(1),
+    )
   }
 
   // httpDeletePlayer$(playerId: string): Observable<Player> {

@@ -72,6 +72,7 @@ export class CareerComponent implements OnInit, OnDestroy {
 
   public openModalConfirmation(): void {
     this.#modalService.showConfirmation(
+      'Atenção!',
       'Tem certeza que deseja deletar essa carreira?',
       'Sim',
       'Não'

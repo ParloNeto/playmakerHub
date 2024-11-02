@@ -1,10 +1,14 @@
 import { NgIf } from '@angular/common';
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   inject,
+  OnChanges,
   OnInit,
   signal,
+  SimpleChanges,
 } from '@angular/core';
 import { ActivatedRoute, Params, RouterLink } from '@angular/router';
 import { HeaderComponent } from '../../shared/header/header.component';
@@ -20,6 +24,9 @@ import { Top3StatsPlayersCareerComponent } from '../../shared/components/top-3-s
 import { ModalService } from '../services/modal.service';
 import { Subscription } from 'rxjs';
 import { Statistics } from '../../models/player/statistics';
+import { Player } from '../../models/player/player';
+import { isValidTypeSeasonKey } from '../../models/enums/type-season';
+import { StatisticsHistory } from '../../models/player/statistics-history';
 
 @Component({
   selector: 'phub-edit-player',
@@ -39,21 +46,28 @@ import { Statistics } from '../../models/player/statistics';
   styleUrl: './edit-player.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EditPlayerComponent implements OnInit {
+export class EditPlayerComponent implements OnInit, OnChanges, AfterViewInit {
+  ngAfterViewInit(): void {
+    console.log(this.#cdr.detectChanges())
+  }
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(changes)
+  }
   public id = signal<string | null>(null);
   public actualSeason = signal<Statistics | null>(null);
   public idCareerOfPlayer = signal<string | null>(null);
   public season = signal<string | null>(null);
+  public statisticsHistory = signal<StatisticsHistory | null>(null);
+  public isValidTypeSeasonKey = isValidTypeSeasonKey;
+
   #playerService = inject(PlayerService);
   #careerService = inject(CareerService);
   #activatedRoute = inject(ActivatedRoute);
   #modalService = inject(ModalService);
-
-  private confirmSubscription!: Subscription;
-
-
+  #cdr = inject(ChangeDetectorRef);
 
   getPlayerById = this.#playerService.getPlayerById;
+  getPlayerStatisticsSeason = this.#playerService.getPlayerStatisticsSeason;
   getCareerDetails = this.#careerService.getCareerDetails;
 
   showSeason = transformSeasonString;
@@ -70,6 +84,7 @@ export class EditPlayerComponent implements OnInit {
       next: (res) => {
         console.log(res)
         this.idCareerOfPlayer.set(res.idCareer);
+        this.statisticsHistory.set(res.statisticsHistory)
       },
     });
 
@@ -79,18 +94,23 @@ export class EditPlayerComponent implements OnInit {
         .subscribe();
     }
 
-    const seasonFilteredByName = this.getPlayerById()?.statisticsBySeasons.filter((player) => player.season === this.season())
-
-    if(seasonFilteredByName) {
-      this.actualSeason.set(seasonFilteredByName[0])
-      console.log(this.actualSeason())
+    if (this.season() !== "geral") {
+      this.#playerService.httpFindPlayerStatisticsBySeason$(this.id()!, this.season()!).subscribe();
 
     }
+
+
+  }
+
+  public statisticsSeasonData(stats: Statistics[], season: string): Statistics | null {
+    const statsActualSeason = stats.find((stats) => stats.season === season);
+    return statsActualSeason ? statsActualSeason : null;
 
   }
 
   public deletePlayer() {
     this.#modalService.showConfirmation(
+          'Atenção!',
           'Tem certeza que deseja deletar essa carreira?',
           'Sim',
           'Não'

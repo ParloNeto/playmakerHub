@@ -1,5 +1,4 @@
-import { EditPlayerComponent } from './edit-player/edit-player.component';
-
+import { CreateStatisticsCareerComponent } from './career/details/create-statistics-career/create-statistics-career.component';
 import { Routes } from '@angular/router';
 
 export const PAGES_ROUTES: Routes = [
@@ -28,6 +27,11 @@ export const PAGES_ROUTES: Routes = [
           import('./career/details/details.component').then((p) => p.DetailsComponent),
       },
       {
+        path: ':id/:season/edit-statistics',
+        loadComponent: () =>
+          import('./career/details/create-statistics-career/create-statistics-career.component').then((p) => p.CreateStatisticsCareerComponent),
+      },
+      {
         path: ':id/:season/new-player',
         loadComponent: () =>
           import('./new-player/new-player.component').then((p) => p.NewPlayerComponent),
@@ -41,6 +45,16 @@ export const PAGES_ROUTES: Routes = [
         path: ':id/:season/:id/edit-player',
         loadComponent: () =>
           import('./edit-player/edit-player.component').then((p) => p.EditPlayerComponent),
+      },
+      {
+        path: ':id/:season/:id/edit-player/new-statistics',
+        loadComponent: () =>
+          import('./edit-player/create-statistics/create-statistics-player.component').then((p) => p.CreateStatisticsPlayerComponent),
+      },
+      {
+        path: ':id/:season/:id/edit-player/edit-statistics',
+        loadComponent: () =>
+          import('./edit-player/create-statistics/create-statistics-player.component').then((p) => p.CreateStatisticsPlayerComponent),
       },
     ],
   },

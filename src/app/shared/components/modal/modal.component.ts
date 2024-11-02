@@ -19,16 +19,19 @@ import { MatListModule, MatSelectionList } from '@angular/material/list';
       >
         <div class="modal-header">
           <span class="close" (click)="onClose()">&times;</span>
-          <h2 class="modal-title modal-title__{{ state() }}">{{ title }}</h2>
+          <h2 class="modal-title modal-title__{{ state() }}">{{ title() }}</h2>
+          <img src="../../../../assets/icons/{{ state() }}.png" alt="">
         </div>
         <div class="modal-body">
-          <p *ngIf="message">{{ message }}</p>
+          <p class="modal-body__message" *ngIf="message">{{ message }}</p>
           <ng-content></ng-content>
           @if (players()) {
         <mat-selection-list class="modal-list-checkbox-player" #playerSelected [multiple]="false">
           @for (player of players(); track player.id) {
           <mat-list-option class="modal-options-checkbox-player" [value]="player">{{ player.firstName }} {{ player.lastName }}</mat-list-option>
-          }
+          } @empty {
+          <p style="color: var(--white);">Todos os jogadores dessa carreira já estão nessa temporada.</p>
+        }
         </mat-selection-list>
         }
         </div>
@@ -43,14 +46,14 @@ import { MatListModule, MatSelectionList } from '@angular/material/list';
           </button>
         </div>
         <div class="modal-footer" *ngIf="!isConfirmation">
-          <button class="btn-modal-close" (click)="onClose()">Fechar</button>
+          <button class="btn-modal-close btn-modal__{{ state() }}" (click)="onClose()">Fechar</button>
         </div>
       </div>
     </div>
   `,
 })
 export class ModalComponent implements OnInit, OnDestroy {
-  @Input() title: string = 'Modal Title';
+  public title =  signal<string | null>(null);
   public state = signal<ModalState>(ModalState.Confirmation);
   @Input() public players = signal<Player[] | null>(null);
   @ViewChild('playerSelected') playerSelected!: MatSelectionList;
@@ -85,14 +88,21 @@ export class ModalComponent implements OnInit, OnDestroy {
   private handleModalState(state: any) {
 
     switch (state.type) {
+      case 'success':
+        this.title.set("Sucesso");
+        this.message = state.message;
+        this.isConfirmation = false;
+        this.openModal();
+        break;
       case 'error':
-        this.title = 'Erro';
+        this.title.set("Erro");
         this.message = state.message;
         this.isConfirmation = false;
         this.openModal();
         break;
       case 'confirmation':
         this.message = state.message;
+        this.title.set(state.title);
         this.isConfirmation = true;
         this.confirmButtonText = state.confirmText || 'Prosseguir';
         this.cancelButtonText = state.cancelText || 'Cancelar';
@@ -100,7 +110,7 @@ export class ModalComponent implements OnInit, OnDestroy {
         this.openModal();
         break;
       case 'player-transfer':
-        this.title = "Transferência de Jogadores";
+        this.title.set("Transferência de Jogadores");
         this.message = state.message;
         this.isConfirmation = true;
         this.confirmButtonText = state.confirmText || 'Adicionar';
@@ -123,6 +133,8 @@ export class ModalComponent implements OnInit, OnDestroy {
   closeModal() {
     this.isOpen = false;
     this.message = null;
+    this.players.set(null);
+    this.title.set(null);
   }
 
   onConfirm() {

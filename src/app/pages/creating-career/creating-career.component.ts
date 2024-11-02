@@ -73,7 +73,6 @@ export class CreatingCareerComponent implements OnInit {
 
   public showError = signal<boolean>(false);
   public messageError = signal<string>('');
-  titleModal!: 'Aviso!' | 'Sucesso!' | 'Erro!';
 
   public searchQueryNation = signal<string>('');
   public searchQueryFifaVersion = signal<string>('');
@@ -112,7 +111,7 @@ export class CreatingCareerComponent implements OnInit {
         [
           Validators.required,
           Validators.maxLength(16),
-          Validators.minLength(6),
+          Validators.minLength(3),
         ],
       ],
       teamCareer: [null, Validators.required],
@@ -124,7 +123,7 @@ export class CreatingCareerComponent implements OnInit {
         [
           Validators.required,
           Validators.maxLength(20),
-          Validators.minLength(6),
+          Validators.minLength(3),
         ],
       ],
       nationality: [
@@ -132,10 +131,10 @@ export class CreatingCareerComponent implements OnInit {
         [
           Validators.required,
           Validators.maxLength(20),
-          Validators.minLength(6),
+          Validators.minLength(3),
         ],
       ],
-      urlImageCoach: [null, [Validators.required]],
+      urlImageCoach: [''],
       seasons: [0, [Validators.required]],
     });
   }

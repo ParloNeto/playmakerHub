@@ -1,0 +1,91 @@
+<app-header />
+<phub-loader></phub-loader>
+
+<div class="container">
+  <div class="creating-form-background">
+    <div class="creating-form-background__content">
+      <h2 class="title-content">
+        {{ pathAlias() === 'edit' ? 'Editar Estatisticas' : 'Criar Estatisticas' }} - {{  infoPlayer()?.firstName  }} {{  infoPlayer()?.lastName  }} - {{ showSeason(season()) }}
+      </h2>
+      <div class="creating-form-background__form">
+        <form [formGroup]="formStatistics" (ngSubmit)="submitForm()">
+          <div class="input-form">
+            <label for="matches">Partidas:</label>
+            <input
+              formControlName="matches"
+              placeholder="Digite aqui..."
+              type="text"
+              maxlength="2"
+              phubClearOnFocus
+            />
+          </div>
+          <div class="input-form">
+            <label for="goals">Gols:</label>
+            <input
+              formControlName="goals"
+              placeholder="Digite aqui..."
+              type="text"
+              maxlength="3"
+              phubClearOnFocus
+            />
+          </div>
+          <div class="input-form">
+            <label for="assists">Assistências:</label>
+            <input
+              formControlName="assists"
+              placeholder="Digite aqui..."
+              type="text"
+              maxlength="3"
+              phubClearOnFocus
+            />
+          </div>
+
+          <div class="input-form">
+            <label for="yellowCards">Cartões Amarelos:</label>
+            <input
+              formControlName="yellowCards"
+              placeholder="Digite aqui..."
+              type="text"
+              maxlength="2"
+              phubClearOnFocus
+            />
+          </div>
+          <div class="input-form">
+            <label for="redCards">Cartões Vermelhos:</label>
+            <input
+              formControlName="redCards"
+              placeholder="Digite aqui..."
+              type="text"
+              maxlength="2"
+              phubClearOnFocus
+            />
+          </div>
+
+
+        </form>
+        <button
+            type="submit"
+            class="btn-primary"
+            [disabled]="formStatistics.invalid"
+            (click)="submitForm()"
+          >
+            {{ pathAlias() === 'edit' ? 'Editar Estatisticas' : 'Criar Estatisticas' }}
+          </button>
+      </div>
+    </div>
+    <!-- @if (showError()) {
+    <div class="show-error-modal">
+      <h4 class="text-warn">{{ messageError() }}</h4>
+    </div>
+    }
+    <button [routerLink]="['/']" class="btn-arrow-return">
+      <img src="../../../assets/icons/voltar.svg" alt="Voltar para a Home" />
+    </button>
+
+    <phub-details-photo
+      [clubName]="getTeamCareer"
+      [personName]="getCoachesName"
+      [url]="getUrl"
+    /> -->
+  </div>
+</div>

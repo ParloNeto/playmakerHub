@@ -1,9 +1,5 @@
 <app-header />
 <phub-loader></phub-loader>
-<phub-modal>
-  <h1>oi</h1>
-
-</phub-modal>
 <div class="container">
   <div class="career">
     @defer { @if (getPlayerById(); as player) {
@@ -23,8 +19,32 @@
       <div class="career__content__statistics">
         @if (this.season() === 'geral') {
           <phub-statistics [statisticsHistory]="player.statisticsHistory" />
-        } @else {
-          <phub-statistics [statisticsSeason]="this.actualSeason()!" />
+        } @else if (isValidTypeSeasonKey(this.season())) {
+          @if (getPlayerStatisticsSeason(); as statisticsSeason) {
+            <phub-statistics [statisticsSeason]="statisticsSeason" />
+            <button
+                  class="btn-primary"
+                  routerLink="edit-statistics"
+                >
+                Editar Estatisticas
+                </button >
+          } @else {
+            <div class="statistics">
+
+              <div class="column-stats">
+                <h4 class="column-stats-field">Não há estatisticas cadastradas desse jogador em: {{ showSeason(this.season()!) }}</h4>
+                <h4 class="column-stats-field__number">
+                  <button
+                  class="btn-primary"
+                  routerLink="new-statistics"
+                >
+                  CADASTRE AGORA
+                </button ></h4>
+
+              </div>
+            </div>
+          }
+
         }
       </div>
     </div>
@@ -32,8 +52,8 @@
     <div class="career__player-icon-and-review">
       <phub-details-photo [player]="player" [clubName]="'Palmeiras'" />
 
-      <app-top-3-stats-players-career [idCareer]="player.idCareer">
-      </app-top-3-stats-players-career>
+      <!-- <app-top-3-stats-players-career [idCareer]="player.idCareer">
+      </app-top-3-stats-players-career> -->
     </div>
 
     } } @error {
@@ -49,7 +69,7 @@
         Elenco
       </button>
       <button
-        [routerLink]="['/career', this.idCareerOfPlayer(), this.season()]"
+        [routerLink]="['/career', this.idCareerOfPlayer(), 'geral', this.id(), 'edit-player']"
         routerLinkActive="active"
         class="btn-primary-white"
       >

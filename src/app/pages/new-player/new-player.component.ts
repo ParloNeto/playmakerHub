@@ -29,6 +29,7 @@ import { ModalService } from '../services/modal.service';
 import { ModalComponent } from '../../shared/components/modal/modal.component';
 import { FileUploadModule } from '../../shared/components/file-upload/file-upload.module';
 import { LoaderModule } from '../../shared/components/loader/loader.module';
+import { ClearOnFocusDirective } from '../../shared/directives/clear-on-focus.directive';
 
 @Component({
   selector: 'app-new-player',
@@ -48,7 +49,8 @@ import { LoaderModule } from '../../shared/components/loader/loader.module';
     DetailsManagerClubIconComponent,
     ModalComponent,
     FileUploadModule,
-    LoaderModule
+    LoaderModule,
+    ClearOnFocusDirective,
   ],
   templateUrl: './new-player.component.html',
   styleUrl: './new-player.component.scss',
@@ -65,13 +67,27 @@ export class NewPlayerComponent implements OnInit {
 
   public getCareerDetails = this.#careerService.getCareerDetails;
 
+  public positions: ReadonlyArray<string> = [
+    'ATA',
+    'PE',
+    'PD',
+    'MEI',
+    'VOL',
+    'MC',
+    'MD',
+    'ME',
+    'SA',
+    'LD',
+    'LE',
+    'ZAG',
+    'GOL',
+  ];
+
   public formNewPlayer!: FormGroup;
   public formStatisticsNewPlayer!: FormGroup;
   public searchQueryNation = signal<string>('');
   public season = signal<string>('');
   public idCareer = signal<string>('');
-
-
 
   #setNations = signal<{ nation: string }[] | null>(null);
   get getNations() {
@@ -92,43 +108,76 @@ export class NewPlayerComponent implements OnInit {
       firstName: ['', [Validators.minLength(3), Validators.required]],
       lastName: ['', [Validators.minLength(3), Validators.required]],
       nationality: ['', [Validators.required]],
-      position: [
-        null,
-        [Validators.required],
+      position: [null, [Validators.required]],
+      joined: [2017, [Validators.required]],
+      kitNumber: [
+        0,
+        [
+          Validators.required,
+          Validators.pattern('^[0-9]*$'),
+          Validators.maxLength(3),
+        ],
       ],
-      joined: [
-        2017,
-        [Validators.required],
-      ],
-      kitNumber: [10, [Validators.required]],
       urlImagePlayer: ['', [Validators.required]],
     });
 
     this.formStatisticsNewPlayer = this.#fb.group({
-      matches: [0, [Validators.required]],
-      goals: [0, [Validators.required]],
-      assists: [0, [Validators.required]],
+      season: [
+        this.season() !== "geral" ? this.season() : null,
+      ],
+      matches: [
+        0,
+        [
+          Validators.required,
+          Validators.pattern('^[0-9]*$'),
+          Validators.maxLength(3),
+        ],
+      ],
+      goals: [
+        0,
+        [
+          Validators.required,
+          Validators.pattern('^[0-9]*$'),
+          Validators.maxLength(3),
+        ],
+      ],
+      assists: [
+        0,
+        [
+          Validators.required,
+          Validators.pattern('^[0-9]*$'),
+          Validators.maxLength(3),
+        ],
+      ],
       yellowCards: [
         0,
-        [Validators.required, Validators.minLength(2), Validators.maxLength(2)],
+        [
+          Validators.required,
+          Validators.pattern('^[0-9]*$'),
+          Validators.maxLength(3),
+        ],
       ],
       redCards: [
         0,
-        [Validators.required, Validators.minLength(2), Validators.maxLength(2)],
-      ]
+        [
+          Validators.required,
+          Validators.pattern('^[0-9]*$'),
+          Validators.maxLength(3),
+        ],
+      ],
     });
 
     this.verifySeason(this.season());
-    this.getNationsMock().then()
+    this.getNationsMock().then();
   }
 
-   /**
+  /**
    * Filtra a nacionalidade com base no input do campo 'nationality'.
    *
    * @returns {string} Retorna um array filtrado com o nome passado no input.
    */
 
-   public nations = computed(() => {
+  public nations = computed(() => {
     const sq = this.searchQueryNation();
     const nations = this.getNations();
     if (nations) {
@@ -156,11 +205,21 @@ export class NewPlayerComponent implements OnInit {
     // if (this.formNewPlayer.get('contractedAtualSeason')!.value === true) {
     //   this.formNewPlayer.get('season')?.setValue(this.season());
     // }
+    let player;
 
     if (this.formNewPlayer.valid && this.formStatisticsNewPlayer.valid) {
-      const player = Object.assign({}, this.formNewPlayer.value, {
-        statisticsBySeasons: [this.formStatisticsNewPlayer.value],
-      }) as Player;
+      if(this.season() == "geral") {
+        this.formStatisticsNewPlayer.removeControl("season");
+
+        player = Object.assign({}, this.formNewPlayer.value, {
+          statisticsHistory: this.formStatisticsNewPlayer.value,
+        }) as Player;
+      } else {
+        player = Object.assign({}, this.formNewPlayer.value, {
+          statisticsBySeasons: [this.formStatisticsNewPlayer.value],
+        }) as Player;
+      }
+
 
       this.#playerService
         .httpCreatePlayerByCareer$(this.idCareer(), player, this.season())

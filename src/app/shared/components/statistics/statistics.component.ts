@@ -41,13 +41,12 @@ import { NgIf } from '@angular/common';
       }
     </div>
   `,
-  styleUrl: './statistics.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StatisticsComponent implements OnInit {
 
   @Input() statisticsHistory!: StatisticsHistory;
-  @Input() statisticsSeason!: Statistics;
+  @Input() statisticsSeason!: Statistics  | null ;
 
   public stats = signal<StatisticsHistory | Statistics | null>(null);
 
@@ -57,6 +56,7 @@ export class StatisticsComponent implements OnInit {
     } else {
       this.stats.set(this.statisticsSeason);
     }
+
   }
 
 }

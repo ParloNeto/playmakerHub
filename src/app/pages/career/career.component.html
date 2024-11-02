@@ -1,6 +1,5 @@
 <app-header />
-<phub-loader>
-</phub-loader>
+<phub-loader> </phub-loader>
 
 <div class="container">
   @if (getCareerDetails(); as career) {
@@ -13,10 +12,7 @@
       <h2 class="semi-bold">Temporadas</h2>
       <div class="career__seasons">
         @if (seasons()) { @for (season of seasons(); track season.id) {
-        <button
-          class="btn-primary"
-          [routerLink]="[season.seasonName]"
-        >
+        <button class="btn-primary" [routerLink]="[season.seasonName]">
           {{ showSeason(season.seasonName!) }}
         </button>
         } } @else {
@@ -27,14 +23,10 @@
       </div>
     </div>
 
-
-      <phub-details-photo
+    <phub-details-photo
       [manager]="career.coach"
       [clubName]="career.teamCareer"
     />
-
-
-
 
     <button [routerLink]="['/home']" class="btn-arrow-return">
       <img src="../../../assets/icons/voltar.svg" alt="Voltar para a Home" />
@@ -66,11 +58,11 @@
       </button>
     </div>
   </div>
+  @if (career.players) {
   <div class="top-3-stats-side">
-    <app-top-3-stats-players-career [idCareer]="career.id">
-
-    </app-top-3-stats-players-career>
+    <app-top-3-stats-players-career
+      [idCareer]="career.id"
+    />
   </div>
-
-  }
+  } }
 </div>

@@ -2,97 +2,100 @@
 <phub-loader></phub-loader>
 
 <div class="container">
-  <div class="creating-career">
-    <div class="creating-career__content">
+  <div class="creating-form-background">
+    <div class="creating-form-background__content">
       <h2 class="title-content">Cadastrar Jogador - {{ season() }}</h2>
-      <div class="creating-career__form">
-
-        <form
-          [formGroup]="formNewPlayer"
-        >
+      <div class="creating-form-background__form">
+        <form [formGroup]="formNewPlayer">
           <div class="input-form">
             <label for="firstName">Nome:</label>
             <input
+              formControlName="firstName"
               placeholder="Digite aqui..."
               type="text"
-              formControlName="firstName"
               maxlength="20"
             />
           </div>
           <div class="input-form">
             <label for="lastName">Sobrenome:</label>
             <input
+              formControlName="lastName"
               placeholder="Digite aqui..."
               type="text"
-              formControlName="lastName"
               maxlength="20"
             />
           </div>
           <div class="input-form">
             <label for="kitNumber">Número do Jogador:</label>
             <input
-              placeholder="Digite aqui..."
-              type="number"
               formControlName="kitNumber"
-              maxlength="20"
+              placeholder="Digite aqui..."
+              type="text"
+              maxlength="3"
+              phubClearOnFocus
             />
           </div>
 
           <div class="input-form">
             <label for="position">Posição:</label>
             <input
+              formControlName="position"
               placeholder="Digite aqui..."
               type="text"
+              [matAutocomplete]="autoPosition"
               maxlength="3"
-              formControlName="position"
             />
+            <mat-autocomplete #autoPosition="matAutocomplete">
+              @for (position of positions; track position) {
+              <mat-option [value]="position">{{ position }}</mat-option>
+              }
+            </mat-autocomplete>
           </div>
           <div class="input-form">
             <label for="joined">Data de Chegada:</label>
             <input
+              formControlName="joined"
               placeholder="Digite aqui..."
               type="number"
-              formControlName="joined"
             />
           </div>
 
-            <div class="input-form">
-              <label for="nationality">Nacionalidade:</label>
-              <input
-                type="text"
-                #searchNation
-                placeholder="Digite aqui a nacionalidade..."
-                formControlName="nationality"
-                [matAutocomplete]="autoNation"
-                (input)="onSearchUpdatedNation(searchNation.value)"
-                appUpperCase
-              />
-              <mat-autocomplete #autoNation="matAutocomplete">
-                @for (name of nations(); track name.nation) {
-                <mat-option [value]="name.nation">{{ name.nation }}</mat-option>
-                }
-              </mat-autocomplete>
-            </div>
-            <div class="input-form">
-              <label for="urlImagePlayer">Foto do Jogador (URL):</label>
-              <!-- <input
+          <div class="input-form">
+            <label for="nationality">Nacionalidade:</label>
+            <input
+              formControlName="nationality"
+              type="text"
+              #searchNation
+              placeholder="Digite aqui a nacionalidade..."
+              [matAutocomplete]="autoNation"
+              (input)="onSearchUpdatedNation(searchNation.value)"
+              appUpperCase
+            />
+            <mat-autocomplete #autoNation="matAutocomplete">
+              @for (name of nations(); track name.nation) {
+              <mat-option [value]="name.nation">{{ name.nation }}</mat-option>
+              }
+            </mat-autocomplete>
+          </div>
+          <div class="input-form">
+            <label for="urlImagePlayer">Foto do Jogador (URL):</label>
+            <!-- <input
                 placeholder="Digite aqui..."
                 type="text"
                 formControlName="urlImagePlayer"
               /> -->
-              <file-upload formControlName="urlImagePlayer"
-              ></file-upload>
-            </div>
-
+            <file-upload formControlName="urlImagePlayer"></file-upload>
+          </div>
         </form>
         <form action="post" [formGroup]="formStatisticsNewPlayer">
           <div class="input-form">
             <label for="matches">Partidas:</label>
             <input
-              placeholder="Digite aqui..."
-              type="number"
               formControlName="matches"
-              maxlength="20"
+              placeholder="Digite aqui..."
+              type="text"
+              maxlength="3"
+              phubClearOnFocus
             />
           </div>
           <div class="input-form">
@@ -101,41 +104,43 @@
               placeholder="Digite aqui..."
               type="number"
               formControlName="goals"
+              phubClearOnFocus
             />
           </div>
           <div class="input-form">
             <label for="assists">Assistências:</label>
             <input
-              placeholder="Digite aqui..."
-              type="number"
               formControlName="assists"
+              placeholder="Digite aqui..."
+              type="text"
+              maxlength="3"
+              phubClearOnFocus
             />
           </div>
 
-
-            <div class="input-form">
-              <label for="yellowCards">Cartões Amarelos:</label>
-              <input
-                placeholder="Digite aqui..."
-                type="number"
-                formControlName="yellowCards"
-              />
-            </div>
-            <div class="input-form">
-              <label for="redCards">Cartões Vermelhos:</label>
-              <input
-                placeholder="Digite aqui..."
-                type="number"
-                formControlName="redCards"
-              />
-            </div>
+          <div class="input-form">
+            <label for="yellowCards">Cartões Amarelos:</label>
+            <input
+              formControlName="yellowCards"
+              placeholder="Digite aqui..."
+              type="text"
+              maxlength="3"
+              phubClearOnFocus
+            />
+          </div>
+          <div class="input-form">
+            <label for="redCards">Cartões Vermelhos:</label>
+            <input
+              formControlName="redCards"
+              placeholder="Digite aqui..."
+              type="text"
+              maxlength="3"
+              phubClearOnFocus
+            />
+          </div>
         </form>
 
-
-
-
-
-          <!-- <div class="input-form">
+        <!-- <div class="input-form">
           <label for="fifaCareer">Fifa da Carreira:</label>
           <input
             type="text"
@@ -150,7 +155,7 @@
             }
           </mat-autocomplete>
         </div> -->
-          <!-- <div class="input-form">
+        <!-- <div class="input-form">
           <label for="leagueCareer">Liga da Carreira:</label>
           <input
           type="text"
@@ -169,23 +174,26 @@
         </mat-autocomplete>
         </div> -->
 
-
-
-          <button
-            type="submit"
-            class="btn-primary"
-            [disabled]="formStatisticsNewPlayer.invalid || this.formNewPlayer.invalid"
-            (click)="submitForm()"
-          >
-            Cadastrar Jogador
-          </button>
+        <button
+          type="submit"
+          class="btn-primary"
+          [disabled]="
+            formStatisticsNewPlayer.invalid || this.formNewPlayer.invalid
+          "
+          (click)="submitForm()"
+        >
+          Cadastrar Jogador
+        </button>
       </div>
 
       @if (getCareerDetails(); as careerDetails) {
       <phub-details-photo [clubName]="careerDetails.teamCareer" />
       }
 
-      <button [routerLink]="['/career', this.idCareer(), this.season()]" class="btn-arrow-return">
+      <button
+        [routerLink]="['/career', this.idCareer(), this.season()]"
+        class="btn-arrow-return"
+      >
         <img src="../../../assets/icons/voltar.svg" alt="Voltar para a Home" />
       </button>
     </div>
