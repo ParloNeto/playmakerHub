@@ -32,12 +32,15 @@
       <h2 class="semi-bold">Elenco</h2>
       @if (getPlayersFromCareer(); as playersGeral) {
       <phub-list-player [setPlayer]="playersGeral" />
-      <button
+      <div class="career__content__btns_bottom">
+        <button
         routerLink="/career/{{ career.id }}/{{ season() }}/new-player"
-        class="btn-primary cadastrar-jogador-top"
+        class="btn-primary"
       >
         Cadastrar Jogador
       </button>
+      </div>
+
       } @else {
       <h3 class="purple-warn">
         Você não possui nenhum jogador cadastrado no momento...
@@ -51,7 +54,11 @@
       } } @else if (isValidTypeSeasonKey(season())) {
       <h2 class="semi-bold">Elenco</h2>
       @if (getPlayersFromCareerFilteredBySeason(); as playersFilteredBySeason) {
-      <phub-list-player [setPlayer]="playersFilteredBySeason" />
+        @defer {
+          <phub-list-player [setPlayer]="playersFilteredBySeason" />
+        } @placeholder {
+          <h2 class="semi-bold">Carregando jogadores...</h2>
+        }
       } @else {
       <h3 class="purple-warn">
         Você não possui nenhum jogador cadastrado nessa temporada no momento...
@@ -63,19 +70,22 @@
         Cadastrar Jogador
       </button>
       } @if (career.players) {
-      <button
-        routerLink="/career/{{ career.id }}/{{ season() }}/new-player"
-        class="btn-primary"
-      >
-        Cadastrar Jogador
-      </button>
-      <button
-        (click)="modalAddPlayerToActualSeason()"
-        class="btn-primary add-player-in-season"
-        style="margin-left: 15px"
-      >
-        Adicionar jogador existente na carreira
-      </button>
+        <div class="career__content__btns_bottom">
+          <button
+          routerLink="/career/{{ career.id }}/{{ season() }}/new-player"
+          class="btn-primary"
+        >
+          Cadastrar Jogador
+        </button>
+        <button
+          (click)="modalAddPlayerToActualSeason()"
+          class="btn-primary add-player-in-season"
+          style="margin-left: 15px"
+        >
+          Adicionar jogador existente na carreira
+        </button>
+        </div>
+
       } } @else {
       <h2 class="semi-bold">
         Não foi possível encontrar dados associados a essa carreira.
@@ -98,13 +108,20 @@
 
     <div class="career-bottom-buttons">
       @if (season() === "geral") {
-      <button
-        [routerLink]="['/career', career.id, initialSeason()]"
-        routerLinkActive="active"
+      <input
         class="btn-primary-white"
-      >
-        {{ showSeason(initialSeason()) }}
-      </button>
+        placeholder="Digite aqui..."
+        type="text"
+        [value]="showSeason(initialSeason()!)"
+        [matAutocomplete]="autoPosition"
+        maxlength="0"
+      />
+      <mat-autocomplete #autoPosition="matAutocomplete">
+        @for (season of seasons(); track season) {
+        <mat-option [routerLink]="['/career', career.id, season.seasonName]">{{ showSeason(season.seasonName) }}</mat-option>
+        }
+      </mat-autocomplete>
+
       <button
         [routerLink]="['/career', career.id, season(), 'new-season']"
         routerLinkActive="active"
@@ -112,6 +129,7 @@
       >
         Adicionar Temporada
       </button>
+
       } @else {
       <button
         [routerLink]="['/career', career.id, 'geral']"
@@ -125,6 +143,8 @@
       <button [routerLink]="['/career', career.id]" class="btn-primary-white">
         {{ career.teamCareer }}
       </button>
+
+
     </div>
   </div>
   }

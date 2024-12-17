@@ -19,6 +19,7 @@ import { MatInputModule } from '@angular/material/input';
 import {
   ActivatedRoute,
   Params,
+  Router,
   RouterLink,
   UrlSegment,
 } from '@angular/router';
@@ -33,6 +34,9 @@ import { ClearOnFocusDirective } from '../../../shared/directives/clear-on-focus
 import { PlayerService } from '../../services/player.service';
 import { ModalService } from '../../services/modal.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Statistics } from '../../../models/player/statistics';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Player } from '../../../models/player/player';
 
 @Component({
   selector: 'phub-create-statistics-player',
@@ -64,11 +68,14 @@ export class CreateStatisticsPlayerComponent implements OnInit {
   #activatedRoute = inject(ActivatedRoute);
   #playerService = inject(PlayerService);
   #modalService = inject(ModalService);
+  #router = inject(Router);
+  #snackBar = inject(MatSnackBar);
 
   public season = signal<string>('');
   public id = signal<string>('');
+  public idCareer = signal<string>('');
   public pathAlias = signal<string>('');
-  
+
   public infoPlayer = this.#playerService.getPlayerById;
 
   public showSeason = transformSeasonString;
@@ -95,9 +102,6 @@ export class CreateStatisticsPlayerComponent implements OnInit {
       },
     });
 
-    this.#playerService.httpGetPlayerById$(this.id()).subscribe();
-
-
     this.formStatistics = this.#fb.group({
       season: [this.season(), [Validators.required]],
       matches: [
@@ -110,6 +114,25 @@ export class CreateStatisticsPlayerComponent implements OnInit {
       redCards: [0, Validators.required],
       contractedAtualSeason: [false],
     });
+
+    this.#playerService.httpGetPlayerById$(this.id()).subscribe({
+      next: (player: Player) => this.idCareer.set(player.idCareer)
+    });
+
+    if (this.pathAlias() === 'edit') {
+      this.#playerService.httpFindPlayerStatisticsBySeason$(this.id(), this.season()).subscribe({
+        next: (statistics) => {
+          this.formStatistics.patchValue({
+            matches: statistics.matches,
+            goals: statistics.goals,
+            assists: statistics.assists,
+            yellowCards: statistics.yellowCards,
+            redCards: statistics.redCards
+          });
+        }
+      });
+    }
+
   }
 
   public submitForm(): void {
@@ -120,7 +143,11 @@ export class CreateStatisticsPlayerComponent implements OnInit {
       .httpCreateStatisticsSeasonPlayer$(this.id(), data)
       .subscribe({
         next: () => {
-          this.#modalService.showSuccess();
+          // this.#modalService.showSuccess();
+          this.#router.navigateByUrl(`/career/${this.idCareer()}/${this.season()}/${this.id()}/edit-player`);
+          this.#snackBar.open('Estatísticas criadas com sucesso!', 'Fechar', {
+            duration: 3500,
+      });
         },
         error: (bodyErr: HttpErrorResponse) => {
           this.#modalService.showError(bodyErr.error.message);
@@ -131,7 +158,10 @@ export class CreateStatisticsPlayerComponent implements OnInit {
       .httpUpdateStatisticsSeasonPlayer$(this.id(), data)
       .subscribe({
         next: () => {
-          this.#modalService.showConfirmation
+          this.#router.navigateByUrl(`/career/${this.idCareer()}/${this.season()}/${this.id()}/edit-player`);
+          this.#snackBar.open('Estatísticas atualizadas com sucesso!', 'Fechar', {
+            duration: 3500,
+      });
         },
         error: (bodyErr: HttpErrorResponse) => {
           this.#modalService.showError(bodyErr.error.message);

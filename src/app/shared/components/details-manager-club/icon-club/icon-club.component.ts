@@ -10,7 +10,6 @@ import { ChangeDetectionStrategy, Component, Input, signal } from '@angular/core
     @if (teamCareer) {
       <img
         [src]="getSvgPath()"
-        src="../../../../../"
         alt="Escudo do {{ teamCareer }}"
         id="badge-{{  formatTeamName(teamCareer)  }}"
       />

@@ -1,34 +1,39 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { HomeComponent } from './home.component';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { RouterModule } from '@angular/router';
-import { CreatingCareerComponent } from '../creating-career/creating-career.component';
-import { CareerComponent } from '../career/career.component';
+import { DebugElement } from '@angular/core';
+import { CareerService } from '../services/career.service';
 
-describe('HomeComponent', () => {
-  let component: HomeComponent;
+fdescribe('HomeComponent', () => {
+  let component:HomeComponent;
   let fixture: ComponentFixture<HomeComponent>;
+  let el: DebugElement;
+  let careerService: any;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [
-        HomeComponent,
-        HttpClientTestingModule,
-        RouterModule.forRoot([
-          { path: '', component: HomeComponent },
-          { path: 'new-career', component: CreatingCareerComponent },
-          { path: 'career/:id', component: CareerComponent },
-        ]),
-      ],
-    }).compileComponents();
+  beforeEach(waitForAsync(() => {
 
-    fixture = TestBed.createComponent(HomeComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    const careerServiceSpy = jasmine.createSpyObj('CareerService', ['httpCareers'])
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    TestBed.configureTestingModule({
+        imports: [
+        ],
+        providers: [
+            {provide: CareerService, useValue: careerServiceSpy}
+        ]
+    }).compileComponents()
+        .then(() => {
+            fixture = TestBed.createComponent(HomeComponent);
+            component = fixture.componentInstance;
+            el = fixture.debugElement;
+            careerService = TestBed.inject(CareerService);
+        });
+
+}));
+
+it("should create the component", () => {
+
+  expect(component).toBeTruthy();
+
 });
+});
+

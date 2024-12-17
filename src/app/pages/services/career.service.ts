@@ -15,7 +15,6 @@ import {
   throwError,
 } from 'rxjs';
 import { fifaVersionMock } from './mocks/fifaVersion-mocks';
-import { footballLeagues } from './mocks/football-leagues';
 import { FootballLeague } from '../../models/footballLeagues/footballLeagues';
 import { Player } from '../../models/player/player';
 import { environment } from '../../../environments/environment';
@@ -23,6 +22,11 @@ import { Season } from '../../models/career/season';
 import { PlayerStats } from '../../models/player/player-stats';
 import { Pageable } from '../../models/player/pageable';
 import { Page } from '../../models/player/page';
+
+type SeasonName = {
+  id: string;
+  seasonName: string;
+};
 
 @Injectable({
   providedIn: 'root',
@@ -34,7 +38,6 @@ export class CareerService {
 
   #http = inject(HttpClient);
   #apiUrl = environment.CAREER_URL;
-  #seasonApiUrl = environment.SEASONS_URL;
 
   async httpCareers(): Promise<NewCareer[]> {
     const careers$ = this.#http.get<NewCareer[]>(`${this.#apiUrl}`);
@@ -61,15 +64,16 @@ export class CareerService {
     );
   }
 
-  #setSeasons = signal<Season[] | null>(null);
+
+  #setSeasons = signal<SeasonName[] | null>(null);
   get getAllSeasonsByCareer() {
     return this.#setSeasons.asReadonly();
   }
 
-  httpSeasonsByCareer$(idCareer: string): Observable<Season[]> {
-    return this.#http.get<Season[]>(`${this.#apiUrl}/${idCareer}/seasons`).pipe(
+  httpSeasonsByCareer$(idCareer: string): Observable<SeasonName[]> {
+    return this.#http.get<SeasonName[]>(`${this.#apiUrl}/${idCareer}/seasons`).pipe(
       shareReplay(1),
-      tap((res: Season[]) => {
+      tap((res: SeasonName[]) => {
         this.#setSeasons.set(res);
       })
     );
@@ -80,14 +84,18 @@ export class CareerService {
     return this.#setSeason.asReadonly();
   }
 
-  httpSeasonByCareer$(idCareer: string, typeSeason: string): Observable<Season> {
-    return this.#http.get<Season>(`${this.#apiUrl}/${idCareer}/seasons/${typeSeason}`)
-    .pipe(
-      shareReplay(1),
-      tap((res: Season) => {
-        this.#setSeason.set(res);
-      })
-    );
+  httpSeasonByCareer$(
+    idCareer: string,
+    typeSeason: string
+  ): Observable<Season> {
+    return this.#http
+      .get<Season>(`${this.#apiUrl}/${idCareer}/seasons/${typeSeason}`)
+      .pipe(
+        shareReplay(1),
+        tap((res: Season) => {
+          this.#setSeason.set(res);
+        })
+      );
   }
 
   #setPlayersFromCareer = signal<Player[] | null>(null);

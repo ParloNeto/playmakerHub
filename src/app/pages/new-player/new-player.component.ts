@@ -30,6 +30,8 @@ import { ModalComponent } from '../../shared/components/modal/modal.component';
 import { FileUploadModule } from '../../shared/components/file-upload/file-upload.module';
 import { LoaderModule } from '../../shared/components/loader/loader.module';
 import { ClearOnFocusDirective } from '../../shared/directives/clear-on-focus.directive';
+import { MatRadioModule } from '@angular/material/radio';
+import { isValidTypeSeasonKey } from '../../models/enums/type-season';
 
 @Component({
   selector: 'app-new-player',
@@ -51,6 +53,7 @@ import { ClearOnFocusDirective } from '../../shared/directives/clear-on-focus.di
     FileUploadModule,
     LoaderModule,
     ClearOnFocusDirective,
+    MatRadioModule,
   ],
   templateUrl: './new-player.component.html',
   styleUrl: './new-player.component.scss',
@@ -66,6 +69,7 @@ export class NewPlayerComponent implements OnInit {
   #activatedRoute = inject(ActivatedRoute);
 
   public getCareerDetails = this.#careerService.getCareerDetails;
+  public isValidTypeSeasonKey = isValidTypeSeasonKey;
 
   public positions: ReadonlyArray<string> = [
     'ATA',
@@ -85,6 +89,8 @@ export class NewPlayerComponent implements OnInit {
 
   public formNewPlayer!: FormGroup;
   public formStatisticsNewPlayer!: FormGroup;
+  public selectedOptionPlayerImage!: string;
+
   public searchQueryNation = signal<string>('');
   public season = signal<string>('');
   public idCareer = signal<string>('');
@@ -122,11 +128,9 @@ export class NewPlayerComponent implements OnInit {
     });
 
     this.formStatisticsNewPlayer = this.#fb.group({
-      season: [
-        this.season() !== "geral" ? this.season() : null,
-      ],
+      season: [this.season() !== 'geral' ? this.season() : null],
       matches: [
-        0,
+        { value: 0, disabled: !this.isValidTypeSeasonKey(this.season()) },
         [
           Validators.required,
           Validators.pattern('^[0-9]*$'),
@@ -134,7 +138,7 @@ export class NewPlayerComponent implements OnInit {
         ],
       ],
       goals: [
-        0,
+        { value: 0, disabled: !this.isValidTypeSeasonKey(this.season()) },
         [
           Validators.required,
           Validators.pattern('^[0-9]*$'),
@@ -142,7 +146,7 @@ export class NewPlayerComponent implements OnInit {
         ],
       ],
       assists: [
-        0,
+        { value: 0, disabled: !this.isValidTypeSeasonKey(this.season()) },
         [
           Validators.required,
           Validators.pattern('^[0-9]*$'),
@@ -150,7 +154,7 @@ export class NewPlayerComponent implements OnInit {
         ],
       ],
       yellowCards: [
-        0,
+        { value: 0, disabled: !this.isValidTypeSeasonKey(this.season()) },
         [
           Validators.required,
           Validators.pattern('^[0-9]*$'),
@@ -158,7 +162,7 @@ export class NewPlayerComponent implements OnInit {
         ],
       ],
       redCards: [
-        0,
+        { value: 0, disabled: !this.isValidTypeSeasonKey(this.season()) },
         [
           Validators.required,
           Validators.pattern('^[0-9]*$'),
@@ -208,8 +212,8 @@ export class NewPlayerComponent implements OnInit {
     let player;
 
     if (this.formNewPlayer.valid && this.formStatisticsNewPlayer.valid) {
-      if(this.season() == "geral") {
-        this.formStatisticsNewPlayer.removeControl("season");
+      if (this.season() == 'geral') {
+        this.formStatisticsNewPlayer.removeControl('season');
 
         player = Object.assign({}, this.formNewPlayer.value, {
           statisticsHistory: this.formStatisticsNewPlayer.value,
@@ -219,7 +223,6 @@ export class NewPlayerComponent implements OnInit {
           statisticsBySeasons: [this.formStatisticsNewPlayer.value],
         }) as Player;
       }
-
 
       this.#playerService
         .httpCreatePlayerByCareer$(this.idCareer(), player, this.season())

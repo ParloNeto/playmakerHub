@@ -18,6 +18,11 @@ import { ModalComponent } from '../../shared/components/modal/modal.component';
 import { NewCareer } from '../../models/career/new-career';
 import { LoaderModule } from '../../shared/components/loader/loader.module';
 import { Top3StatsPlayersCareerComponent } from '../../shared/components/top-3-stats-players-career/top-3-stats-players-career.component';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 @Component({
   selector: 'app-career',
   standalone: true,
@@ -28,6 +33,11 @@ import { Top3StatsPlayersCareerComponent } from '../../shared/components/top-3-s
     ModalComponent,
     LoaderModule,
     Top3StatsPlayersCareerComponent,
+    FormsModule,
+    MatAutocompleteModule,
+    CommonModule,
+    MatFormFieldModule,
+    MatInputModule,
   ],
   templateUrl: './career.component.html',
   styleUrl: './career.component.scss',
@@ -45,7 +55,6 @@ export class CareerComponent implements OnInit, OnDestroy {
   public initialSeason = this.#careerService.getSeasonByInitialSeason;
   public seasons = this.#careerService.getAllSeasonsByCareer;
   public showSeason = transformSeasonString;
-
   private confirmSubscription!: Subscription;
 
   ngOnInit(): void {

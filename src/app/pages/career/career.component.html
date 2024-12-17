@@ -34,14 +34,29 @@
 
     <div class="career-bottom-buttons">
       <button routerLink="geral" class="btn-primary-white">Geral</button>
-      <button
+      <!-- <button
         [routerLink]="[this.formatSeason(career.fifaCareer)]"
         class="btn-primary-white"
       >
         @if (this.initialSeason()) {
         {{ showSeason(initialSeason()!) }}
         }
-      </button>
+      </button> -->
+
+        <input
+        class="btn-primary-white"
+        placeholder="Digite aqui..."
+        type="text"
+        [value]="showSeason(initialSeason()!)"
+        [matAutocomplete]="autoPosition"
+        maxlength="0"
+      />
+      <mat-autocomplete #autoPosition="matAutocomplete">
+        @for (season of seasons(); track season) {
+        <mat-option [routerLink]="[season.seasonName]">{{ showSeason(season.seasonName) }}</mat-option>
+        }
+      </mat-autocomplete>
+
       <button
         [routerLink]="['/career', career.id, 'geral', 'new-season']"
         routerLinkActive="active"

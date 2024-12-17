@@ -39,6 +39,8 @@ import { NgIf } from '@angular/common';
         <h4 class="column-stats-field__number">{{ this.stats()!.redCards }}</h4>
       </div>
       }
+      <ng-content></ng-content>
+
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

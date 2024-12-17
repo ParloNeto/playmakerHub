@@ -20,5 +20,11 @@ $width-background: 1200px;
       justify-content: space-between;
       width: 80%;
     }
+
+    &__btns_bottom {
+      position: absolute;
+      right: 0px;
+      bottom: 0px;
+    }
   }
 }

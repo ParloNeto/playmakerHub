@@ -9,7 +9,8 @@ import { Season } from '../../models/career/season';
 })
 export class SeasonService {
   #http = inject(HttpClient);
-  #apiUrl = environment.GET_ALL_SEASONS_URL;
+  #apiUrl = environment.SEASONS_URL;
+  #getAllSeasonsUrl = environment.GET_ALL_SEASONS_URL;
 
   constructor() {}
 
@@ -19,7 +20,7 @@ export class SeasonService {
   }
 
   public httpGetAllSeasons(): Observable<string[]> {
-    return this.#http.get<string[]>(this.#apiUrl).pipe(
+    return this.#http.get<string[]>(this.#getAllSeasonsUrl).pipe(
       shareReplay(),
       tap((res: string[]) => {
         this.#setSeasons.set(res);
@@ -28,7 +29,13 @@ export class SeasonService {
   }
 
   async httpUpdateSeason(seasonId: string, seasonData: Partial<Season>): Promise<Season> {
-    const season$ = this.#http.put<Season>(`${environment.SEASONS_URL}/${seasonId}`, seasonData);
+    const season$ = this.#http.put<Season>(`${this.#apiUrl}/${seasonId}`, seasonData);
     return await firstValueFrom(season$);
+  }
+
+  async httpRemovePlayerFromSeason(seasonId: string, playerId: string): Promise<Season> {
+    const url = `${this.#apiUrl}/${seasonId}/remove-player/${playerId}`;
+    const updatedSeason$ = this.#http.put<Season>(url, {});
+    return await firstValueFrom(updatedSeason$);
   }
 }

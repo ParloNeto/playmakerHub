@@ -1,4 +1,3 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CareerComponent } from './career.component';
 import {
@@ -7,6 +6,7 @@ import {
 } from '@angular/common/http/testing';
 import { RouterModule } from '@angular/router';
 import { HomeComponent } from '../home/home.component';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 describe('CareerComponent', () => {
   let component: CareerComponent;

@@ -74,11 +74,12 @@
             />
           </div>
         </form>
-        <button
+        @if (this.getSeason(); as season) {
+          <button
           type="submit"
           class="btn-primary"
           [disabled]="formStatistics.invalid"
-          (click)="submitForm(getSeason()?.id!)"
+          (click)="submitForm(season.id!)"
         >
           {{
             pathAlias() === "edit"
@@ -86,21 +87,9 @@
               : "Criar Estatisticas"
           }}
         </button>
+        }
+
       </div>
     </div>
-    <!-- @if (showError()) {
-    <div class="show-error-modal">
-      <h4 class="text-warn">{{ messageError() }}</h4>
-    </div>
-    }
-    <button [routerLink]="['/']" class="btn-arrow-return">
-      <img src="../../../assets/icons/voltar.svg" alt="Voltar para a Home" />
-    </button>
-
-    <phub-details-photo
-      [clubName]="getTeamCareer"
-      [personName]="getCoachesName"
-      [url]="getUrl"
-    /> -->
   </div>
 </div>

@@ -1,35 +1,39 @@
-import { NgIf } from '@angular/common';
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  inject,
-  OnChanges,
-  OnInit,
-  signal,
-  SimpleChanges,
-} from '@angular/core';
-import { ActivatedRoute, Params, RouterLink } from '@angular/router';
-import { HeaderComponent } from '../../shared/header/header.component';
+
+
+
+
+
+  import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, DoCheck, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Subscription } from 'rxjs';
 import { PlayerService } from '../services/player.service';
-import { DetailsManagerClubIconComponent } from '../../shared/components/details-manager-club/details-manager-club-icon.component';
-import { ModalComponent } from '../../shared/components/modal/modal.component';
-import { IconPlayerSeasonComponent } from '../../shared/components/icon-player-season/icon-player-season.component';
 import { CareerService } from '../services/career.service';
+import { ModalService } from '../services/modal.service';
+import { SeasonService } from '../services/season.service';
+import { Season } from '../../models/career/season';
+import { Statistics } from '../../models/player/statistics';
+import { isValidTypeSeasonKey } from '../../models/enums/type-season';
 import { transformSeasonString } from '../../shared/utils/utils';
+import { DetailsManagerClubIconComponent } from '../../shared/components/details-manager-club/details-manager-club-icon.component';
+import { IconPlayerSeasonComponent } from '../../shared/components/icon-player-season/icon-player-season.component';
 import { LoaderModule } from '../../shared/components/loader/loader.module';
+import { ModalComponent } from '../../shared/components/modal/modal.component';
 import { StatisticsComponent } from '../../shared/components/statistics/statistics.component';
 import { Top3StatsPlayersCareerComponent } from '../../shared/components/top-3-stats-players-career/top-3-stats-players-career.component';
-import { ModalService } from '../services/modal.service';
-import { Subscription } from 'rxjs';
-import { Statistics } from '../../models/player/statistics';
+import { HeaderComponent } from '../../shared/header/header.component';
+import { NewCareer } from '../../models/career/new-career';
 import { Player } from '../../models/player/player';
-import { isValidTypeSeasonKey } from '../../models/enums/type-season';
-import { StatisticsHistory } from '../../models/player/statistics-history';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatOptionSelectionChange } from '@angular/material/core';
 
 @Component({
   selector: 'phub-edit-player',
+  templateUrl: './edit-player.component.html',
   standalone: true,
   imports: [
     RouterLink,
@@ -40,113 +44,153 @@ import { StatisticsHistory } from '../../models/player/statistics-history';
     LoaderModule,
     DetailsManagerClubIconComponent,
     StatisticsComponent,
-    Top3StatsPlayersCareerComponent
+    Top3StatsPlayersCareerComponent,
+    FormsModule,
+    MatAutocompleteModule,
+    CommonModule,
+    MatFormFieldModule,
+    MatInputModule,
   ],
-  templateUrl: './edit-player.component.html',
-  styleUrl: './edit-player.component.scss',
+  styleUrls: ['./edit-player.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EditPlayerComponent implements OnInit, OnChanges, AfterViewInit {
-  ngAfterViewInit(): void {
-    console.log(this.#cdr.detectChanges())
+export class EditPlayerComponent implements OnInit, AfterViewInit, DoCheck, OnDestroy {
+  ngDoCheck(): void {
+    console.log()
   }
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes)
-  }
+
   public id = signal<string | null>(null);
   public actualSeason = signal<Statistics | null>(null);
-  public idCareerOfPlayer = signal<string | null>(null);
+  public idCareer = signal<string | null>(null);
+  public seasonObj = signal<Season | null>(null);
   public season = signal<string | null>(null);
-  public statisticsHistory = signal<StatisticsHistory | null>(null);
+
+
+  private playerService = inject(PlayerService);
+  private careerService = inject(CareerService);
+  private seasonService = inject(SeasonService);
+  private activatedRoute = inject(ActivatedRoute);
+  private snackBar = inject(MatSnackBar);
+  private router = inject(Router);
+  private modalService = inject(ModalService);
+  private cdr = inject(ChangeDetectorRef);
+
+  public showSeason = transformSeasonString;
   public isValidTypeSeasonKey = isValidTypeSeasonKey;
 
-  #playerService = inject(PlayerService);
-  #careerService = inject(CareerService);
-  #activatedRoute = inject(ActivatedRoute);
-  #modalService = inject(ModalService);
-  #cdr = inject(ChangeDetectorRef);
+  #setPlayerById = signal<Player | null>(null);
+  get getPlayerById() {
+    return this.#setPlayerById.asReadonly();
+  }
 
-  getPlayerById = this.#playerService.getPlayerById;
-  getPlayerStatisticsSeason = this.#playerService.getPlayerStatisticsSeason;
-  getCareerDetails = this.#careerService.getCareerDetails;
+  #setPlayerStatisticsSeason = signal<Statistics | null>(null);
+  get getPlayerStatisticsSeason() {
+    return this.#setPlayerStatisticsSeason.asReadonly();
+  }
 
-  showSeason = transformSeasonString;
+  public getSeason = this.careerService.getSeason;
+  public getCareerDetails = this.careerService.getCareerDetails;
+  public seasons = this.careerService.getAllSeasonsByCareer;
+
+
+  private subscriptions: Subscription[] = [];
 
   ngOnInit(): void {
-    this.#activatedRoute.params.subscribe({
-      next: (params: Params) => {
-        this.id.set(params['id']);
-        this.season.set(params['season']);
-      },
-    });
-    const id = this.id() as string;
-    this.#playerService.httpGetPlayerById$(id).subscribe({
-      next: (res) => {
-        console.log(res)
-        this.idCareerOfPlayer.set(res.idCareer);
-        this.statisticsHistory.set(res.statisticsHistory)
-      },
-    });
+    this.activatedRoute.params.subscribe(this.handleRouteParams);
+    this.fetchPlayerData();
+  }
 
-    if (this.idCareerOfPlayer()) {
-      this.#careerService
-        .httpCareersById$(this.idCareerOfPlayer()!)
-        .subscribe();
+  ngAfterViewInit(): void {
+    this.cdr.detectChanges();
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
+  }
+
+  onSelectionChange(event: MatOptionSelectionChange): void {
+    const selectedValue = event.source.value;
+    this.router.navigate([`/career/${this.idCareer()}/${selectedValue}/${this.id()}/edit-player`]);
+    this.ngOnInit();
+  }
+
+  private handleRouteParams = (params: Params): void => {
+    this.id.set(params['id']);
+    if (isValidTypeSeasonKey(params['season']) || params['season'] === 'geral') {
+      this.season.set(params['season']);
     }
+  };
 
-    if (this.season() !== "geral") {
-      this.#playerService.httpFindPlayerStatisticsBySeason$(this.id()!, this.season()!).subscribe();
+  private fetchPlayerData(): void {
+    if (!this.id()) return;
 
+    const id = this.id()!;
+    this.subscriptions.push(
+      this.playerService.httpGetPlayerById$(id).subscribe({
+        next: res => {
+          this.idCareer.set(res.idCareer);
+          this.#setPlayerById.set(res);
+          this.loadSeasonData();
+        },
+      })
+    );
+  }
+
+
+
+  private loadSeasonData(): void {
+    if (!this.idCareer() || !this.season()) return;
+
+    this.subscriptions.push(
+      this.careerService.httpSeasonByCareer$(this.idCareer()!, this.season()!).subscribe({
+        next: season => this.seasonObj.set(season),
+      })
+    );
+
+    this.subscriptions.push(
+      this.playerService
+        .httpFindPlayerStatisticsBySeason$(this.id()!, this.season()!)
+        .subscribe({
+          next: (res) => {
+            this.#setPlayerStatisticsSeason.set(res);
+          },
+          error: () => this.#setPlayerStatisticsSeason.set(null)
+        })
+    )
+    this.subscriptions.push(
+      this.careerService
+        .httpCareersById$(this.idCareer()!)
+        .subscribe()
+    )
+    this.subscriptions.push(
+      this.careerService
+        .httpSeasonsByCareer$(this.idCareer()!)
+        .subscribe()
+    )
+  }
+
+  public openModalRemovePlayerInSeason(): void {
+    this.modalService.showConfirmation(
+      'Atenção!',
+      `Tem certeza que deseja remover esse jogador da ${transformSeasonString(this.season()!)}`,
+      'Sim',
+      'Não'
+    );
+
+    this.modalService.confirmState().subscribe(confirmed => {
+      if (confirmed && this.seasonObj()) {
+        this.removePlayerFromSeason(this.seasonObj()!.id!, this.id()!);
+      }
+    });
+  }
+
+  private async removePlayerFromSeason(seasonId: string, playerId: string): Promise<void> {
+    try {
+      await this.seasonService.httpRemovePlayerFromSeason(seasonId, playerId);
+      this.router.navigateByUrl(`/career/${this.idCareer()}/${this.season()}`);
+      this.snackBar.open('Jogador removido da temporada com sucesso!', 'Fechar', { duration: 3500 });
+    } catch (err: any) {
+      this.modalService.showError(err.error.message);
     }
-
-
   }
-
-  public statisticsSeasonData(stats: Statistics[], season: string): Statistics | null {
-    const statsActualSeason = stats.find((stats) => stats.season === season);
-    return statsActualSeason ? statsActualSeason : null;
-
-  }
-
-  public deletePlayer() {
-    this.#modalService.showConfirmation(
-          'Atenção!',
-          'Tem certeza que deseja deletar essa carreira?',
-          'Sim',
-          'Não'
-        );
-  }
-
-
-
-  // public openModalConfirmation(): void {
-  //   this.subscribeToConfirm(
-  //     () => {
-  //       console.log('User confirmed the action.');
-  //       this.deletePlayer();
-  //     },
-  //     () => {
-  //       console.log('User cancelled the action.');
-  //     }
-  //   );
-  //   this.#modalService.showConfirmation(
-  //     'Tem certeza que deseja deletar essa carreira?',
-  //     'Sim',
-  //     'Não'
-  //   );
-  // }
-
-  // public deletePlayer(): void {
-  //   this.#careerService.httpDeleteCareer$(this.id).subscribe({
-  //     next: () => {
-  //       this.#router.navigateByUrl(`/home`);
-  //       this.#snackBar.open('Carreira removida com sucesso!', 'Fechar', {
-  //         duration: 3500,
-  //       });
-  //     },
-  //   });
-  // }
-
-
-
 }

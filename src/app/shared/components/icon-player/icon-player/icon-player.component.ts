@@ -17,13 +17,12 @@ import { environment } from '../../../../../environments/environment';
         />
       </div>
       <div class="name-player-and-nation">
-      <h3>
-        {{ player.firstName }} - {{ player.nationality }}
-
-      </h3>
-      <img
+        <h3>{{ player.firstName }} - {{ player.nationality }}</h3>
+        <img
           id="player-nation-img"
-          src="../../../../../assets/images/nation/{{ player.nationality.toLocaleLowerCase() }}.png"
+          src="../../../../../assets/images/nation/{{
+            player.nationality.toLocaleLowerCase()
+          }}.png"
           alt="{{ player.nationality }}"
         />
       </div>
@@ -35,7 +34,11 @@ import { environment } from '../../../../../environments/environment';
 export class IconPlayerComponent {
   @Input() public player!: Player;
 
-  public returnImageByName(imageName: string) {
-    return `${environment.DOWNLOAD_FILE_URL}/${imageName}`;
+  public returnImageByName(imageNameUrl: string) {
+    if (imageNameUrl.startsWith('http') || imageNameUrl.startsWith('https')) {
+      return imageNameUrl;
+    } else {
+      return `${environment.DOWNLOAD_FILE_URL}/${imageNameUrl}`;
+    }
   }
 }

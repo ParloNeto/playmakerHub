@@ -5,3 +5,5 @@ export interface FootballLeague {
   name: string;
   teams: Team[];
 }
+
+export { Team };

@@ -66,19 +66,15 @@ export class PlayerService {
     );
   }
 
-  #setPlayerStatisticsSeason = signal<Statistics | null>(null);
-  get getPlayerStatisticsSeason() {
-    return this.#setPlayerStatisticsSeason.asReadonly();
-  }
+  // #setPlayerStatisticsSeason = signal<Statistics | null>(null);
+  // get getPlayerStatisticsSeason() {
+  //   return this.#setPlayerStatisticsSeason.asReadonly();
+  // }
 
   httpFindPlayerStatisticsBySeason$(id: string, season: string): Observable<Statistics> {
     return this.#http.get<Statistics>(`${this.#apiPlayerUrl}/${id}/${season}`).pipe(
       shareReplay(1),
-      tap((res: Statistics) => {
-        this.#setPlayerStatisticsSeason.set(res);
-      }),
       catchError((error) => {
-        this.#setPlayerStatisticsSeason.set(null);
         console.error('Erro na requisição', error);
         return throwError(() => error);
     })
@@ -97,12 +93,12 @@ export class PlayerService {
     )
   }
 
-  // httpDeletePlayer$(playerId: string): Observable<Player> {
-  //   return this.#http.delete<Player>(`${this.#apiUrl}/${careerId}`).pipe(
-  //     shareReplay(),
-  //     tap((res) => {
-  //       console.log(`Deletado!`);
-  //     })
-  //   );
-  // }
+  httpDeletePlayer$(playerId: string): Observable<Player> {
+    return this.#http.delete<Player>(`${this.#apiPlayerUrl}/${playerId}`).pipe(
+      shareReplay(),
+      tap((res) => {
+        console.log(`Deletado!`);
+      })
+    );
+  }
 }

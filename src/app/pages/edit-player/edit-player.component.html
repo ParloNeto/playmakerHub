@@ -17,40 +17,45 @@
       }
 
       <div class="career__content__statistics">
-        @if (this.season() === 'geral') {
-          <phub-statistics [statisticsHistory]="player.statisticsHistory" />
-        } @else if (isValidTypeSeasonKey(this.season())) {
-          @if (getPlayerStatisticsSeason(); as statisticsSeason) {
-            <phub-statistics [statisticsSeason]="statisticsSeason" />
-            <button
-                  class="btn-primary"
-                  routerLink="edit-statistics"
-                >
-                Editar Estatisticas
-                </button >
-          } @else {
-            <div class="statistics">
+        @defer { @if (this.season() === 'geral') {
+        <phub-statistics [statisticsHistory]="player.statisticsHistory" />
+        } @else if (isValidTypeSeasonKey(this.season())) { @if
+        (getPlayerStatisticsSeason(); as statisticsSeason) {
 
-              <div class="column-stats">
-                <h4 class="column-stats-field">Não há estatisticas cadastradas desse jogador em: {{ showSeason(this.season()!) }}</h4>
-                <h4 class="column-stats-field__number">
-                  <button
-                  class="btn-primary"
-                  routerLink="new-statistics"
-                >
-                  CADASTRE AGORA
-                </button ></h4>
-
-              </div>
-            </div>
-          }
-
+        <phub-statistics [statisticsSeason]="statisticsSeason">
+          <button class="circle-edit-player" [routerLink]="['edit-statistics']">
+            <img
+              src="../../../../assets/icons/edit-player.svg"
+              alt="Edit player"
+            />
+          </button>
+        </phub-statistics>
+        } @else {
+        <div class="statistics">
+          <div class="column-stats">
+            <h4 class="column-stats-field">
+              Não há estatisticas cadastradas desse jogador em:
+              {{ showSeason(this.season()!) }}
+            </h4>
+            <h4 class="column-stats-field__number">
+              <button class="btn-primary" routerLink="new-statistics">
+                CADASTRE AGORA
+              </button>
+            </h4>
+          </div>
+        </div>
+        }
+       }
+      } @placeholder {
+        <p>Placeholder content</p>
         }
       </div>
     </div>
 
     <div class="career__player-icon-and-review">
-      <phub-details-photo [player]="player" [clubName]="'Palmeiras'" />
+      @if (getCareerDetails(); as career) {
+      <phub-details-photo [player]="player" [clubName]="career.teamCareer" />
+      }
 
       <!-- <app-top-3-stats-players-career [idCareer]="player.idCareer">
       </app-top-3-stats-players-career> -->
@@ -62,31 +67,66 @@
 
     <div class="career-bottom-buttons">
       <button
-        [routerLink]="['/career', this.idCareerOfPlayer(), this.season()]"
+        [routerLink]="['/career', this.idCareer(), this.season()]"
         routerLinkActive="active"
         class="btn-primary-white"
       >
         Elenco
       </button>
-      <button
-        [routerLink]="['/career', this.idCareerOfPlayer(), 'geral', this.id(), 'edit-player']"
+      @if (this.season() === "geral") {
+        <input
+        class="btn-primary-white"
+        placeholder="Digite aqui..."
+        type="text"
+        [value]="'Temporadas'"
+        [matAutocomplete]="autoPosition"
+        maxlength="14"
+      />
+      <mat-autocomplete #autoPosition="matAutocomplete">
+        @for (season of seasons(); track season) {
+        <mat-option (onSelectionChange)="onSelectionChange($event)" [value]="season.seasonName" >{{ showSeason(season.seasonName) }}</mat-option>
+        }
+      </mat-autocomplete>
+      }
+      @if (this.season() !== "geral") {
+        <button
+        [routerLink]="[
+          '/career',
+          this.idCareer(),
+          'geral',
+          this.id(),
+          'edit-player'
+        ]"
         routerLinkActive="active"
         class="btn-primary-white"
       >
         Geral do Jogador
       </button>
-      <button
+      }
 
+      @if (isValidTypeSeasonKey(this.season())) {
+
+
+      <button
         class="btn-primary-red align-final"
         aria-label="Deletar Carreira"
-        (click)="deletePlayer()"
+        (click)="openModalRemovePlayerInSeason()"
+      >
+        Remover Jogador na {{ showSeason(this.season()!) }}
+      </button>
+      } @else {
+      <button
+        class="btn-primary-red align-final"
+        aria-label="Deletar Carreira"
+        (click)="openModalRemovePlayerInSeason()"
       >
         Deletar Jogador
       </button>
+      }
     </div>
 
     <button
-      [routerLink]="['/career', this.idCareerOfPlayer(), this.season()]"
+      [routerLink]="['/career', this.idCareer(), this.season()]"
       class="btn-arrow-return"
     >
       <img src="../../../assets/icons/voltar.svg" alt="Voltar para a Home" />

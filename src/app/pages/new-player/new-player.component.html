@@ -79,12 +79,23 @@
           </div>
           <div class="input-form">
             <label for="urlImagePlayer">Foto do Jogador (URL):</label>
-            <!-- <input
-                placeholder="Digite aqui..."
-                type="text"
-                formControlName="urlImagePlayer"
-              /> -->
+            <mat-radio-group
+              aria-label="Selecione uma opção de imagem para o jogador"
+              [(ngModel)]="selectedOptionPlayerImage"
+              [ngModelOptions]="{ standalone: true }"
+            >
+              <mat-radio-button value="url">URL</mat-radio-button>
+              <mat-radio-button value="file">Arrastar Arquivo</mat-radio-button>
+            </mat-radio-group>
+            @if (selectedOptionPlayerImage === "url") {
+            <input
+              placeholder="Adicione a URL aqui..."
+              type="text"
+              formControlName="urlImagePlayer"
+            />
+            } @else if (selectedOptionPlayerImage === "file") {
             <file-upload formControlName="urlImagePlayer"></file-upload>
+            }
           </div>
         </form>
         <form action="post" [formGroup]="formStatisticsNewPlayer">

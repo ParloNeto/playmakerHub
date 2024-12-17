@@ -1,13 +1,11 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  OnDestroy,
   OnInit,
-  computed,
   inject,
+  computed,
   signal,
 } from '@angular/core';
-import { HeaderComponent } from '../../shared/header/header.component';
 import {
   FormBuilder,
   FormGroup,
@@ -15,25 +13,25 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { AsyncPipe, CommonModule, NgFor } from '@angular/common';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { NationService } from '../services/nation.service';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { CareerService } from '../services/career.service';
-import { UpperCaseDirective } from '../../shared/directives/upper-case.directive';
 import { Router, RouterLink } from '@angular/router';
-import { ModalComponent } from '../../shared/components/modal/modal.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { NewCareer } from '../../models/career/new-career';
+import { NationService } from '../services/nation.service';
+import { CareerService } from '../services/career.service';
 import { ModalService } from '../services/modal.service';
 import { CoachService } from '../services/coach.service';
-import { Coach } from '../../models/career/Coach';
-import { FootballLeague } from '../../models/footballLeagues/footballLeagues';
-import { LoaderModule } from '../../shared/components/loader/loader.module';
-import { FileUploadModule } from '../../shared/components/file-upload/file-upload.module';
+import { NewCareer } from '../../models/career/new-career';
+import { FootballLeague, Team } from '../../models/footballLeagues/footballLeagues';
+import { NgFor, AsyncPipe, CommonModule } from '@angular/common';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatRadioModule } from '@angular/material/radio';
 import { DetailsManagerClubIconComponent } from '../../shared/components/details-manager-club/details-manager-club-icon.component';
-import { Team } from '../../models/footballLeagues/team';
+import { FileUploadModule } from '../../shared/components/file-upload/file-upload.module';
+import { LoaderModule } from '../../shared/components/loader/loader.module';
+import { ModalComponent } from '../../shared/components/modal/modal.component';
+import { UpperCaseDirective } from '../../shared/directives/upper-case.directive';
+import { HeaderComponent } from '../../shared/header/header.component';
 
 @Component({
   selector: 'app-creating-career',
@@ -53,7 +51,8 @@ import { Team } from '../../models/footballLeagues/team';
     ModalComponent,
     LoaderModule,
     FileUploadModule,
-    DetailsManagerClubIconComponent
+    DetailsManagerClubIconComponent,
+    MatRadioModule
   ],
   templateUrl: './creating-career.component.html',
   styleUrl: './creating-career.component.scss',
@@ -68,17 +67,16 @@ export class CreatingCareerComponent implements OnInit {
   #modalService = inject(ModalService);
   #router = inject(Router);
 
-  public formCreatingCareer!: FormGroup;
-  public formCreatingCoach!: FormGroup;
+  formCreatingCareer!: FormGroup;
+  formCreatingCoach!: FormGroup;
+  selectedOptionCoachImage!: string;
+  showError = signal<boolean>(false);
+  messageError = signal<string>('');
 
-  public showError = signal<boolean>(false);
-  public messageError = signal<string>('');
-
-  public searchQueryNation = signal<string>('');
-  public searchQueryFifaVersion = signal<string>('');
-  public searchQueryLeagueCareer = signal<string>('');
-
-  public filteredOptions: Team[] = [];
+  searchQueryNation = signal<string>('');
+  searchQueryFifaVersion = signal<string>('');
+  searchQueryLeagueCareer = signal<string>('');
+  filteredOptions: Team[] = [];
 
   #setFootballLeague = signal<FootballLeague[] | null>(null);
   get getFootballLeague() {
@@ -93,50 +91,6 @@ export class CreatingCareerComponent implements OnInit {
   #setFifaCareer = signal<string[] | null>(null);
   get getFifaCareer() {
     return this.#setFifaCareer.asReadonly();
-  }
-
-  ngOnInit(): void {
-
-    this.getVersionsFifa().then();
-    this.getNationsMock().then();
-    this.getFootballLeagues().then();
-
-    this.formCreatingCareer = this.#fb.group({
-      fifaCareer: [
-        null,
-        [Validators.required, Validators.maxLength(8), Validators.minLength(7)],
-      ],
-      leagueCareer: [
-        null,
-        [
-          Validators.required,
-          Validators.maxLength(16),
-          Validators.minLength(3),
-        ],
-      ],
-      teamCareer: [null, Validators.required],
-    });
-
-    this.formCreatingCoach = this.#fb.group({
-      coachesName: [
-        '',
-        [
-          Validators.required,
-          Validators.maxLength(20),
-          Validators.minLength(3),
-        ],
-      ],
-      nationality: [
-        null,
-        [
-          Validators.required,
-          Validators.maxLength(20),
-          Validators.minLength(3),
-        ],
-      ],
-      urlImageCoach: [''],
-      seasons: [0, [Validators.required]],
-    });
   }
 
   get getUrl() {
@@ -159,100 +113,79 @@ export class CreatingCareerComponent implements OnInit {
     return this.formCreatingCareer.get('teamCareer')!.value;
   }
 
-  /**
-   * Filtra a nacionalidade com base no input do campo 'nationality'.
-   *
-   * @returns {string} Retorna um array filtrado com o nome passado no input.
-   */
+  ngOnInit(): void {
+    this.initForms();
+    this.loadInitialData();
+  }
+
+  private initForms() {
+    this.formCreatingCareer = this.#fb.group({
+      fifaCareer: [
+        null,
+        [Validators.required, Validators.maxLength(8), Validators.minLength(7)],
+      ],
+      leagueCareer: [
+        null,
+        [Validators.required, Validators.maxLength(16), Validators.minLength(3)],
+      ],
+      teamCareer: [null, Validators.required],
+    });
+
+    this.formCreatingCoach = this.#fb.group({
+      coachesName: [
+        '',
+        [Validators.required, Validators.maxLength(20), Validators.minLength(3)],
+      ],
+      nationality: [
+        null,
+        [Validators.required, Validators.maxLength(20), Validators.minLength(3)],
+      ],
+      urlImageCoach: [''],
+      seasons: [0, Validators.required],
+    });
+  }
+
+  private async loadInitialData() {
+    await Promise.all([this.getVersionsFifa(), this.getNationsMock(), this.getFootballLeagues()]);
+  }
 
   public nations = computed(() => {
-    const sq = this.searchQueryNation();
-    const nations = this.getNations();
-
-    if (nations) {
-      return nations!.filter((x) => x.nation.includes(sq));
-    }
-
-    return null;
+    return this.getNations()?.filter(x => x.nation.includes(this.searchQueryNation())) || null;
   });
 
-  /**
-   * Filtra a versão do fifa com base no input do campo 'fifaCareer'.
-   *
-   * @returns {string} Retorna um array filtrado com o nome passado no input.
-   */
   public fifaVersion = computed(() => {
-    const sq = this.searchQueryFifaVersion();
-    const fifaCareer = this.getFifaCareer();
-    if (fifaCareer) {
-      return fifaCareer!.filter((fifaVersion) => fifaVersion.includes(sq));
-    }
-    return null;
+    return this.getFifaCareer()?.filter(v => v.includes(this.searchQueryFifaVersion())) || null;
   });
 
-  /**
-   * Filtra a liga com base no input do campo 'leagueCareer'.
-   *
-   * @returns {string} Retorna um array filtrado com o nome passado no input.
-   */
   public leagues = computed(() => {
-    const sq = this.searchQueryLeagueCareer();
-    const footballLeagues = this.getFootballLeague();
-    if (footballLeagues) {
-      return footballLeagues.filter((league) => league.name.includes(sq));
-    }
-    return null;
+    return this.getFootballLeague()?.filter(l => l.name.includes(this.searchQueryLeagueCareer())) || null;
   });
 
-  /**
-   * Adiciona os times em um array com base na liga selecionada.
-   *
-   * @returns {string} Retorna um array com os nomes dos times da liga selecionada.
-   */
   public selectedTeamsFilteredByLeague = computed(() => {
-    const sq = this.searchQueryLeagueCareer();
-    const leagues = this.leagues();
-    if (leagues) {
-      leagues
-        .filter((league) => league.name == sq)
-        .map((res) => (this.filteredOptions = res.teams.slice()));
-    }
-    return null;
+    const league = this.leagues()!.find(league => league.name === this.searchQueryLeagueCareer());
+    this.filteredOptions = league?.teams || [];
   });
 
-  public async submitForm(): Promise<void> {
+  async submitForm(): Promise<void> {
     if (this.formCreatingCareer.valid && this.formCreatingCoach.valid) {
-      const careerForm = this.formCreatingCareer.value;
-      const coachForm = this.formCreatingCoach.value;
-
       const finalForm: NewCareer = {
-        coach: coachForm,
-        fifaCareer: careerForm.fifaCareer,
-        leagueCareer: careerForm.leagueCareer,
-        teamCareer: careerForm.teamCareer,
+        coach: this.formCreatingCoach.value,
+        fifaCareer: this.formCreatingCareer.value.fifaCareer,
+        leagueCareer: this.formCreatingCareer.value.leagueCareer,
+        teamCareer: this.formCreatingCareer.value.teamCareer,
       };
 
-      await this.createCareer(finalForm).then(() => {
+      try {
+        await this.createCareer(finalForm);
         this.#router.navigateByUrl(`/home`);
-        this.#snackBar.open('Carreira criada com sucesso!', 'Fechar', {
-          duration: 3500,
-        });
-      });
+        this.#snackBar.open('Carreira criada com sucesso!', 'Fechar', { duration: 3500 });
+      } catch (err: any) {
+        this.#modalService.showError(err.error.message);
+      }
     }
   }
 
-  async createCoach(coach: Partial<Coach>) {
-    try {
-      const response = await this.#coachService.httpCreateCoach(coach);
-      return response;
-    } catch (err: any) {
-      console.error(err);
-      this.#modalService.showError(err.error.message);
-    }
-    return undefined;
-  }
-
-  async createCareer(career: Partial<NewCareer>) {
+  private async createCareer(career: Partial<NewCareer>) {
     try {
       await this.#careerService.httpPostCareer(career);
     } catch (err: any) {
@@ -260,49 +193,30 @@ export class CreatingCareerComponent implements OnInit {
     }
   }
 
-  async getFootballLeagues(): Promise<void> {
-    try {
-      const footballLeagues = await this.#careerService.httpFootballLeagues();
-      this.#setFootballLeague.set(footballLeagues);
-    } catch (err) {
-      console.error(err);
-    }
+  private async getFootballLeagues() {
+    const leagues = await this.#careerService.httpFootballLeagues();
+    this.#setFootballLeague.set(leagues);
   }
 
-  async getNationsMock(): Promise<void> {
-    try {
-      const nations = await this.#nationService.getAllNationsMock();
-      this.#setNations.set(nations);
-    } catch (err) {
-      console.error(err);
-    }
+  private async getNationsMock() {
+    const nations = await this.#nationService.getAllNationsMock();
+    this.#setNations.set(nations);
   }
 
-  async getVersionsFifa(): Promise<void> {
-    try {
-      const versionsFifa = await this.#careerService.httpVersionFifa();
-      this.#setFifaCareer.set(versionsFifa);
-    } catch (err) {
-      console.error(err);
-    }
+  private async getVersionsFifa() {
+    const versions = await this.#careerService.httpVersionFifa();
+    this.#setFifaCareer.set(versions);
   }
 
-  public onSearchUpdatedNation(nationName: string) {
-    this.searchQueryNation.set(nationName);
+  onSearchUpdatedNation(value: string) {
+    this.searchQueryNation.set(value);
   }
 
-  public onSearchUpdatedFifaVersion(sq: string) {
-    this.searchQueryFifaVersion.set(sq);
+  onSearchUpdatedFifaVersion(value: string) {
+    this.searchQueryFifaVersion.set(value);
   }
 
-  public onSearchUpdatedLeagueCareer(sq: string) {
-    this.searchQueryLeagueCareer.set(sq);
-  }
-
-  public formatWithHyphenAndLowerCase(field: string): string {
-    const formattedName = field.trim().toLowerCase();
-
-    const dashedName = formattedName.replace(/\s+/g, '-');
-    return dashedName;
+  onSearchUpdatedLeagueCareer(value: string) {
+    this.searchQueryLeagueCareer.set(value);
   }
 }

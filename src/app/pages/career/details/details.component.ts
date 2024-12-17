@@ -15,6 +15,11 @@ import { ModalState } from '../../../models/enums/modal-state';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { StatisticsCareerComponent } from '../../../shared/components/statistics-career/statistics-career.component';
 import { Season } from '../../../models/career/season';
+import { AsyncPipe, CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-details',
@@ -26,7 +31,12 @@ import { Season } from '../../../models/career/season';
     IconPlayerSeasonComponent,
     ListPlayerComponent,
     LoaderModule,
-    StatisticsCareerComponent
+    StatisticsCareerComponent,
+    FormsModule,
+    MatAutocompleteModule,
+    CommonModule,
+    MatFormFieldModule,
+    MatInputModule,
   ],
   templateUrl: './details.component.html',
   styleUrl: './details.component.scss',
@@ -41,12 +51,15 @@ export class DetailsComponent implements OnInit {
   #snackBar = inject(MatSnackBar);
 
 
+
   public getCareerDetails = this.#careerService.getCareerDetails;
   public isValidTypeSeasonKey = isValidTypeSeasonKey;
   public initialSeason = this.#careerService.getSeasonByInitialSeason;
   public getPlayersFromCareer = this.#careerService.getPlayersFromCareer;
   public getAvailablePlayersForSeason = this.#careerService.getAvailablePlayersForSeason;
   public getPlayersFromCareerFilteredBySeason = this.#careerService.getPlayersFromCareerFilteredBySeason;
+  public seasons = this.#careerService.getAllSeasonsByCareer;
+
   public season = signal<string>('');
   public seasonHistory = signal<Season | null>(null);
   public id = signal<string>('');
@@ -68,7 +81,7 @@ export class DetailsComponent implements OnInit {
         } else {
           this.#modalService.showError("Temporada não encontrada.");
         }
-
+        this.#careerService.httpSeasonsByCareer$(this.id()).subscribe();
         this.#careerService.httpCareersById$(this.id())
         .subscribe({
           next: (career: NewCareer) => {

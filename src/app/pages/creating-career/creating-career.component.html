@@ -99,15 +99,24 @@
             </mat-autocomplete>
           </div>
           <div class="input-form">
-            <label for="urlImageCoach">Foto do Técnico (URL):</label>
-            <!-- <input
-              placeholder="Digite aqui..."
+            <label for="urlImageCoach">Foto do Técnico:</label>
+            <mat-radio-group
+              aria-label="Select an option"
+              [(ngModel)]="selectedOptionCoachImage"
+              [ngModelOptions]="{ standalone: true }"
+            >
+              <mat-radio-button value="url">URL</mat-radio-button>
+              <mat-radio-button value="file">Arrastar Arquivo</mat-radio-button>
+            </mat-radio-group>
+            @if (selectedOptionCoachImage === "url") {
+            <input
+              placeholder="Adicione a URL aqui..."
               type="text"
               formControlName="urlImageCoach"
-            /> -->
-            <file-upload
-              formControlName="urlImageCoach"
-            ></file-upload>
+            />
+            } @else if (selectedOptionCoachImage === "file") {
+            <file-upload formControlName="urlImageCoach"></file-upload>
+            }
           </div>
         </form>
       </div>
@@ -132,7 +141,5 @@
       [personName]="getCoachesName"
       [url]="getUrl"
     />
-
-
   </div>
 </div>

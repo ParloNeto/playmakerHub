@@ -27,7 +27,7 @@ import { environment } from '../../../../../environments/environment';
       </div>
       <h3>{{ manager.coachesName }}</h3>
       } @else if (creatingPerson) {
-        <div class="image-manager__background">
+      <div class="image-manager__background">
         <img
           [src]="this.returnImageByName(creatingPerson.url)"
           alt="Foto do Manager {{ creatingPerson.name }}"
@@ -35,7 +35,7 @@ import { environment } from '../../../../../environments/environment';
       </div>
       <h3>{{ creatingPerson.name }}</h3>
       } @else {
-        <div class="image-manager__background">
+      <div class="image-manager__background">
         <img
           src="../../../../../assets/images/players/dudu.svg"
           alt="Foto do Manager"
@@ -48,17 +48,19 @@ import { environment } from '../../../../../environments/environment';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class IconManagerComponent implements OnInit {
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   @Input({ alias: 'manager-details' }) manager!: Coach;
   @Input({ alias: 'creating-person' }) creatingPerson!: {
     name: string;
     url: string;
   };
-  // courses = input<Coach>(null);
 
-  public returnImageByName(imageName: string) {
-    return `${environment.DOWNLOAD_FILE_URL}/${imageName}`;
+  public returnImageByName(imageNameUrl: string) {
+    if (imageNameUrl.startsWith('http') || imageNameUrl.startsWith('https')) {
+      return imageNameUrl;
+    } else {
+      return `${environment.DOWNLOAD_FILE_URL}/${imageNameUrl}`;
+    }
   }
 }

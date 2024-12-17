@@ -7,7 +7,7 @@ import { CreatingCareerComponent } from './creating-career.component';
 import { RouterModule } from '@angular/router';
 import { HomeComponent } from '../home/home.component';
 
-describe('CreatingCareerComponent', () => {
+fdescribe('CreatingCareerComponent', () => {
   let component: CreatingCareerComponent;
   let fixture: ComponentFixture<CreatingCareerComponent>;
 

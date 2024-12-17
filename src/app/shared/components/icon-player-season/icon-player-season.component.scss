@@ -1,23 +1,31 @@
 :host {
-
   .box-player {
     width: 200px;
     height: 122px;
     background-color: var(--primary);
     border-radius: 10px;
-    margin: 0px 0px 50px 0px;
+    margin: 0px 0px 15px 0px;
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
     align-items: center;
     padding: 5px;
     position: relative;
+    box-shadow: rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset,
+      rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+      rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
 
     &__info {
-      margin-top: 15px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
+
+      display: flex;
+      flex-direction: column;
+
+
+      .circle-edit-player {
+        position: absolute;
+        right: 15px;
+        bottom: 15px;
+      }
       &__statistics {
         display: flex;
         flex-direction: column;
@@ -33,13 +41,11 @@
           margin: 0;
         }
       }
-
-
     }
 
     img.image-player {
-      width: 110px;
-      height: 110px;
+      width: 95px;
+      height: 95px;
       border-radius: 5px;
     }
 
@@ -61,14 +67,14 @@
       font-style: italic;
       font-weight: 700;
       color: var(--white);
-      left: 2px;
+      left: 10px;
       top: -37px;
       opacity: 15%;
     }
 
     p.name-player {
       font-family: Roboto;
-      font-size: 19px;
+      font-size: 15px;
       font-style: italic;
       font-weight: 400;
       color: var(--white);
