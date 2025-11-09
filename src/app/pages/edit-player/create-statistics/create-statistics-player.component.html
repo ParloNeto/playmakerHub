@@ -1,11 +1,11 @@
-<app-header />
+<phub-header />
 <phub-loader></phub-loader>
 
 <div class="container">
   <div class="creating-form-background">
     <div class="creating-form-background__content">
       <h2 class="title-content">
-        {{ pathAlias() === 'edit' ? 'Editar Estatisticas' : 'Criar Estatisticas' }} - {{  infoPlayer()?.firstName  }} {{  infoPlayer()?.lastName  }} - {{ showSeason(season()) }}
+        {{ pathAlias() === 'edit' ? 'Editar Estatisticas' : 'Criar Estatisticas' }} - {{  getPlayerById()?.firstName  }} {{  getPlayerById()?.lastName  }} - {{ showSeason(season()) }}
       </h2>
       <div class="creating-form-background__form">
         <form [formGroup]="formStatistics" (ngSubmit)="submitForm()">

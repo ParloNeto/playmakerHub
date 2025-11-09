@@ -39,17 +39,14 @@ import { isValidTypeSeasonKey } from '../../models/enums/type-season';
   imports: [
     HeaderComponent,
     ReactiveFormsModule,
-    NgFor,
     FormsModule,
     MatAutocompleteModule,
-    AsyncPipe,
     CommonModule,
     MatFormFieldModule,
     MatInputModule,
     UpperCaseDirective,
     RouterLink,
     DetailsManagerClubIconComponent,
-    ModalComponent,
     FileUploadModule,
     LoaderModule,
     ClearOnFocusDirective,
@@ -121,6 +118,7 @@ export class NewPlayerComponent implements OnInit {
         [
           Validators.required,
           Validators.pattern('^[0-9]*$'),
+          Validators.minLength(1),
           Validators.maxLength(3),
         ],
       ],
@@ -228,8 +226,6 @@ export class NewPlayerComponent implements OnInit {
         .httpCreatePlayerByCareer$(this.idCareer(), player, this.season())
         .subscribe();
     }
-    console.log(this.formNewPlayer.valid);
-    console.log(this.formNewPlayer.value);
   }
 
   public onSearchUpdatedNation(nationName: string) {

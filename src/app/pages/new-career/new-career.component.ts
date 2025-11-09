@@ -18,10 +18,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { NationService } from '../services/nation.service';
 import { CareerService } from '../services/career.service';
 import { ModalService } from '../services/modal.service';
-import { CoachService } from '../services/coach.service';
 import { NewCareer } from '../../models/career/new-career';
-import { FootballLeague, Team } from '../../models/footballLeagues/footballLeagues';
-import { NgFor, AsyncPipe, CommonModule } from '@angular/common';
+import { FootballLeague, Team } from '../../models/league/footballLeagues';
+import { CommonModule } from '@angular/common';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -29,9 +28,10 @@ import { MatRadioModule } from '@angular/material/radio';
 import { DetailsManagerClubIconComponent } from '../../shared/components/details-manager-club/details-manager-club-icon.component';
 import { FileUploadModule } from '../../shared/components/file-upload/file-upload.module';
 import { LoaderModule } from '../../shared/components/loader/loader.module';
-import { ModalComponent } from '../../shared/components/modal/modal.component';
 import { UpperCaseDirective } from '../../shared/directives/upper-case.directive';
 import { HeaderComponent } from '../../shared/header/header.component';
+import { fifaCareerValidator } from '../../validators/course-title.validator';
+import { OnlyOneErrorPipe } from '../../shared/pipes/only-one-error.pipe';
 
 @Component({
   selector: 'app-creating-career',
@@ -39,30 +39,27 @@ import { HeaderComponent } from '../../shared/header/header.component';
   imports: [
     HeaderComponent,
     ReactiveFormsModule,
-    NgFor,
     FormsModule,
     MatAutocompleteModule,
-    AsyncPipe,
     CommonModule,
     MatFormFieldModule,
     MatInputModule,
     UpperCaseDirective,
     RouterLink,
-    ModalComponent,
     LoaderModule,
     FileUploadModule,
     DetailsManagerClubIconComponent,
-    MatRadioModule
+    MatRadioModule,
+    OnlyOneErrorPipe
   ],
-  templateUrl: './creating-career.component.html',
-  styleUrl: './creating-career.component.scss',
+  templateUrl: './new-career.component.html',
+  styleUrl: './new-career.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CreatingCareerComponent implements OnInit {
+export class NewCareerComponent implements OnInit {
   #fb = inject(FormBuilder);
   #nationService = inject(NationService);
   #careerService = inject(CareerService);
-  #coachService = inject(CoachService);
   #snackBar = inject(MatSnackBar);
   #modalService = inject(ModalService);
   #router = inject(Router);
@@ -70,8 +67,6 @@ export class CreatingCareerComponent implements OnInit {
   formCreatingCareer!: FormGroup;
   formCreatingCoach!: FormGroup;
   selectedOptionCoachImage!: string;
-  showError = signal<boolean>(false);
-  messageError = signal<string>('');
 
   searchQueryNation = signal<string>('');
   searchQueryFifaVersion = signal<string>('');
@@ -113,6 +108,10 @@ export class CreatingCareerComponent implements OnInit {
     return this.formCreatingCareer.get('teamCareer')!.value;
   }
 
+  get fifaCareer() {
+    return this.formCreatingCareer.controls['fifaCareer'];
+}
+
   ngOnInit(): void {
     this.initForms();
     this.loadInitialData();
@@ -120,13 +119,18 @@ export class CreatingCareerComponent implements OnInit {
 
   private initForms() {
     this.formCreatingCareer = this.#fb.group({
-      fifaCareer: [
-        null,
-        [Validators.required, Validators.maxLength(8), Validators.minLength(7)],
-      ],
+      fifaCareer: [, {
+        validators: [
+            Validators.required,
+            Validators.minLength(5),
+            Validators.maxLength(10)
+        ],
+        asyncValidators: [fifaCareerValidator(this.#careerService)],
+        updateOn: 'blur'
+    }],
       leagueCareer: [
         null,
-        [Validators.required, Validators.maxLength(16), Validators.minLength(3)],
+        [Validators.required, Validators.minLength(3), Validators.maxLength(16)],
       ],
       teamCareer: [null, Validators.required],
     });
@@ -134,11 +138,11 @@ export class CreatingCareerComponent implements OnInit {
     this.formCreatingCoach = this.#fb.group({
       coachesName: [
         '',
-        [Validators.required, Validators.maxLength(20), Validators.minLength(3)],
+        [Validators.required, Validators.minLength(3), Validators.maxLength(20)],
       ],
       nationality: [
         null,
-        [Validators.required, Validators.maxLength(20), Validators.minLength(3)],
+        [Validators.required, Validators.minLength(3), Validators.maxLength(20)],
       ],
       urlImageCoach: [''],
       seasons: [0, Validators.required],

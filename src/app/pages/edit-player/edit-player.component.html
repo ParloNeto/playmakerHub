@@ -1,4 +1,4 @@
-<app-header />
+<phub-header />
 <phub-loader></phub-loader>
 <div class="container">
   <div class="career">
@@ -18,18 +18,18 @@
 
       <div class="career__content__statistics">
         @defer { @if (this.season() === 'geral') {
-        <phub-statistics [statisticsHistory]="player.statisticsHistory" />
+        <phub-statistics-player [statistics]="player.statisticsHistory" />
         } @else if (isValidTypeSeasonKey(this.season())) { @if
         (getPlayerStatisticsSeason(); as statisticsSeason) {
 
-        <phub-statistics [statisticsSeason]="statisticsSeason">
+        <phub-statistics-player [statistics]="statisticsSeason">
           <button class="circle-edit-player" [routerLink]="['edit-statistics']">
             <img
               src="../../../../assets/icons/edit-player.svg"
               alt="Edit player"
             />
           </button>
-        </phub-statistics>
+        </phub-statistics-player>
         } @else {
         <div class="statistics">
           <div class="column-stats">

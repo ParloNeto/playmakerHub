@@ -4,22 +4,27 @@ import { HeaderComponent } from '../../../shared/header/header.component';
 import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
 import { CareerService } from '../../services/career.service';
 import { DetailsManagerClubIconComponent } from '../../../shared/components/details-manager-club/details-manager-club-icon.component';
-import { IconPlayerSeasonComponent } from '../../../shared/components/icon-player-season/icon-player-season.component';
 import { NewCareer } from '../../../models/career/new-career';
-import { isValidTypeSeasonKey, TypeSeason } from '../../../models/enums/type-season';
+import { isValidTypeSeasonKey } from '../../../models/enums/type-season';
 import { ListPlayerComponent } from '../../../shared/components/list-player/list-player.component';
 import { LoaderModule } from '../../../shared/components/loader/loader.module';
 import { ModalService } from '../../services/modal.service';
-import { finalize, take } from 'rxjs';
-import { ModalState } from '../../../models/enums/modal-state';
+import { finalize } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { StatisticsCareerComponent } from '../../../shared/components/statistics-career/statistics-career.component';
 import { Season } from '../../../models/career/season';
-import { AsyncPipe, CommonModule } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { Player } from '../../../models/player/player';
+
+
+type SeasonName = {
+  id: string;
+  seasonName: string;
+};
 
 @Component({
   selector: 'app-details',
@@ -28,7 +33,6 @@ import { MatInputModule } from '@angular/material/input';
     HeaderComponent,
     RouterLink,
     DetailsManagerClubIconComponent,
-    IconPlayerSeasonComponent,
     ListPlayerComponent,
     LoaderModule,
     StatisticsCareerComponent,
@@ -50,14 +54,32 @@ export class DetailsComponent implements OnInit {
   #router = inject(Router);
   #snackBar = inject(MatSnackBar);
 
+  #setPlayersFromCareer = signal<Player[] | null>(null);
+  get getPlayersFromCareer() {
+    return this.#setPlayersFromCareer.asReadonly();
+  }
 
+  #setCareerDetails = signal<NewCareer | null>(null);
+  get getCareerDetails() {
+    return this.#setCareerDetails.asReadonly();
+  }
+  #setAvailablePlayersForSeason = signal<Player[] | null>(null);
+  get getAvailablePlayersForSeason() {
+    return this.#setAvailablePlayersForSeason.asReadonly();
+  }
 
-  public getCareerDetails = this.#careerService.getCareerDetails;
+  #setSeasons = signal<SeasonName[] | null>(null);
+    get getAllSeasonsByCareer() {
+      return this.#setSeasons.asReadonly();
+    }
+
+    #setPlayersFromCareerFilteredBySeason = signal<Player[] | null>(null);
+  get getPlayersFromCareerFilteredBySeason() {
+    return this.#setPlayersFromCareerFilteredBySeason.asReadonly();
+  }
+
   public isValidTypeSeasonKey = isValidTypeSeasonKey;
   public initialSeason = this.#careerService.getSeasonByInitialSeason;
-  public getPlayersFromCareer = this.#careerService.getPlayersFromCareer;
-  public getAvailablePlayersForSeason = this.#careerService.getAvailablePlayersForSeason;
-  public getPlayersFromCareerFilteredBySeason = this.#careerService.getPlayersFromCareerFilteredBySeason;
   public seasons = this.#careerService.getAllSeasonsByCareer;
 
   public season = signal<string>('');
@@ -75,16 +97,23 @@ export class DetailsComponent implements OnInit {
         this.season.set(params['season']);
 
         if (isValidTypeSeasonKey(this.season())) {
-          this.#careerService.httpPlayersFilteredBySeason$(this.id(), this.season()).subscribe();
+          this.#careerService.httpPlayersFilteredBySeason$(this.id(), this.season()).subscribe({
+            next: players => this.#setPlayersFromCareerFilteredBySeason.set(players)
+          });
         } else if (this.season() === 'geral') {
-          this.#careerService.httpPlayersOfCareersGeralById$(this.id()).subscribe();
+          this.#careerService.httpPlayersOfCareersGeralById$(this.id()).subscribe({
+            next: (players) => this.#setPlayersFromCareer.set(players)
+          });
         } else {
           this.#modalService.showError("Temporada não encontrada.");
         }
-        this.#careerService.httpSeasonsByCareer$(this.id()).subscribe();
+        this.#careerService.httpSeasonsByCareer$(this.id()).subscribe({
+          next: seasonName => this.#setSeasons.set(seasonName)
+        });
         this.#careerService.httpCareersById$(this.id())
         .subscribe({
           next: (career: NewCareer) => {
+            this.#setCareerDetails.set(career);
             this.#careerService
               .httpSeasonByInitialSeason$(career.fifaCareer)
               .subscribe();
@@ -105,7 +134,8 @@ export class DetailsComponent implements OnInit {
 
     }))
     .subscribe({
-      next: () => {
+      next: (players) => {
+        this.#setAvailablePlayersForSeason.set(players);
         this.#modalService.showTransferPlayer(
           'Selecione o jogador que deseja adicionar nessa temporada',
           this.getAvailablePlayersForSeason()

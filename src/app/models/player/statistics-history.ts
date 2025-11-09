@@ -1,7 +1,3 @@
-export interface StatisticsHistory {
-  matches: number;
-  goals: number;
-  assists: number;
-  yellowCards: number;
-  redCards: number;
-};
+import { BaseStatsPlayer } from "./base-stats-player";
+
+export interface StatisticsHistory extends BaseStatsPlayer {};

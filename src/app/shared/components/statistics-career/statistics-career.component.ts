@@ -1,16 +1,13 @@
-import { StatisticsHistory } from '../../../models/player/statistics-history';
 import {
   ChangeDetectionStrategy,
   Component,
   Input,
-  OnInit,
-  signal,
 } from '@angular/core';
-import { Statistics } from '../../../models/player/statistics';
 import { NgIf } from '@angular/common';
 import { CareerHistory } from '../../../models/career/career-history';
 import { RouterLink } from '@angular/router';
 import { Season } from '../../../models/career/season';
+import { StatisticsBaseComponent } from '../statistics-base/statistics-base.component';
 
 @Component({
   selector: 'phub-statistics-career',
@@ -33,24 +30,18 @@ import { Season } from '../../../models/career/season';
       </div>
       <div class="column-stats">
         <h4 class="column-stats-field">Derrotas</h4>
-        <h4 class="column-stats-field__number">
-          {{ this.stats()!.losses }}
-        </h4>
+        <h4 class="column-stats-field__number">{{ this.stats()!.losses }}</h4>
       </div>
       <div class="column-stats">
         <h4 class="column-stats-field">Gols sofridos</h4>
-        <h4 class="column-stats-field__number">
-          {{ this.stats()!.goalsConceded }}
-        </h4>
+        <h4 class="column-stats-field__number">{{ this.stats()!.goalsConceded }}</h4>
       </div>
       <div class="column-stats">
         <h4 class="column-stats-field">Gols marcados</h4>
-        <h4 class="column-stats-field__number">
-          {{ this.stats()!.goalsScored }}
-        </h4>
+        <h4 class="column-stats-field__number">{{ this.stats()!.goalsScored }}</h4>
       </div>
 
-      @if (this.isSeasonHistoryStatistics()) {
+      @if (this.isSeasonHistoryStatistics) {
       <button class="circle-edit-player">
         <img
           src="../../../../assets/icons/edit-player.svg"
@@ -63,9 +54,8 @@ import { Season } from '../../../models/career/season';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class StatisticsCareerComponent implements OnInit {
-  public stats = signal<CareerHistory | Season | null>(null);
-  public isSeasonHistoryStatistics = signal<boolean>(false);
+export class StatisticsCareerComponent extends StatisticsBaseComponent<CareerHistory | Season> {
+  public isSeasonHistoryStatistics = false;
 
   @Input() set careerHistory(value: CareerHistory) {
     this.stats.set(value);
@@ -73,8 +63,6 @@ export class StatisticsCareerComponent implements OnInit {
 
   @Input() set season(value: Season) {
     this.stats.set(value);
-    this.isSeasonHistoryStatistics.set(true);
+    this.isSeasonHistoryStatistics = true;
   }
-
-  ngOnInit(): void {}
 }

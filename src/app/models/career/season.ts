@@ -1,15 +1,11 @@
 import { Player } from "../player/player";
+import { BaseStats } from "./base-stats";
 import { Title } from "./title";
 
-export interface Season {
+export interface Season extends BaseStats {
   id?: string;
   seasonName?: string;
-  games?: number;
-  wins?: number;
-  draws?: number;
-  losses?: number;
-  goalsConceded?: number;
-  goalsScored?: number;
   titles?: Title[];
   players?: Player[];
+  careerId?: string;
 }

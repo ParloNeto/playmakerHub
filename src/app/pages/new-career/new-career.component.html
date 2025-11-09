@@ -1,4 +1,4 @@
-<app-header />
+<phub-header />
 <phub-loader></phub-loader>
 
 <div class="container">
@@ -14,6 +14,8 @@
               #searchFifaVersion
               placeholder="Ex: 16, 17..."
               formControlName="fifaCareer"
+              phubFifaCareer
+              maxlength="10"
               [matAutocomplete]="autoFV"
               (input)="onSearchUpdatedFifaVersion(searchFifaVersion.value)"
             />
@@ -22,6 +24,13 @@
               <mat-option [value]="optionFifa">{{ optionFifa }}</mat-option>
               }
             </mat-autocomplete>
+            @if (fifaCareer.errors | onlyOneError: ['invalidVersion']; as error) {
+              @if (error.invalidVersion) {
+                <mat-error>A versão do FIFA é inválida</mat-error>
+              }
+            }
+
+
           </div>
           <div class="input-form">
             <label for="leagueCareer">Liga da Carreira:</label>
@@ -121,25 +130,20 @@
         </form>
       </div>
     </div>
-    @if (showError()) {
-    <div class="show-error-modal">
-      <h4 class="text-warn">{{ messageError() }}</h4>
-    </div>
-    }
     <button [routerLink]="['/']" class="btn-arrow-return">
       <img src="../../../assets/icons/voltar.svg" alt="Voltar para a Home" />
     </button>
-    <!-- <div class="image-manager">
-      <div class="image-manager__background">
-        <img [src]="getUrl" alt="Foto do Manager {{ getCoachesName }}" />
-      </div>
-      <h3>{{ getCoachesName }}</h3>
-    </div> -->
 
-    <phub-details-photo
+    @if (getTeamCareer) {
+      <phub-details-photo
       [clubName]="getTeamCareer"
-      [personName]="getCoachesName"
-      [url]="getUrl"
+      [creatingManager]="{
+          name: getCoachesName,
+          url: getUrl
+        }
+          "
     />
+    }
+
   </div>
 </div>

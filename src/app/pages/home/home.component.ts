@@ -47,7 +47,7 @@ export class HomeComponent implements OnInit{
     }
   }
 
-  public careerExists(data: NewCareer[]): string {
+  public careerExists(data?: NewCareer[]): string {
     if (data) {
       return "top";
     }

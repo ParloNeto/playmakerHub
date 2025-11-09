@@ -11,11 +11,12 @@ import { Coach } from '../../../../models/career/Coach';
 import { NgIf } from '@angular/common';
 import { UploadFileService } from '../../../../pages/services/upload-file.service';
 import { environment } from '../../../../../environments/environment';
+import { IIconPlayer } from '../../../interface/icon-player';
 
 @Component({
   selector: 'app-icon-manager',
   standalone: true,
-  imports: [NgIf],
+  imports: [],
   template: `
     <div class="image-manager">
       @if (manager) {
@@ -26,14 +27,14 @@ import { environment } from '../../../../../environments/environment';
         />
       </div>
       <h3>{{ manager.coachesName }}</h3>
-      } @else if (creatingPerson) {
+      } @else if (creatingManager) {
       <div class="image-manager__background">
         <img
-          [src]="this.returnImageByName(creatingPerson.url)"
-          alt="Foto do Manager {{ creatingPerson.name }}"
+          [src]="this.returnImageByName(creatingManager.url)"
+          alt="Foto do Manager {{ creatingManager.name }}"
         />
       </div>
-      <h3>{{ creatingPerson.name }}</h3>
+      <h3>{{ creatingManager.name }}</h3>
       } @else {
       <div class="image-manager__background">
         <img
@@ -51,7 +52,7 @@ export class IconManagerComponent implements OnInit {
   ngOnInit(): void {}
 
   @Input({ alias: 'manager-details' }) manager!: Coach;
-  @Input({ alias: 'creating-person' }) creatingPerson!: {
+  @Input({ alias: 'creating-manager' }) creatingManager!: {
     name: string;
     url: string;
   };

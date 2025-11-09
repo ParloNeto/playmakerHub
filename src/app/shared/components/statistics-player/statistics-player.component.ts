@@ -1,20 +1,17 @@
-import { StatisticsHistory } from './../../../models/player/statistics-history';
+import { StatisticsHistory } from '../../../models/player/statistics-history';
 import {
   ChangeDetectionStrategy,
   Component,
-  Input,
-  OnInit,
-  signal,
 } from '@angular/core';
 import { Statistics } from '../../../models/player/statistics';
-import { NgIf } from '@angular/common';
+import { StatisticsBaseComponent } from '../statistics-base/statistics-base.component';
 
 @Component({
-  selector: 'phub-statistics',
+  selector: 'phub-statistics-player',
   standalone: true,
-  imports: [NgIf],
+  imports: [],
   template: `
-    <div class="statistics">
+     <div class="statistics">
       @if (this.stats()) {
       <div class="column-stats">
         <h4 class="column-stats-field">Jogos</h4>
@@ -30,9 +27,7 @@ import { NgIf } from '@angular/common';
       </div>
       <div class="column-stats">
         <h4 class="column-stats-field">Cartões Amar.</h4>
-        <h4 class="column-stats-field__number">
-          {{ this.stats()!.yellowCards }}
-        </h4>
+        <h4 class="column-stats-field__number">{{ this.stats()!.yellowCards }}</h4>
       </div>
       <div class="column-stats">
         <h4 class="column-stats-field">Cartões Verm.</h4>
@@ -40,25 +35,8 @@ import { NgIf } from '@angular/common';
       </div>
       }
       <ng-content></ng-content>
-
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class StatisticsComponent implements OnInit {
-
-  @Input() statisticsHistory!: StatisticsHistory;
-  @Input() statisticsSeason!: Statistics  | null ;
-
-  public stats = signal<StatisticsHistory | Statistics | null>(null);
-
-  ngOnInit(): void {
-    if (this.statisticsHistory) {
-      this.stats.set(this.statisticsHistory);
-    } else {
-      this.stats.set(this.statisticsSeason);
-    }
-
-  }
-
-}
+export class StatisticsPlayerComponent extends StatisticsBaseComponent<StatisticsHistory | Statistics> {}

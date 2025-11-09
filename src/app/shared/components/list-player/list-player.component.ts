@@ -1,14 +1,11 @@
-import { NgIf } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, input, Signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { Player } from '../../../models/player/player';
-import { IconPlayerSeasonComponent } from '../icon-player-season/icon-player-season.component';
 import { ShowPlayersComponent } from './show-players/show-players.component';
 
 @Component({
   selector: 'phub-list-player',
   standalone: true,
-  imports: [NgIf, RouterLink, IconPlayerSeasonComponent, ShowPlayersComponent],
+  imports: [ShowPlayersComponent],
   template: `
     <div class="list-players">
       @if (players()) {

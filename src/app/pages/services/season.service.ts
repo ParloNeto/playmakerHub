@@ -24,18 +24,28 @@ export class SeasonService {
       shareReplay(),
       tap((res: string[]) => {
         this.#setSeasons.set(res);
+        console.log(res)
       })
     );
   }
 
   async httpUpdateSeason(seasonId: string, seasonData: Partial<Season>): Promise<Season> {
-    const season$ = this.#http.put<Season>(`${this.#apiUrl}/${seasonId}`, seasonData);
-    return await firstValueFrom(season$);
+    try {
+      const season$ = this.#http.put<Season>(`${this.#apiUrl}/${seasonId}`, seasonData);
+      return await firstValueFrom(season$);
+
+    } catch (error: any) {
+      throw new Error(error.error);
+    }
   }
 
   async httpRemovePlayerFromSeason(seasonId: string, playerId: string): Promise<Season> {
     const url = `${this.#apiUrl}/${seasonId}/remove-player/${playerId}`;
-    const updatedSeason$ = this.#http.put<Season>(url, {});
-    return await firstValueFrom(updatedSeason$);
+    try {
+      const updatedSeason$ = this.#http.put<Season>(url, {});
+      return await firstValueFrom(updatedSeason$);
+    } catch (error: any) {
+      throw new Error(error.error);
+    }
   }
 }

@@ -15,7 +15,7 @@ import {
   throwError,
 } from 'rxjs';
 import { fifaVersionMock } from './mocks/fifaVersion-mocks';
-import { FootballLeague } from '../../models/footballLeagues/footballLeagues';
+import { FootballLeague } from '../../models/league/footballLeagues';
 import { Player } from '../../models/player/player';
 import { environment } from '../../../environments/environment';
 import { Season } from '../../models/career/season';
@@ -270,5 +270,12 @@ export class CareerService {
       environment.CREATE_FIFAVERSION_URL
     );
     return await firstValueFrom(versionsFifa$);
+  }
+
+  httpVersionFifa$(): Observable<string[]> {
+    const versionsFifa$ = this.#http.get<string[]>(
+      environment.CREATE_FIFAVERSION_URL
+    );
+    return versionsFifa$;
   }
 }

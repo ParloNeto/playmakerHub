@@ -1,4 +1,4 @@
-import { FootballLeague } from "../../../models/footballLeagues/footballLeagues";
+import { FootballLeague } from "../../../models/league/footballLeagues";
 
 export const footballLeagues: FootballLeague[] = [
   {

@@ -9,8 +9,7 @@ import { LoaderModule } from './loader.module';
 
 @Component({
   selector: 'phub-loader',
-  standalone: true,
-  imports: [LoaderModule],
+  standalone: false,
   template: `
     <ngx-spinner
       bdColor="rgba(0,0,0,0.5)"

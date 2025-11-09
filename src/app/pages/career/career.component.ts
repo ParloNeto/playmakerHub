@@ -5,6 +5,7 @@ import {
   inject,
   OnDestroy,
   OnInit,
+  signal,
 } from '@angular/core';
 import { HeaderComponent } from '../../shared/header/header.component';
 import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
@@ -51,11 +52,16 @@ export class CareerComponent implements OnInit, OnDestroy {
   #router = inject(Router);
 
   private id!: string;
-  public getCareerDetails = this.#careerService.getCareerDetails;
   public initialSeason = this.#careerService.getSeasonByInitialSeason;
   public seasons = this.#careerService.getAllSeasonsByCareer;
   public showSeason = transformSeasonString;
   private confirmSubscription!: Subscription;
+
+
+  #setCareerDetails = signal<NewCareer | null>(null);
+    get getCareerDetails() {
+      return this.#setCareerDetails.asReadonly();
+    }
 
   ngOnInit(): void {
     this.#activatedRoute.params.subscribe({
@@ -64,6 +70,7 @@ export class CareerComponent implements OnInit, OnDestroy {
         this.#careerService.httpSeasonsByCareer$(this.id).subscribe();
         this.#careerService.httpCareersById$(this.id).subscribe({
           next: (career: NewCareer) => {
+            this.#setCareerDetails.set(career);
             this.#careerService
               .httpSeasonByInitialSeason$(career.fifaCareer)
               .subscribe();
@@ -112,6 +119,9 @@ export class CareerComponent implements OnInit, OnDestroy {
           duration: 3500,
         });
       },
+      error: (err) => {
+        this.#modalService.showError(err);
+      }
     });
   }
 }

@@ -1,9 +1,6 @@
-export interface Statistics {
+import { BaseStatsPlayer } from "./base-stats-player";
+
+export interface Statistics extends BaseStatsPlayer {
   season: string;
-  matches: number;
-  goals: number;
-  assists: number;
-  yellowCards: number;
-  redCards: number;
-  contractedAtualSeason: boolean;
+  contractedAtualSeason?: boolean;
 };

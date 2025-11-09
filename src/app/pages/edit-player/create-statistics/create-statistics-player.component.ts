@@ -76,7 +76,10 @@ export class CreateStatisticsPlayerComponent implements OnInit {
   public idCareer = signal<string>('');
   public pathAlias = signal<string>('');
 
-  public infoPlayer = this.#playerService.getPlayerById;
+  #setPlayerById = signal<Player | null>(null);
+  get getPlayerById() {
+    return this.#setPlayerById.asReadonly();
+  }
 
   public showSeason = transformSeasonString;
   public formStatistics!: FormGroup;
@@ -116,7 +119,10 @@ export class CreateStatisticsPlayerComponent implements OnInit {
     });
 
     this.#playerService.httpGetPlayerById$(this.id()).subscribe({
-      next: (player: Player) => this.idCareer.set(player.idCareer)
+      next: (player: Player) => {
+        this.idCareer.set(player.idCareer);
+        this.#setPlayerById.set(player);
+      }
     });
 
     if (this.pathAlias() === 'edit') {

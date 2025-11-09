@@ -1,0 +1,55 @@
+@if (player) {
+  <div >
+
+    @if (showBackground) {
+      <div class="image-manager">
+        <div class="image-manager__background">
+          <img
+            [src]="returnImageByName(player.urlImagePlayer)"
+            alt="Foto do Jogador {{ player.firstName + ' ' + player.lastName }}"
+          />
+        </div>
+        <div class="name-player-and-nation">
+          <h3>{{ player.firstName }} - {{ player.nationality }}</h3>
+          <img
+            id="player-nation-img"
+            [src]="'../../../../../assets/images/nation/' + player.nationality.toLocaleLowerCase() + '.png'"
+            alt="{{ player.nationality }}"
+          />
+        </div>
+      </div>
+
+    }
+
+    @if (showPlayerSeason) {
+      <div class="box-player">
+        <p class="number-player">{{ player.kitNumber }}</p>
+        <img
+          class="image-player"
+          [src]=returnImageByName(player.urlImagePlayer)
+          alt="Foto de {{ player.firstName }} {{ player.lastName }}."
+        />
+        <div class="box-player__info">
+          <p class="name-player">{{ player.firstName }}</p>
+          <p class="name-player">{{ player.lastName }}</p>
+          @if (enableEdit) {
+            <button
+            class="circle-edit-player"
+            [routerLink]="[player.id, 'edit-player']"
+          >
+            <img
+              src="../../../../assets/icons/edit-player.svg"
+              alt="Edit player"
+            />
+          </button>
+          }
+
+        </div>
+        <p class="position-player">{{ player.position }}</p>
+      </div>
+    }
+
+  </div>
+}
+
+

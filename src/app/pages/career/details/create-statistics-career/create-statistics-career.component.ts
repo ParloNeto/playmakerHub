@@ -49,7 +49,6 @@ import { SeasonService } from '../../../services/season.service';
 export class CreateStatisticsCareerComponent implements OnInit {
   #fb = inject(FormBuilder);
   #activatedRoute = inject(ActivatedRoute);
-  #playerService = inject(PlayerService);
   #router = inject(Router);
   #snackBar = inject(MatSnackBar);
 
@@ -62,9 +61,16 @@ export class CreateStatisticsCareerComponent implements OnInit {
   public pathAlias = signal<string>('');
   public formStatistics!: FormGroup;
   public showSeason = transformSeasonString;
-  public getCareerDetails = this.#careerService.getCareerDetails;
-  public getSeason = this.#careerService.getSeason;
 
+  #setCareerDetails = signal<NewCareer | null>(null);
+  get getCareerDetails() {
+    return this.#setCareerDetails.asReadonly();
+  }
+
+  #setSeason = signal<Season | null>(null);
+  get getSeason() {
+    return this.#setSeason.asReadonly();
+  }
 
   ngOnInit(): void {
 
@@ -102,16 +108,19 @@ export class CreateStatisticsCareerComponent implements OnInit {
       titles: [[]]
     });
 
-    this.#careerService.httpCareersById$(this.id()).subscribe();
+    this.#careerService.httpCareersById$(this.id()).subscribe({
+      next: (career) => this.#setCareerDetails.set(career)
+    });
     this.#careerService.httpSeasonByCareer$(this.id(), this.season()).subscribe({
-      next: (data) => {
+      next: (season) => {
+        this.#setSeason.set(season)
         this.formStatistics.patchValue({
-          games: data.games,
-          wins: data.wins,
-          draws: data.draws,
-          losses: data.losses,
-          goalsConceded: data.goalsConceded,
-          goalsScored: data.goalsScored
+          games: season.games,
+          wins: season.wins,
+          draws: season.draws,
+          losses: season.losses,
+          goalsConceded: season.goalsConceded,
+          goalsScored: season.goalsScored
         });
       }
     });

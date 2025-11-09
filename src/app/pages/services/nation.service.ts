@@ -13,13 +13,6 @@ export class NationService {
     return this.#setNations.asReadonly();
   }
 
-  // getAllNationsMock(): Observable<{ nation: string }[]> {
-  //   return this.#nation$.pipe(
-  //     shareReplay(),
-  //     tap((res) => this.#setNations.set(res))
-  //   );
-  // }
-
   async getAllNationsMock(): Promise<{ nation: string }[]> {
     const nation$ = of(nationsMock);
     return await firstValueFrom(nation$);

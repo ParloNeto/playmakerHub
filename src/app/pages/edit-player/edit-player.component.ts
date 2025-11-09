@@ -16,13 +16,11 @@ import { Statistics } from '../../models/player/statistics';
 import { isValidTypeSeasonKey } from '../../models/enums/type-season';
 import { transformSeasonString } from '../../shared/utils/utils';
 import { DetailsManagerClubIconComponent } from '../../shared/components/details-manager-club/details-manager-club-icon.component';
-import { IconPlayerSeasonComponent } from '../../shared/components/icon-player-season/icon-player-season.component';
 import { LoaderModule } from '../../shared/components/loader/loader.module';
 import { ModalComponent } from '../../shared/components/modal/modal.component';
-import { StatisticsComponent } from '../../shared/components/statistics/statistics.component';
+import { StatisticsPlayerComponent } from '../../shared/components/statistics-player/statistics-player.component';
 import { Top3StatsPlayersCareerComponent } from '../../shared/components/top-3-stats-players-career/top-3-stats-players-career.component';
 import { HeaderComponent } from '../../shared/header/header.component';
-import { NewCareer } from '../../models/career/new-career';
 import { Player } from '../../models/player/player';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -30,6 +28,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatOptionSelectionChange } from '@angular/material/core';
+import { StatisticsBaseComponent } from '../../shared/components/statistics-base/statistics-base.component';
 
 @Component({
   selector: 'phub-edit-player',
@@ -40,10 +39,9 @@ import { MatOptionSelectionChange } from '@angular/material/core';
     HeaderComponent,
     DetailsManagerClubIconComponent,
     ModalComponent,
-    IconPlayerSeasonComponent,
     LoaderModule,
     DetailsManagerClubIconComponent,
-    StatisticsComponent,
+    StatisticsPlayerComponent,
     Top3StatsPlayersCareerComponent,
     FormsModule,
     MatAutocompleteModule,

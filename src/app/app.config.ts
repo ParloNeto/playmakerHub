@@ -7,6 +7,7 @@ import { provideClientHydration } from '@angular/platform-browser';
 import { BrowserAnimationsModule, provideAnimations } from '@angular/platform-browser/animations';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { loadingInterceptor } from './pages/services/loading.interceptor';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -19,6 +20,6 @@ export const appConfig: ApplicationConfig = {
         loadingInterceptor
       ])
     ),
-    provideAnimations(), provideAnimationsAsync()
+    provideAnimations(), provideAnimationsAsync(), NgxSpinnerService
   ],
 };

@@ -1,11 +1,16 @@
-import { Component, inject } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-header',
+  selector: 'phub-header',
   standalone: true,
   imports: [],
-  templateUrl: './header.component.html',
+  template: `
+  <header>
+    <img
+      src="../../../assets/images/logo/playmaker-hub.png"
+      alt="playmaker hub logo"
+    />
+  </header>`,
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent {

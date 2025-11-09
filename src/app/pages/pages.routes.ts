@@ -62,8 +62,8 @@ export const PAGES_ROUTES: Routes = [
     path: 'new-career',
     title: 'Criar Carreira - Playmaker Hub',
     loadComponent: () =>
-      import('./creating-career/creating-career.component').then(
-        (p) => p.CreatingCareerComponent
+      import('./new-career/new-career.component').then(
+        (p) => p.NewCareerComponent
       ),
   },
 ];
