@@ -31,26 +31,25 @@ import { MatOptionSelectionChange } from '@angular/material/core';
 import { StatisticsBaseComponent } from '../../shared/components/statistics-base/statistics-base.component';
 
 @Component({
-  selector: 'phub-edit-player',
-  templateUrl: './edit-player.component.html',
-  standalone: true,
-  imports: [
-    RouterLink,
-    HeaderComponent,
-    DetailsManagerClubIconComponent,
-    ModalComponent,
-    LoaderModule,
-    DetailsManagerClubIconComponent,
-    StatisticsPlayerComponent,
-    Top3StatsPlayersCareerComponent,
-    FormsModule,
-    MatAutocompleteModule,
-    CommonModule,
-    MatFormFieldModule,
-    MatInputModule,
-  ],
-  styleUrls: ['./edit-player.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'phub-edit-player',
+    templateUrl: './edit-player.component.html',
+    imports: [
+        RouterLink,
+        HeaderComponent,
+        DetailsManagerClubIconComponent,
+        ModalComponent,
+        LoaderModule,
+        DetailsManagerClubIconComponent,
+        StatisticsPlayerComponent,
+        Top3StatsPlayersCareerComponent,
+        FormsModule,
+        MatAutocompleteModule,
+        CommonModule,
+        MatFormFieldModule,
+        MatInputModule,
+    ],
+    styleUrls: ['./edit-player.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EditPlayerComponent implements OnInit, AfterViewInit, DoCheck, OnDestroy {
   ngDoCheck(): void {

@@ -27,24 +27,23 @@ type SeasonName = {
 };
 
 @Component({
-  selector: 'app-details',
-  standalone: true,
-  imports: [
-    HeaderComponent,
-    RouterLink,
-    DetailsManagerClubIconComponent,
-    ListPlayerComponent,
-    LoaderModule,
-    StatisticsCareerComponent,
-    FormsModule,
-    MatAutocompleteModule,
-    CommonModule,
-    MatFormFieldModule,
-    MatInputModule,
-  ],
-  templateUrl: './details.component.html',
-  styleUrl: './details.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-details',
+    imports: [
+        HeaderComponent,
+        RouterLink,
+        DetailsManagerClubIconComponent,
+        ListPlayerComponent,
+        LoaderModule,
+        StatisticsCareerComponent,
+        FormsModule,
+        MatAutocompleteModule,
+        CommonModule,
+        MatFormFieldModule,
+        MatInputModule,
+    ],
+    templateUrl: './details.component.html',
+    styleUrl: './details.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DetailsComponent implements OnInit {
 

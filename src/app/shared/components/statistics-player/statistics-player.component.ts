@@ -7,10 +7,9 @@ import { Statistics } from '../../../models/player/statistics';
 import { StatisticsBaseComponent } from '../statistics-base/statistics-base.component';
 
 @Component({
-  selector: 'phub-statistics-player',
-  standalone: true,
-  imports: [],
-  template: `
+    selector: 'phub-statistics-player',
+    imports: [],
+    template: `
      <div class="statistics">
       @if (this.stats()) {
       <div class="column-stats">
@@ -37,6 +36,6 @@ import { StatisticsBaseComponent } from '../statistics-base/statistics-base.comp
       <ng-content></ng-content>
     </div>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StatisticsPlayerComponent extends StatisticsBaseComponent<StatisticsHistory | Statistics> {}

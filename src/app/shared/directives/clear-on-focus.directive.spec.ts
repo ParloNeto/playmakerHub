@@ -5,11 +5,12 @@ import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
 @Component({
-  template: `
+    template: `
     <form [formGroup]="form">
       <input formControlName="wins" phubClearOnFocus />
     </form>
-  `
+  `,
+    standalone: false
 })
 class TestComponent {
   form = new FormGroup({

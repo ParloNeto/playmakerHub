@@ -23,28 +23,27 @@ import { Season } from '../../../../models/career/season';
 import { SeasonService } from '../../../services/season.service';
 
 @Component({
-  selector: 'phub-create-statistics-career',
-  standalone: true,
-  imports: [
-    HeaderComponent,
-    ReactiveFormsModule,
-    NgFor,
-    FormsModule,
-    MatAutocompleteModule,
-    AsyncPipe,
-    CommonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    UpperCaseDirective,
-    RouterLink,
-    ModalComponent,
-    LoaderModule,
-    FileUploadModule,
-    DetailsManagerClubIconComponent,
-  ],
-  templateUrl: './create-statistics-career.component.html',
-  styleUrl: './create-statistics-career.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'phub-create-statistics-career',
+    imports: [
+        HeaderComponent,
+        ReactiveFormsModule,
+        NgFor,
+        FormsModule,
+        MatAutocompleteModule,
+        AsyncPipe,
+        CommonModule,
+        MatFormFieldModule,
+        MatInputModule,
+        UpperCaseDirective,
+        RouterLink,
+        ModalComponent,
+        LoaderModule,
+        FileUploadModule,
+        DetailsManagerClubIconComponent,
+    ],
+    templateUrl: './create-statistics-career.component.html',
+    styleUrl: './create-statistics-career.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CreateStatisticsCareerComponent implements OnInit {
   #fb = inject(FormBuilder);

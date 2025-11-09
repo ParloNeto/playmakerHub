@@ -3,10 +3,9 @@ import { Player } from '../../../models/player/player';
 import { ShowPlayersComponent } from './show-players/show-players.component';
 
 @Component({
-  selector: 'phub-list-player',
-  standalone: true,
-  imports: [ShowPlayersComponent],
-  template: `
+    selector: 'phub-list-player',
+    imports: [ShowPlayersComponent],
+    template: `
     <div class="list-players">
       @if (players()) {
       <div class="goalkeepers">
@@ -40,8 +39,8 @@ import { ShowPlayersComponent } from './show-players/show-players.component';
       }
     </div>
   `,
-  styleUrl: './list-player.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    styleUrl: './list-player.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ListPlayerComponent {
   public players = input.required<Player[] | null>({

@@ -10,10 +10,9 @@ import { Season } from '../../../models/career/season';
 import { StatisticsBaseComponent } from '../statistics-base/statistics-base.component';
 
 @Component({
-  selector: 'phub-statistics-career',
-  standalone: true,
-  imports: [NgIf, RouterLink],
-  template: `
+    selector: 'phub-statistics-career',
+    imports: [NgIf, RouterLink],
+    template: `
     <div class="statistics">
       @if (this.stats()) {
       <div class="column-stats">
@@ -52,7 +51,7 @@ import { StatisticsBaseComponent } from '../statistics-base/statistics-base.comp
       } }
     </div>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StatisticsCareerComponent extends StatisticsBaseComponent<CareerHistory | Season> {
   public isSeasonHistoryStatistics = false;

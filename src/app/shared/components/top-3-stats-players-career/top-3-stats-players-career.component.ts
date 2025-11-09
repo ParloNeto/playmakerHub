@@ -6,10 +6,9 @@ import { PlayerStats } from '../../../models/player/player-stats';
 import { Pageable } from '../../../models/player/pageable';
 
 @Component({
-  selector: 'app-top-3-stats-players-career',
-  standalone: true,
-  imports: [],
-  template: `
+    selector: 'app-top-3-stats-players-career',
+    imports: [],
+    template: `
     <div class="career-lobby-player-stats">
       <h4 class="title-content">Mais Gols</h4>
       <ol class="top-3-players-list">
@@ -23,7 +22,7 @@ import { Pageable } from '../../../models/player/pageable';
           <li>{{ player.firstName }} - {{ player.assists }}</li>
         }
       </ol>
-    </div>`,
+    </div>`
 })
 export class Top3StatsPlayersCareerComponent implements OnInit {
   @Input({required: true}) idCareer?: string;

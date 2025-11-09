@@ -3,12 +3,11 @@ import { RouterOutlet } from '@angular/router';
 import { LoaderModule } from './shared/components/loader/loader.module';
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [RouterOutlet, LoaderModule],
-  template: `<router-outlet />
+    selector: 'app-root',
+    imports: [RouterOutlet, LoaderModule],
+    template: `<router-outlet />
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent {
 

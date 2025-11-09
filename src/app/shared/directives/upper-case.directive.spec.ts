@@ -4,7 +4,8 @@ import { UpperCaseDirective } from './upper-case.directive';
 import { By } from '@angular/platform-browser';
 
 @Component({
-  template: `<input type="text" appUpperCase>`
+    template: `<input type="text" appUpperCase>`,
+    standalone: false
 })
 class TestComponent {}
 

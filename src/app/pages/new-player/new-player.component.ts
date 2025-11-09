@@ -34,27 +34,26 @@ import { MatRadioModule } from '@angular/material/radio';
 import { isValidTypeSeasonKey } from '../../models/enums/type-season';
 
 @Component({
-  selector: 'app-new-player',
-  standalone: true,
-  imports: [
-    HeaderComponent,
-    ReactiveFormsModule,
-    FormsModule,
-    MatAutocompleteModule,
-    CommonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    UpperCaseDirective,
-    RouterLink,
-    DetailsManagerClubIconComponent,
-    FileUploadModule,
-    LoaderModule,
-    ClearOnFocusDirective,
-    MatRadioModule,
-  ],
-  templateUrl: './new-player.component.html',
-  styleUrl: './new-player.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-new-player',
+    imports: [
+        HeaderComponent,
+        ReactiveFormsModule,
+        FormsModule,
+        MatAutocompleteModule,
+        CommonModule,
+        MatFormFieldModule,
+        MatInputModule,
+        UpperCaseDirective,
+        RouterLink,
+        DetailsManagerClubIconComponent,
+        FileUploadModule,
+        LoaderModule,
+        ClearOnFocusDirective,
+        MatRadioModule,
+    ],
+    templateUrl: './new-player.component.html',
+    styleUrl: './new-player.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NewPlayerComponent implements OnInit {
   #fb = inject(FormBuilder);

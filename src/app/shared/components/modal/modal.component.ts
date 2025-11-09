@@ -8,10 +8,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatListModule, MatSelectionList } from '@angular/material/list';
 
 @Component({
-  selector: 'phub-modal',
-  standalone: true,
-  imports: [NgClass, NgIf, JsonPipe, MatCheckboxModule, MatListModule],
-  template: `
+    selector: 'phub-modal',
+    imports: [NgClass, NgIf, JsonPipe, MatCheckboxModule, MatListModule],
+    template: `
     <div class="modal" [ngClass]="{ show: isOpen }" (click)="onClose()">
       <div
         class="modal-content modal-content__{{ state() }}"
@@ -50,7 +49,7 @@ import { MatListModule, MatSelectionList } from '@angular/material/list';
         </div>
       </div>
     </div>
-  `,
+  `
 })
 export class ModalComponent implements OnInit, OnDestroy {
   public title =  signal<string | null>(null);

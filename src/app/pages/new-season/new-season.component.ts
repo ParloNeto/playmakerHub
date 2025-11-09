@@ -33,28 +33,27 @@ import { LoaderModule } from '../../shared/components/loader/loader.module';
 import { ClearOnFocusDirective } from '../../shared/directives/clear-on-focus.directive';
 
 @Component({
-  selector: 'phub-new-season',
-  standalone: true,
-  imports: [
-    HeaderComponent,
-    ReactiveFormsModule,
-    NgFor,
-    FormsModule,
-    MatAutocompleteModule,
-    AsyncPipe,
-    CommonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    UpperCaseDirective,
-    RouterLink,
-    DetailsManagerClubIconComponent,
-    ModalComponent,
-    LoaderModule,
-    ClearOnFocusDirective
-  ],
-  templateUrl: './new-season.component.html',
-  styleUrl: './new-season.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'phub-new-season',
+    imports: [
+        HeaderComponent,
+        ReactiveFormsModule,
+        NgFor,
+        FormsModule,
+        MatAutocompleteModule,
+        AsyncPipe,
+        CommonModule,
+        MatFormFieldModule,
+        MatInputModule,
+        UpperCaseDirective,
+        RouterLink,
+        DetailsManagerClubIconComponent,
+        ModalComponent,
+        LoaderModule,
+        ClearOnFocusDirective
+    ],
+    templateUrl: './new-season.component.html',
+    styleUrl: './new-season.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NewSeasonComponent implements OnInit {
   #activatedRoute = inject(ActivatedRoute);

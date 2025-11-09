@@ -14,10 +14,9 @@ import { environment } from '../../../../../environments/environment';
 import { IIconPlayer } from '../../../interface/icon-player';
 
 @Component({
-  selector: 'app-icon-manager',
-  standalone: true,
-  imports: [],
-  template: `
+    selector: 'app-icon-manager',
+    imports: [],
+    template: `
     <div class="image-manager">
       @if (manager) {
       <div class="image-manager__background">
@@ -46,7 +45,7 @@ import { IIconPlayer } from '../../../interface/icon-player';
       }
     </div>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class IconManagerComponent implements OnInit {
   ngOnInit(): void {}

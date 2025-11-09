@@ -25,24 +25,23 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 @Component({
-  selector: 'app-career',
-  standalone: true,
-  imports: [
-    HeaderComponent,
-    RouterLink,
-    DetailsManagerClubIconComponent,
-    ModalComponent,
-    LoaderModule,
-    Top3StatsPlayersCareerComponent,
-    FormsModule,
-    MatAutocompleteModule,
-    CommonModule,
-    MatFormFieldModule,
-    MatInputModule,
-  ],
-  templateUrl: './career.component.html',
-  styleUrl: './career.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-career',
+    imports: [
+        HeaderComponent,
+        RouterLink,
+        DetailsManagerClubIconComponent,
+        ModalComponent,
+        LoaderModule,
+        Top3StatsPlayersCareerComponent,
+        FormsModule,
+        MatAutocompleteModule,
+        CommonModule,
+        MatFormFieldModule,
+        MatInputModule,
+    ],
+    templateUrl: './career.component.html',
+    styleUrl: './career.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CareerComponent implements OnInit, OnDestroy {
   #careerService = inject(CareerService);

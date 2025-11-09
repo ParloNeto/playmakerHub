@@ -34,27 +34,26 @@ import { fifaCareerValidator } from '../../validators/course-title.validator';
 import { OnlyOneErrorPipe } from '../../shared/pipes/only-one-error.pipe';
 
 @Component({
-  selector: 'app-creating-career',
-  standalone: true,
-  imports: [
-    HeaderComponent,
-    ReactiveFormsModule,
-    FormsModule,
-    MatAutocompleteModule,
-    CommonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    UpperCaseDirective,
-    RouterLink,
-    LoaderModule,
-    FileUploadModule,
-    DetailsManagerClubIconComponent,
-    MatRadioModule,
-    OnlyOneErrorPipe
-  ],
-  templateUrl: './new-career.component.html',
-  styleUrl: './new-career.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-creating-career',
+    imports: [
+        HeaderComponent,
+        ReactiveFormsModule,
+        FormsModule,
+        MatAutocompleteModule,
+        CommonModule,
+        MatFormFieldModule,
+        MatInputModule,
+        UpperCaseDirective,
+        RouterLink,
+        LoaderModule,
+        FileUploadModule,
+        DetailsManagerClubIconComponent,
+        MatRadioModule,
+        OnlyOneErrorPipe
+    ],
+    templateUrl: './new-career.component.html',
+    styleUrl: './new-career.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NewCareerComponent implements OnInit {
   #fb = inject(FormBuilder);

@@ -39,29 +39,28 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Player } from '../../../models/player/player';
 
 @Component({
-  selector: 'phub-create-statistics-player',
-  standalone: true,
-  imports: [
-    HeaderComponent,
-    ReactiveFormsModule,
-    NgFor,
-    FormsModule,
-    MatAutocompleteModule,
-    AsyncPipe,
-    CommonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    UpperCaseDirective,
-    RouterLink,
-    ModalComponent,
-    LoaderModule,
-    FileUploadModule,
-    DetailsManagerClubIconComponent,
-    ClearOnFocusDirective,
-  ],
-  templateUrl: './create-statistics-player.component.html',
-  styleUrl: './create-statistics-player.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'phub-create-statistics-player',
+    imports: [
+        HeaderComponent,
+        ReactiveFormsModule,
+        NgFor,
+        FormsModule,
+        MatAutocompleteModule,
+        AsyncPipe,
+        CommonModule,
+        MatFormFieldModule,
+        MatInputModule,
+        UpperCaseDirective,
+        RouterLink,
+        ModalComponent,
+        LoaderModule,
+        FileUploadModule,
+        DetailsManagerClubIconComponent,
+        ClearOnFocusDirective,
+    ],
+    templateUrl: './create-statistics-player.component.html',
+    styleUrl: './create-statistics-player.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CreateStatisticsPlayerComponent implements OnInit {
   #fb = inject(FormBuilder);

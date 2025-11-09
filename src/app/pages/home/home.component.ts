@@ -9,12 +9,11 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { LoaderModule } from '../../shared/components/loader/loader.module';
 
 @Component({
-  selector: 'app-home',
-  standalone: true,
-  imports: [RouterLink, HeaderComponent, AsyncPipe, NgClass, ModalComponent, MatSnackBarModule, LoaderModule],
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-home',
+    imports: [RouterLink, HeaderComponent, AsyncPipe, NgClass, ModalComponent, MatSnackBarModule, LoaderModule],
+    templateUrl: './home.component.html',
+    styleUrl: './home.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomeComponent implements OnInit{
 

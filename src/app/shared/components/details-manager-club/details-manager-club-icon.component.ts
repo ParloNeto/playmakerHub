@@ -13,14 +13,13 @@ import { Player } from '../../../models/player/player';
 import { IconPlayerBaseComponent } from '../icon-player-base/icon-player-base.component';
 
 @Component({
-  selector: 'phub-details-photo',
-  standalone: true,
-  imports: [
-    IconManagerComponent,
-    IconClubComponent,
-    IconPlayerBaseComponent,
-  ],
-  template: `
+    selector: 'phub-details-photo',
+    imports: [
+        IconManagerComponent,
+        IconClubComponent,
+        IconPlayerBaseComponent,
+    ],
+    template: `
     <div class="phub-details-photo">
       @if (clubName) {
       <app-icon-club [teamCareer]="clubName"></app-icon-club>
@@ -42,7 +41,7 @@ import { IconPlayerBaseComponent } from '../icon-player-base/icon-player-base.co
       }
     </div>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DetailsManagerClubIconComponent {
   @Input() manager!: Coach;

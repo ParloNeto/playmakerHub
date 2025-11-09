@@ -1,10 +1,9 @@
 import { ChangeDetectionStrategy, Component, Input, signal } from '@angular/core';
 
 @Component({
-  selector: 'app-icon-club',
-  standalone: true,
-  imports: [],
-  template: `
+    selector: 'app-icon-club',
+    imports: [],
+    template: `
 
     <div class="image-club">
     @if (teamCareer) {
@@ -17,7 +16,7 @@ import { ChangeDetectionStrategy, Component, Input, signal } from '@angular/core
     </div>
 
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class IconClubComponent {
   @Input() teamCareer!: string;

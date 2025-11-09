@@ -5,12 +5,11 @@ import { Player } from '../../../models/player/player';
 import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'phub-icon-player-base',
-  standalone: true,
-  imports: [RouterLink],
-  templateUrl: './icon-player-base.component.html',
-  styleUrl: './icon-player-base.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'phub-icon-player-base',
+    imports: [RouterLink],
+    templateUrl: './icon-player-base.component.html',
+    styleUrl: './icon-player-base.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class IconPlayerBaseComponent implements IIconPlayer {
   @Input() public player!: Player;
