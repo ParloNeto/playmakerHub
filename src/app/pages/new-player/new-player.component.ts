@@ -1,5 +1,5 @@
 import { Player } from './../../models/player/player';
-import { NgFor, AsyncPipe, CommonModule } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -36,21 +36,20 @@ import { isValidTypeSeasonKey } from '../../models/enums/type-season';
 @Component({
     selector: 'app-new-player',
     imports: [
-        HeaderComponent,
-        ReactiveFormsModule,
-        FormsModule,
-        MatAutocompleteModule,
-        CommonModule,
-        MatFormFieldModule,
-        MatInputModule,
-        UpperCaseDirective,
-        RouterLink,
-        DetailsManagerClubIconComponent,
-        FileUploadModule,
-        LoaderModule,
-        ClearOnFocusDirective,
-        MatRadioModule,
-    ],
+    HeaderComponent,
+    ReactiveFormsModule,
+    FormsModule,
+    MatAutocompleteModule,
+    MatFormFieldModule,
+    MatInputModule,
+    UpperCaseDirective,
+    RouterLink,
+    DetailsManagerClubIconComponent,
+    FileUploadModule,
+    LoaderModule,
+    ClearOnFocusDirective,
+    MatRadioModule
+],
     templateUrl: './new-player.component.html',
     styleUrl: './new-player.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush

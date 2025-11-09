@@ -7,7 +7,7 @@ import {
   signal,
 } from '@angular/core';
 import { HeaderComponent } from '../../shared/header/header.component';
-import { NgFor, AsyncPipe, CommonModule } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import {
   ReactiveFormsModule,
   FormsModule,
@@ -35,22 +35,20 @@ import { ClearOnFocusDirective } from '../../shared/directives/clear-on-focus.di
 @Component({
     selector: 'phub-new-season',
     imports: [
-        HeaderComponent,
-        ReactiveFormsModule,
-        NgFor,
-        FormsModule,
-        MatAutocompleteModule,
-        AsyncPipe,
-        CommonModule,
-        MatFormFieldModule,
-        MatInputModule,
-        UpperCaseDirective,
-        RouterLink,
-        DetailsManagerClubIconComponent,
-        ModalComponent,
-        LoaderModule,
-        ClearOnFocusDirective
-    ],
+    HeaderComponent,
+    ReactiveFormsModule,
+    FormsModule,
+    MatAutocompleteModule,
+    AsyncPipe,
+    MatFormFieldModule,
+    MatInputModule,
+    UpperCaseDirective,
+    RouterLink,
+    DetailsManagerClubIconComponent,
+    ModalComponent,
+    LoaderModule,
+    ClearOnFocusDirective
+],
     templateUrl: './new-season.component.html',
     styleUrl: './new-season.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush

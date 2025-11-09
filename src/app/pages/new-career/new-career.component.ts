@@ -20,7 +20,7 @@ import { CareerService } from '../services/career.service';
 import { ModalService } from '../services/modal.service';
 import { NewCareer } from '../../models/career/new-career';
 import { FootballLeague, Team } from '../../models/league/footballLeagues';
-import { CommonModule } from '@angular/common';
+
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -36,21 +36,20 @@ import { OnlyOneErrorPipe } from '../../shared/pipes/only-one-error.pipe';
 @Component({
     selector: 'app-creating-career',
     imports: [
-        HeaderComponent,
-        ReactiveFormsModule,
-        FormsModule,
-        MatAutocompleteModule,
-        CommonModule,
-        MatFormFieldModule,
-        MatInputModule,
-        UpperCaseDirective,
-        RouterLink,
-        LoaderModule,
-        FileUploadModule,
-        DetailsManagerClubIconComponent,
-        MatRadioModule,
-        OnlyOneErrorPipe
-    ],
+    HeaderComponent,
+    ReactiveFormsModule,
+    FormsModule,
+    MatAutocompleteModule,
+    MatFormFieldModule,
+    MatInputModule,
+    UpperCaseDirective,
+    RouterLink,
+    LoaderModule,
+    FileUploadModule,
+    DetailsManagerClubIconComponent,
+    MatRadioModule,
+    OnlyOneErrorPipe
+],
     templateUrl: './new-career.component.html',
     styleUrl: './new-career.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush

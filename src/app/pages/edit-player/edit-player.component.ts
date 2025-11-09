@@ -22,7 +22,7 @@ import { StatisticsPlayerComponent } from '../../shared/components/statistics-pl
 import { Top3StatsPlayersCareerComponent } from '../../shared/components/top-3-stats-players-career/top-3-stats-players-career.component';
 import { HeaderComponent } from '../../shared/header/header.component';
 import { Player } from '../../models/player/player';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -34,20 +34,19 @@ import { StatisticsBaseComponent } from '../../shared/components/statistics-base
     selector: 'phub-edit-player',
     templateUrl: './edit-player.component.html',
     imports: [
-        RouterLink,
-        HeaderComponent,
-        DetailsManagerClubIconComponent,
-        ModalComponent,
-        LoaderModule,
-        DetailsManagerClubIconComponent,
-        StatisticsPlayerComponent,
-        Top3StatsPlayersCareerComponent,
-        FormsModule,
-        MatAutocompleteModule,
-        CommonModule,
-        MatFormFieldModule,
-        MatInputModule,
-    ],
+    RouterLink,
+    HeaderComponent,
+    DetailsManagerClubIconComponent,
+    ModalComponent,
+    LoaderModule,
+    DetailsManagerClubIconComponent,
+    StatisticsPlayerComponent,
+    Top3StatsPlayersCareerComponent,
+    FormsModule,
+    MatAutocompleteModule,
+    MatFormFieldModule,
+    MatInputModule
+],
     styleUrls: ['./edit-player.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

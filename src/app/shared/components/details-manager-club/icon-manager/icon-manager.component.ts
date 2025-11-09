@@ -8,7 +8,7 @@ import {
   signal,
 } from '@angular/core';
 import { Coach } from '../../../../models/career/Coach';
-import { NgIf } from '@angular/common';
+
 import { UploadFileService } from '../../../../pages/services/upload-file.service';
 import { environment } from '../../../../../environments/environment';
 import { IIconPlayer } from '../../../interface/icon-player';

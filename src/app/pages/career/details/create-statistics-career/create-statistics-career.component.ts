@@ -1,4 +1,4 @@
-import { NgFor, AsyncPipe, CommonModule } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { ReactiveFormsModule, FormsModule, FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -25,22 +25,20 @@ import { SeasonService } from '../../../services/season.service';
 @Component({
     selector: 'phub-create-statistics-career',
     imports: [
-        HeaderComponent,
-        ReactiveFormsModule,
-        NgFor,
-        FormsModule,
-        MatAutocompleteModule,
-        AsyncPipe,
-        CommonModule,
-        MatFormFieldModule,
-        MatInputModule,
-        UpperCaseDirective,
-        RouterLink,
-        ModalComponent,
-        LoaderModule,
-        FileUploadModule,
-        DetailsManagerClubIconComponent,
-    ],
+    HeaderComponent,
+    ReactiveFormsModule,
+    FormsModule,
+    MatAutocompleteModule,
+    AsyncPipe,
+    MatFormFieldModule,
+    MatInputModule,
+    UpperCaseDirective,
+    RouterLink,
+    ModalComponent,
+    LoaderModule,
+    FileUploadModule,
+    DetailsManagerClubIconComponent
+],
     templateUrl: './create-statistics-career.component.html',
     styleUrl: './create-statistics-career.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush

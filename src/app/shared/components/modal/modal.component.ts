@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit, signal, ViewChild } from '@angular/core';
-import { JsonPipe, NgClass, NgIf } from '@angular/common';
+import { JsonPipe, NgClass } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { ModalService } from '../../../pages/services/modal.service';
 import { ModalState } from '../../../models/enums/modal-state';
@@ -9,47 +9,53 @@ import { MatListModule, MatSelectionList } from '@angular/material/list';
 
 @Component({
     selector: 'phub-modal',
-    imports: [NgClass, NgIf, JsonPipe, MatCheckboxModule, MatListModule],
+    imports: [NgClass, JsonPipe, MatCheckboxModule, MatListModule],
     template: `
     <div class="modal" [ngClass]="{ show: isOpen }" (click)="onClose()">
       <div
         class="modal-content modal-content__{{ state() }}"
         (click)="$event.stopPropagation()"
-      >
+        >
         <div class="modal-header">
           <span class="close" (click)="onClose()">&times;</span>
           <h2 class="modal-title modal-title__{{ state() }}">{{ title() }}</h2>
           <img src="../../../../assets/icons/{{ state() }}.png" alt="">
         </div>
         <div class="modal-body">
-          <p class="modal-body__message" *ngIf="message">{{ message }}</p>
+          @if (message) {
+            <p class="modal-body__message">{{ message }}</p>
+          }
           <ng-content></ng-content>
           @if (players()) {
-        <mat-selection-list class="modal-list-checkbox-player" #playerSelected [multiple]="false">
-          @for (player of players(); track player.id) {
-          <mat-list-option class="modal-options-checkbox-player" [value]="player">{{ player.firstName }} {{ player.lastName }}</mat-list-option>
-          } @empty {
-          <p style="color: var(--white);">Todos os jogadores dessa carreira já estão nessa temporada.</p>
+            <mat-selection-list class="modal-list-checkbox-player" #playerSelected [multiple]="false">
+              @for (player of players(); track player.id) {
+                <mat-list-option class="modal-options-checkbox-player" [value]="player">{{ player.firstName }} {{ player.lastName }}</mat-list-option>
+                } @empty {
+                <p style="color: var(--white);">Todos os jogadores dessa carreira já estão nessa temporada.</p>
+              }
+            </mat-selection-list>
+          }
+        </div>
+    
+    
+        @if (isConfirmation) {
+          <div class="modal-footer">
+            <button class="btn-primary-red-modal" (click)="onConfirm()">
+              {{ confirmButtonText }}
+            </button>
+            <button class="btn-primary-white-modal" (click)="onCancel()">
+              {{ cancelButtonText }}
+            </button>
+          </div>
         }
-        </mat-selection-list>
+        @if (!isConfirmation) {
+          <div class="modal-footer">
+            <button class="btn-modal-close btn-modal__{{ state() }}" (click)="onClose()">Fechar</button>
+          </div>
         }
-        </div>
-
-
-        <div class="modal-footer" *ngIf="isConfirmation">
-          <button class="btn-primary-red-modal" (click)="onConfirm()">
-            {{ confirmButtonText }}
-          </button>
-          <button class="btn-primary-white-modal" (click)="onCancel()">
-            {{ cancelButtonText }}
-          </button>
-        </div>
-        <div class="modal-footer" *ngIf="!isConfirmation">
-          <button class="btn-modal-close btn-modal__{{ state() }}" (click)="onClose()">Fechar</button>
-        </div>
       </div>
     </div>
-  `
+    `
 })
 export class ModalComponent implements OnInit, OnDestroy {
   public title =  signal<string | null>(null);

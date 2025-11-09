@@ -3,7 +3,7 @@ import {
   Component,
   Input,
 } from '@angular/core';
-import { NgIf } from '@angular/common';
+
 import { CareerHistory } from '../../../models/career/career-history';
 import { RouterLink } from '@angular/router';
 import { Season } from '../../../models/career/season';
@@ -11,7 +11,7 @@ import { StatisticsBaseComponent } from '../statistics-base/statistics-base.comp
 
 @Component({
     selector: 'phub-statistics-career',
-    imports: [NgIf, RouterLink],
+    imports: [RouterLink],
     template: `
     <div class="statistics">
       @if (this.stats()) {

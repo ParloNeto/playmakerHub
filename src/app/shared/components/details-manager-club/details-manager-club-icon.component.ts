@@ -8,7 +8,7 @@ import { IconClubComponent } from './icon-club/icon-club.component';
 import { IconManagerComponent } from './icon-manager/icon-manager.component';
 import { Top3StatsPlayersCareerComponent } from '../top-3-stats-players-career/top-3-stats-players-career.component';
 import { Coach } from '../../../models/career/Coach';
-import { NgIf } from '@angular/common';
+
 import { Player } from '../../../models/player/player';
 import { IconPlayerBaseComponent } from '../icon-player-base/icon-player-base.component';
 

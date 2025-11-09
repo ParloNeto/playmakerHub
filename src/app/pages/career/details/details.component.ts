@@ -13,7 +13,7 @@ import { finalize } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { StatisticsCareerComponent } from '../../../shared/components/statistics-career/statistics-career.component';
 import { Season } from '../../../models/career/season';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -29,18 +29,17 @@ type SeasonName = {
 @Component({
     selector: 'app-details',
     imports: [
-        HeaderComponent,
-        RouterLink,
-        DetailsManagerClubIconComponent,
-        ListPlayerComponent,
-        LoaderModule,
-        StatisticsCareerComponent,
-        FormsModule,
-        MatAutocompleteModule,
-        CommonModule,
-        MatFormFieldModule,
-        MatInputModule,
-    ],
+    HeaderComponent,
+    RouterLink,
+    DetailsManagerClubIconComponent,
+    ListPlayerComponent,
+    LoaderModule,
+    StatisticsCareerComponent,
+    FormsModule,
+    MatAutocompleteModule,
+    MatFormFieldModule,
+    MatInputModule
+],
     templateUrl: './details.component.html',
     styleUrl: './details.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush

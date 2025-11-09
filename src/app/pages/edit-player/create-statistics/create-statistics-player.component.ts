@@ -1,4 +1,4 @@
-import { NgFor, AsyncPipe, CommonModule } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -41,23 +41,21 @@ import { Player } from '../../../models/player/player';
 @Component({
     selector: 'phub-create-statistics-player',
     imports: [
-        HeaderComponent,
-        ReactiveFormsModule,
-        NgFor,
-        FormsModule,
-        MatAutocompleteModule,
-        AsyncPipe,
-        CommonModule,
-        MatFormFieldModule,
-        MatInputModule,
-        UpperCaseDirective,
-        RouterLink,
-        ModalComponent,
-        LoaderModule,
-        FileUploadModule,
-        DetailsManagerClubIconComponent,
-        ClearOnFocusDirective,
-    ],
+    HeaderComponent,
+    ReactiveFormsModule,
+    FormsModule,
+    MatAutocompleteModule,
+    AsyncPipe,
+    MatFormFieldModule,
+    MatInputModule,
+    UpperCaseDirective,
+    RouterLink,
+    ModalComponent,
+    LoaderModule,
+    FileUploadModule,
+    DetailsManagerClubIconComponent,
+    ClearOnFocusDirective
+],
     templateUrl: './create-statistics-player.component.html',
     styleUrl: './create-statistics-player.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
